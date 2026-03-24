@@ -1,0 +1,8 @@
+{
+  "sub_tasks_total": 10,
+  "sub_tasks_passed": 7,
+  "sub_tasks_failed": 3,
+  "total_cost_usd": 0.1378,
+  "executor_model": "qwen/qwen3-coder-30b-a3b-instruct",
+  "reviewer_model": "anthropic/claude-sonnet-4"
+}

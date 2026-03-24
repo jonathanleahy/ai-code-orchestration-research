@@ -1,0 +1,8 @@
+{
+  "sub_tasks_total": 10,
+  "sub_tasks_passed": 8,
+  "sub_tasks_failed": 2,
+  "total_cost_usd": 0.1102,
+  "executor_model": "qwen/qwen3-coder",
+  "reviewer_model": "google/gemini-2.5-flash"
+}

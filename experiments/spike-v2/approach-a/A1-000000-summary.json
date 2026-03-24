@@ -1,0 +1,8 @@
+{
+  "sub_tasks_total": 10,
+  "sub_tasks_passed": 9,
+  "sub_tasks_failed": 1,
+  "total_cost_usd": 0.1255,
+  "executor_model": "anthropic/claude-sonnet-4",
+  "reviewer_model": "anthropic/claude-sonnet-4"
+}

@@ -1,0 +1,11 @@
+approach	config	attempt	layer	sub_task	model	cost_usd	time_s	tokens_in	tokens_out	gate_pass	review_verdict	quality	retry	files	error	timestamp
+A	A2	000000	planner	plan	google/gemini-2.5-flash	0.012504	8	2553	1615	n/a	n/a	-	0	0		2026-03-24T19:05:06Z
+A	A3	000000	planner	plan	google/gemini-2.5-flash	0.01314	17	2553	1827	n/a	n/a	-	0	0		2026-03-24T19:05:16Z
+A	A4	000000	planner	plan	claude-sonnet	0.11748824999999999	44	0	0	n/a	n/a	-	0	0		2026-03-24T19:05:42Z
+A	A3	001	planner	plan	google/gemini-2.5-flash	0.012345	8	2553	1562	n/a	n/a	-	0	0		2026-03-24T19:26:23Z
+A	A2	001	planner	plan	google/gemini-2.5-flash	0.012834	8	2553	1725	n/a	n/a	-	0	0		2026-03-24T19:26:23Z
+A	A4	001	planner	plan	anthropic/claude-sonnet-4	0.012225	16	2726	1349	n/a	n/a	-	0	0		2026-03-24T19:26:31Z
+A	A1	000000	planner	plan	anthropic/claude-sonnet-4	0.013566	22	2726	1796	n/a	n/a	-	0	0		2026-03-24T19:26:37Z
+D	D1	000000	planner	plan	google/gemini-2.5-flash	0.012552	7	2553	1631	n/a	n/a	-	0	0		2026-03-24T20:19:10Z
+C	C1	000000	planner	plan	google/gemini-2.5-flash	0.012279	7	2553	1540	n/a	n/a	-	0	0		2026-03-24T20:19:10Z
+B	B1	000000	planner	plan	google/gemini-2.5-flash	0.012009	7	2553	1450	n/a	n/a	-	0	0		2026-03-24T20:19:10Z

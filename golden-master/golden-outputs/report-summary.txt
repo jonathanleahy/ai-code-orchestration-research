@@ -1,0 +1,1 @@
+example-app@1.0.0: ISSUES FOUND (5 deps, 2 issues, 1 deprecated, 2 large)

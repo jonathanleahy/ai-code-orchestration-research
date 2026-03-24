@@ -1,0 +1,26 @@
+=== dep-doctor tests ===
+
+  PASS: --help exits 0 and lists commands
+Unknown command: nonexistent
+Run dep-doctor --help for usage
+  PASS: unknown command exits 1
+  PASS: scan valid package.json returns deps
+Error: Invalid JSON in /home/jon/work/dark-factory/scripts/dev-spike-v2/golden-master/dep-doctor/fixtures/malformed/package.json: Expected ',' or '}' after property value in JSON at position 27 (line 3 column 3)
+  PASS: scan malformed package.json fails
+Error: package.json not found: /nonexistent/path/package.json
+  PASS: scan missing directory fails
+  PASS: scan empty package.json returns 0 deps
+  PASS: isValidSemver accepts ^1.2.3
+  PASS: isValidSemver rejects not-semver
+  PASS: isValidSpdx accepts MIT
+  PASS: isValidSpdx rejects unknown
+  PASS: analyze flags deprecated packages
+  PASS: analyze reports summary counts
+  PASS: formatJson returns valid JSON
+  PASS: formatTable returns string with headers
+  PASS: formatSummary returns single line
+  PASS: check exits 1 for project with issues
+  PASS: check exits 0 for project with no issues
+  PASS: init creates config file
+
+=== Results: 18 passed, 0 failed ===

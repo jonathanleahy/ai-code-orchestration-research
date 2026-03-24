@@ -1,0 +1,17 @@
+dep-doctor — Dependency Health Checker
+
+Usage: dep-doctor <command> [options]
+
+Commands:
+  scan       Scan a directory's package.json and list dependencies
+  report     Full health report with analysis
+  check      Pass/fail gate (exit 0 = healthy, exit 1 = issues)
+  licenses   License inventory for all dependencies
+  init       Create a .dep-doctor.json config file
+
+Options:
+  --path <dir>       Target directory (default: .)
+  --format <fmt>     Output format: json, table, summary (default: summary)
+  --max-age <days>   Max acceptable dependency age in days (default: 365)
+  --deny-license <l> Deny a specific license (can be repeated)
+  --help             Show this help

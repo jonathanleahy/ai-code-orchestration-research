@@ -1,0 +1,61 @@
+strategy	run_id	cost_usd	time_s	files_changed	tests_created	tests_passing	compiles	quality_0_10	notes	timestamp
+02-sonnet-with-file-list	000000	0.1348071	29	1	0	0	false	-		2026-03-24T15:57:53Z
+05-minimax-m2.7-direct	000000	.0039075	53	1	1	0
+0	true	-		2026-03-24T16:01:09Z
+01-opus-plan-sonnet-exec	000000	.6678494999999999	179	1	1	5	false	-		2026-03-24T16:03:14Z
+04-opus-subtasks-sonnet-exec	000000	.35118774999999997	79	1	0	0	false	-		2026-03-24T16:10:11Z
+01-opus-plan-sonnet-exec	001	.58202670000000001	150	1	1	12	false	-		2026-03-24T16:11:12Z
+02-sonnet-with-file-list	001	0.28921199999999997	79	1	1	8	false	-		2026-03-24T16:12:32Z
+03-two-phase-test-then-impl	000000	.49267845	198	1	1	2
+0	false	-		2026-03-24T16:15:50Z
+model-minimax_minimax-m2.7	000		56	0	0	0	false	-		2026-03-24T16:16:03Z
+04-opus-subtasks-sonnet-exec	001	.3343655	70	1	0	0	false	-		2026-03-24T16:17:00Z
+model-qwen_qwen3-coder	000		91	0	0	0	false	-		2026-03-24T16:17:34Z
+model-deepseek_deepseek-v3.2	000		242	0	0	0	false	-		2026-03-24T16:21:37Z
+model-mistralai_devstral-small	000		13	0	0	0	false	-		2026-03-24T16:21:50Z
+05-minimax-m2.7-direct	001	0.05	300	1	0	0	false	-		2026-03-24T16:22:00Z
+model-google_gemini-2.5-flash	000		24	0	0	0	false	-		2026-03-24T16:22:14Z
+model-kwaipilot_kat-coder-pro	000		62	0	0	0	false	-		2026-03-24T16:23:16Z
+06-opus-plan-minimax-exec	000000	.47838099999999995	104	1	0	0	false	-		2026-03-24T16:23:44Z
+07-openrouter-generic	000000	.006192	36	1	1	0
+0	false	-		2026-03-24T16:24:20Z
+model-minimax_minimax-m2.7	000	.011652	79	1	1	0
+0	true	-		2026-03-24T16:25:39Z
+model-zhipu-ai_glm-5	000	0.00	1	0	0	0	false	0	ERROR: zhipu-ai/glm-5 is not a valid model ID	2026-03-24T16:25:40Z
+model-google_gemini-2.5-flash	000	.011478	117	1	1	0
+0	true	-		2026-03-24T16:27:37Z
+model-google_gemini-2.5-pro	000	.019236	63	1	1	0
+0	true	-		2026-03-24T16:28:40Z
+model-deepseek_deepseek-chat-v3	000	.006670	47	1	1	0
+0	true	-		2026-03-24T16:29:28Z
+model-minimax_minimax-m2-7	000	.013275	49	1	1	0
+0	True	-	lines=296 preserved=True tokens=4425	2026-03-24T16:30:35Z
+model-qwen_qwen3-coder	000	.007216	79	1	1	0
+0	true	-		2026-03-24T16:30:47Z
+model-qwen_qwen3-coder	000	.007533	17	1	1	0
+0	True	-	lines=185 preserved=False tokens=2511	2026-03-24T16:30:52Z
+model-meta-llama_llama-4-maverick	000	.007560	59	1	1	0
+0	true	-		2026-03-24T16:31:46Z
+model-mistralai_codestral-latest	000	0.00	0	0	0	0	false	0	ERROR: mistralai/codestral-latest is not a valid model ID	2026-03-24T16:31:46Z
+model-openai_gpt-4.1-mini	000	.007070	88	1	1	0
+0	true	-		2026-03-24T16:33:14Z
+model-deepseek_deepseek-v3-2	000	.010824	158	1	1	0
+0	True	-	lines=243 preserved=True tokens=3608	2026-03-24T16:33:31Z
+model-mistralai_devstral-small	000	.009825	6	1	1	0
+0	True	-	lines=272 preserved=True tokens=3275	2026-03-24T16:33:37Z
+model-openai_gpt-4.1	000	.008196	40	1	1	0
+0	true	-		2026-03-24T16:33:54Z
+model-google_gemini-2-5-flash	000	.013314	23	1	1	0
+0	True	-	lines=343 preserved=True tokens=4438	2026-03-24T16:34:01Z
+model-kwaipilot_kat-coder-pro	000	.014505	123	1	1	0
+0	True	-	lines=347 preserved=True tokens=4835	2026-03-24T16:36:04Z
+model-meta-llama_llama-4-maverick	000	.009234	45	1	1	0
+0	True	-	lines=236 preserved=True tokens=3078	2026-03-24T16:36:49Z
+model-x-ai_grok-3-mini	000	.014853	56	1	1	0
+0	True	-	lines=176 preserved=False tokens=4951	2026-03-24T16:37:45Z
+model-openai_gpt-4-1-mini	000	.010050	71	1	1	0
+0	True	-	lines=289 preserved=True tokens=3350	2026-03-24T16:38:57Z
+model-openai_gpt-4-1	000	.009468	27	1	1	0
+0	True	-	lines=259 preserved=True tokens=3156	2026-03-24T16:39:25Z
+model-anthropic_claude-sonnet-4	000	.015228	42	1	1	0
+0	True	-	lines=382 preserved=True tokens=5076	2026-03-24T16:49:32Z

@@ -1,0 +1,8 @@
+{
+  "sub_tasks_total": 8,
+  "sub_tasks_passed": 8,
+  "sub_tasks_failed": 0,
+  "total_cost_usd": 0.0687,
+  "executor_model": "minimax/minimax-m2.7",
+  "reviewer_model": "deepseek/deepseek-v3.2"
+}

@@ -1,0 +1,32 @@
+{
+  "name": "example-app",
+  "version": "1.0.0",
+  "license": "MIT",
+  "deps": [
+    {
+      "name": "express",
+      "range": "^4.18.2",
+      "type": "production"
+    },
+    {
+      "name": "lodash",
+      "range": "^4.17.21",
+      "type": "production"
+    },
+    {
+      "name": "moment",
+      "range": "^2.29.4",
+      "type": "production"
+    },
+    {
+      "name": "jest",
+      "range": "^29.7.0",
+      "type": "dev"
+    },
+    {
+      "name": "eslint",
+      "range": "^8.56.0",
+      "type": "dev"
+    }
+  ]
+}

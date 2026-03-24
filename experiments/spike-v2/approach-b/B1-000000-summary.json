@@ -1,0 +1,9 @@
+{
+  "total": 8,
+  "passed": 7,
+  "failed": 1,
+  "total_cost": 0.23697600000000005,
+  "total_calls": 29,
+  "executor_model": "qwen/qwen3-coder-30b-a3b-instruct",
+  "num_candidates": 5
+}

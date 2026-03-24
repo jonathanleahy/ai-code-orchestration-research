@@ -1,0 +1,13 @@
+{
+  "total": 8,
+  "passed": 6,
+  "failed": 2,
+  "total_cost": 0.191784,
+  "total_calls": 24,
+  "council": [
+    "qwen/qwen3-coder",
+    "minimax/minimax-m2.7",
+    "deepseek/deepseek-v3.2"
+  ],
+  "chairman": "google/gemini-2.5-flash"
+}

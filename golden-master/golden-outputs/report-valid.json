@@ -1,0 +1,64 @@
+{
+  "name": "example-app",
+  "version": "1.0.0",
+  "license": "MIT",
+  "licenseIssues": [],
+  "dependencies": [
+    {
+      "name": "express",
+      "range": "^4.18.2",
+      "type": "production",
+      "issues": [],
+      "healthy": true
+    },
+    {
+      "name": "lodash",
+      "range": "^4.17.21",
+      "type": "production",
+      "issues": [
+        {
+          "type": "large",
+          "message": "lodash is a large package — consider alternatives"
+        }
+      ],
+      "healthy": false
+    },
+    {
+      "name": "moment",
+      "range": "^2.29.4",
+      "type": "production",
+      "issues": [
+        {
+          "type": "deprecated",
+          "message": "moment is deprecated"
+        },
+        {
+          "type": "large",
+          "message": "moment is a large package — consider alternatives"
+        }
+      ],
+      "healthy": false
+    },
+    {
+      "name": "jest",
+      "range": "^29.7.0",
+      "type": "dev",
+      "issues": [],
+      "healthy": true
+    },
+    {
+      "name": "eslint",
+      "range": "^8.56.0",
+      "type": "dev",
+      "issues": [],
+      "healthy": true
+    }
+  ],
+  "summary": {
+    "total": 5,
+    "healthy": 3,
+    "issues": 2,
+    "deprecated": 1,
+    "large": 2
+  }
+}

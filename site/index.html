@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Code Orchestration Research</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Marked for Markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Highlight.js for code syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <!-- Mermaid for diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <div class="app">
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>📚 AI Code Research</h2>
+                <div class="search-box">
+                    <input type="text" id="search" placeholder="Search files..." oninput="filterTree(this.value)">
+                </div>
+            </div>
+            <div class="tree" id="tree">
+                <div class="loading">Loading file tree...</div>
+            </div>
+        </nav>
+        <main class="content" id="content">
+            <div class="content-header">
+                <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                <span class="breadcrumb" id="breadcrumb">README.md</span>
+            </div>
+            <article class="markdown-body" id="article">
+                <div class="loading">Select a file from the sidebar...</div>
+            </article>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
