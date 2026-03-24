@@ -1,0 +1,25 @@
+type Task {
+  id: ID!
+  title: String!
+  description: String
+  status: Status!
+  createdAt: String!
+  updatedAt: String!
+}
+
+enum Status {
+  TODO
+  DOING
+  DONE
+}
+
+type Query {
+  tasks(status: Status): [Task!]!
+  task(id: ID!): Task
+}
+
+type Mutation {
+  createTask(title: String!, description: String): Task!
+  updateTask(id: ID!, title: String, description: String, status: Status): Task!
+  deleteTask(id: ID!): Boolean!
+}

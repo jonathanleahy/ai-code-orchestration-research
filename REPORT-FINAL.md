@@ -371,3 +371,70 @@ If we optimize A5's retries (currently 6/8 → target 8/8 with better prompt):
 | A5 optimized | $0.013 | 8 × $0.0005 = $0.004 | **$0.017** |
 
 **$0.017 per application** — that's 176x cheaper than the current pipeline ($3.00).
+
+---
+
+## Addendum 3: Spike V3 — Go CRUD App + claude -p Breakthrough
+
+### The Test
+Build a Go task-board backend (model + tests) from a GraphQL schema contract.
+
+### Results
+
+| Config | Method | Tests | Cost | Time |
+|--------|--------|-------|------|------|
+| **S4** | **claude -p Sonnet (subscription)** | **10/10 PASS** | **FREE** | **39s** |
+| S1 | Gemini + MiniMax (OpenRouter) | 0/12 | $0.26 | ~20min |
+| S2 | Gemini + Qwen3-30B (OpenRouter) | 0/12 | $0.25 | ~10min |
+
+### The claude -p Fix
+
+`claude -p` works perfectly when:
+1. **Imperative prompts**: "Create model/task.go with Task struct and Store methods"
+2. **Contract-first**: "Read schema.graphql to understand the data model"
+3. **Flags**: `--dangerously-skip-permissions --verbose --output-format stream-json`
+4. **Run from correct workdir** with go.mod already present
+
+Sonnet via `claude -p` is the **best option for Go projects** on subscription:
+- $0 cost (subscription)
+- 10/10 tests in 39 seconds
+- Reads the schema, writes correct Go code, runs tests itself
+- No parsing/extraction needed — files written directly to disk
+
+### Why OpenRouter Failed on Go
+
+The OpenRouter configs (S1/S2) failed because:
+1. The experiment runner's file block parser was built for Node.js (.cjs files)
+2. Go projects need `go.mod` present before `go vet` gates work
+3. The planner created 12 sub-tasks (too many) instead of the 4 that map to actual files
+
+The `claude -p` approach bypasses all of this — it writes files directly and runs its own verification.
+
+### Architecture Pattern: Contract + Mocks
+
+```
+schema.graphql (THE CONTRACT)
+        ↓
+   ┌────┴────┐
+   ↓         ↓
+Backend    Frontend
+builds     builds
+against    against
+mock       mock
+queries    server
+   ↓         ↓
+   └────┬────┘
+        ↓
+   Integration
+      Test
+```
+
+Both sides build independently against the contract. Mocks validate the contract before implementation.
+
+### Recommendation for Dark Factory Pipeline
+
+**Two-track approach:**
+1. **Go projects** → `claude -p` with imperative prompts (FREE, 39s, high quality)
+2. **Multi-file/multi-language** → Gemini plan + MiniMax/Qwen3 execute ($0.07-$0.10)
+
+The contract-first, mock-driven architecture should be standard for all full-stack work.
