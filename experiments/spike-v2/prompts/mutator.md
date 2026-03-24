@@ -1,4 +1,4 @@
-You are improving existing code. The current version has issues that need fixing.
+You are improving existing code. Fix the issues described below.
 
 ## Architecture Reference
 {{ARCHITECTURE_EXCERPT}}
@@ -6,17 +6,22 @@ You are improving existing code. The current version has issues that need fixing
 ## Current Code
 {{CURRENT_CODE}}
 
-## Test Results (what's failing)
+## Issues to Fix
 {{TEST_RESULTS}}
 
-## Your Job
-Fix the issues shown in the test results. Output the COMPLETE improved file:
+## Output Format
+You MUST use this EXACT format. No markdown fences. No explanation text.
 
 --- FILE: {{FILE_PATH}} ---
-[complete improved file content]
+'use strict';
+// ... improved code ...
+module.exports = { ... };
 --- END FILE ---
 
-Rules:
-1. Fix ONLY the issues shown in the test results
-2. Keep everything that already works
-3. Output ONLY the file block. No explanation.
+CRITICAL:
+1. Start with: --- FILE: {{FILE_PATH}} ---
+2. End with: --- END FILE ---
+3. Do NOT use ```javascript``` fences
+4. Do NOT add text before or after the file block
+5. ZERO npm dependencies — Node.js built-ins only
+6. Keep everything that works, fix only what's broken

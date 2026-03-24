@@ -101,18 +101,56 @@ def call_claude_p(prompt, workdir, model="sonnet", budget="0.50"):
 
 
 def extract_file_blocks(content, workdir):
-    """Extract --- FILE: path --- blocks and write to workdir. Return list of paths."""
+    """Extract file blocks from model output. Tries multiple formats:
+    1. --- FILE: path --- ... --- END FILE ---
+    2. ```language ... ``` with FILE: path hint
+    3. Single code block when only one file expected
+    """
+    created = []
+
+    # Format 1: --- FILE: path --- blocks (preferred)
     pattern = r"---\s*FILE:\s*([\w./\-]+)\s*---\n(.*?)\n---\s*END FILE\s*---"
     matches = re.findall(pattern, content, re.DOTALL)
 
-    created = []
-    for filepath, filecontent in matches:
-        full_path = os.path.join(workdir, filepath)
-        os.makedirs(os.path.dirname(full_path), exist_ok=True)
-        with open(full_path, "w") as f:
-            f.write(filecontent)
-        os.chmod(full_path, 0o755)
-        created.append(filepath)
+    if matches:
+        for filepath, filecontent in matches:
+            full_path = os.path.join(workdir, filepath)
+            os.makedirs(os.path.dirname(full_path), exist_ok=True)
+            with open(full_path, "w") as f:
+                f.write(filecontent)
+            os.chmod(full_path, 0o755)
+            created.append(filepath)
+        return created
+
+    # Format 2: Look for FILE: path hints near code blocks
+    file_hint_pattern = r"(?:FILE|file|File):\s*([\w./\-]+\.(?:cjs|js|json|sh|py))\s*(?:\n|---)"
+    code_block_pattern = r"```(?:\w+)?\n(.*?)```"
+
+    hints = re.findall(file_hint_pattern, content)
+    blocks = re.findall(code_block_pattern, content, re.DOTALL)
+
+    if hints and blocks:
+        for filepath, code in zip(hints, blocks):
+            full_path = os.path.join(workdir, filepath)
+            os.makedirs(os.path.dirname(full_path), exist_ok=True)
+            with open(full_path, "w") as f:
+                f.write(code.strip())
+            os.chmod(full_path, 0o755)
+            created.append(filepath)
+        return created
+
+    # Format 3: Single code block — guess filename from content
+    if blocks and not created:
+        code = blocks[0].strip()
+        if code.startswith("'use strict'") or code.startswith('"use strict"') or 'module.exports' in code:
+            # Try to guess the filename from the prompt context
+            # Default to output.cjs
+            filepath = "output.cjs"
+            full_path = os.path.join(workdir, filepath)
+            with open(full_path, "w") as f:
+                f.write(code)
+            os.chmod(full_path, 0o755)
+            created.append(filepath)
 
     return created
 

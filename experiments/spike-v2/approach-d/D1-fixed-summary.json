@@ -1,0 +1,10 @@
+{
+  "total": 8,
+  "passed": 7,
+  "failed": 1,
+  "total_cost": 0.20166,
+  "total_calls": 28,
+  "mutator_model": "qwen/qwen3-coder-30b-a3b-instruct",
+  "generations": 3,
+  "pop_size": 3
+}

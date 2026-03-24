@@ -54,7 +54,7 @@ case "$CONFIG" in
     C1) MODELS=([planner]="google/gemini-2.5-flash" [council_a]="qwen/qwen3-coder" [council_b]="minimax/minimax-m2.7" [council_c]="deepseek/deepseek-v3.2" [chairman]="google/gemini-2.5-flash") ;;
     C2) MODELS=([planner]="claude-sonnet" [council_a]="qwen/qwen3-coder" [council_b]="minimax/minimax-m2.7" [council_c]="google/gemini-2.5-flash" [chairman]="claude-sonnet") ;;
     D1) MODELS=([planner]="google/gemini-2.5-flash" [mutator]="qwen/qwen3-coder-30b-a3b-instruct") ;;
-    D2) MODELS=([planner]="claude-sonnet" [mutator]="qwen/qwen3-coder-30b-a3b-instruct") ;;
+    D2) MODELS=([planner]="google/gemini-2.5-flash" [mutator]="qwen/qwen3-coder") ;;
     *) echo "Unknown config: $CONFIG"; exit 1 ;;
 esac
 

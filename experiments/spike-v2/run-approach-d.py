@@ -85,16 +85,19 @@ def copy_to_assembled(src_dir):
 
 def score_candidate(cand_dir, gate_cmd):
     """Score: 0 (broken) to 10 (passes gate + has content)."""
-    # Check files exist
-    files = [f for f in os.listdir(cand_dir) if f.endswith(('.cjs', '.json')) and f not in ('response.json', 'prompt.txt')]
+    # Check files exist (walk entire tree)
+    files = []
+    for root, dirs, fnames in os.walk(cand_dir):
+        for f in fnames:
+            if f.endswith(('.cjs', '.json', '.txt')) and f not in ('response.json', 'prompt.txt', 'gate-result.json'):
+                files.append(os.path.join(root, f))
     if not files:
         return 0
 
     score = 2  # Has files
 
     # Check file sizes (non-empty)
-    for f in files:
-        fp = os.path.join(cand_dir, f)
+    for fp in files:
         if os.path.getsize(fp) > 50:
             score += 1
 

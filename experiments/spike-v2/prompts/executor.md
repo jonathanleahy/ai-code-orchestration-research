@@ -10,15 +10,20 @@ You are implementing a specific sub-task for the dep-doctor CLI tool.
 {{CONTEXT_FILES}}
 
 ## Output Format
-Output the complete file(s) using this exact format:
+You MUST use this EXACT format. Do NOT use markdown code fences. Do NOT add explanation.
 
 --- FILE: path/to/file.cjs ---
-[complete file content]
+'use strict';
+// ... your code here ...
+module.exports = { ... };
 --- END FILE ---
 
-Rules:
-1. Output ONLY the file blocks. No explanation.
-2. Use .cjs extension for JavaScript files.
-3. Follow the architecture spec exactly — same function names, same exports, same behavior.
-4. Keep code simple and minimal. Zero npm dependencies.
-5. Use 'use strict' at the top of every .cjs file.
+CRITICAL RULES:
+1. Start each file with: --- FILE: path/to/file.cjs ---
+2. End each file with: --- END FILE ---
+3. Do NOT wrap in ```javascript``` fences
+4. Do NOT add any text before or after the file blocks
+5. Use .cjs extension for all JavaScript files
+6. ZERO npm dependencies — use only Node.js built-ins (fs, path, etc.)
+7. Use 'use strict' at the top of every .cjs file
+8. Follow the architecture spec exactly — same function names, same exports
