@@ -3,10 +3,7 @@
 // File tree structure (populated from repo)
 const FILES = {
     'README.md': 'README.md',
-    'docs': {
-        '_folder': true,
-        'research-overview.md': 'docs/research-overview.md'
-    },
+    'REPORT-FINAL.md': 'REPORT-FINAL.md',
     'experiments': {
         '_folder': true,
         'spike-v1': {
@@ -49,6 +46,44 @@ const FILES = {
                     'test': {
                         '_folder': true,
                         'dep-doctor.test.cjs': 'experiments/spike-v2/approach-a/A3-winner/test/dep-doctor.test.cjs'
+                    }
+                }
+            }
+        },
+        'spike-v3': {
+            '_folder': true,
+            'architecture.md': 'experiments/spike-v3/architecture.md',
+            'executor-go.md': 'experiments/spike-v3/executor-go.md',
+            'call-claude-p.sh': 'experiments/spike-v3/call-claude-p.sh',
+            'golden-master': {
+                '_folder': true,
+                'task-board': {
+                    '_folder': true,
+                    'schema.graphql': 'experiments/spike-v3/golden-master/task-board/schema.graphql',
+                    'go.mod': 'experiments/spike-v3/golden-master/task-board/go.mod',
+                    'main.go': 'experiments/spike-v3/golden-master/task-board/main.go',
+                    'main_test.go': 'experiments/spike-v3/golden-master/task-board/main_test.go',
+                    'model': {
+                        '_folder': true,
+                        'task.go': 'experiments/spike-v3/golden-master/task-board/model/task.go',
+                        'task_test.go': 'experiments/spike-v3/golden-master/task-board/model/task_test.go'
+                    }
+                }
+            },
+            'approach-s': {
+                '_folder': true,
+                'S1-assembled': {
+                    '_folder': true,
+                    'model': {
+                        '_folder': true,
+                        'task.go': 'experiments/spike-v3/approach-s/S1-assembled/model/task.go'
+                    }
+                },
+                'S2-assembled': {
+                    '_folder': true,
+                    'model': {
+                        '_folder': true,
+                        'task.go': 'experiments/spike-v3/approach-s/S2-assembled/model/task.go'
                     }
                 }
             }
