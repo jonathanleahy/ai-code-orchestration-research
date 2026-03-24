@@ -18,10 +18,13 @@ Output valid JSON only. No explanation, no markdown fences. Just the JSON array:
   }
 ]
 
-Rules:
-1. Order by dependency — fixtures first, libraries next, CLI last, tests last
-2. Each sub-task creates 1-2 files maximum
-3. Each sub-task has a concrete gate_command that validates the output
-4. 8-12 sub-tasks total
-5. Use .cjs extension for all JavaScript files
-6. Gate commands must be runnable with `node -e "..."` or `node <file>`
+CRITICAL RULES:
+1. Use EXACTLY the file paths from the architecture (lib/parser.cjs, lib/validator.cjs, etc.)
+2. Do NOT rename or reorganize files — the architecture is the spec
+3. Order by dependency — fixtures first, libraries next, CLI last, tests last
+4. Each sub-task creates 1-2 files maximum
+5. Each sub-task has a concrete gate_command that validates the output
+6. 8-12 sub-tasks total
+7. Use .cjs extension for all JavaScript files
+8. Gate commands must be runnable with `node -e "..."` or `node <file>`
+9. Use the EXACT function names from the architecture for gate commands
