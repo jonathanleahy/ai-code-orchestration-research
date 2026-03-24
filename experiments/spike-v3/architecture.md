@@ -99,3 +99,63 @@ func (s *Store) Delete(id string) error                             // Returns e
 10. `TestDeleteNotFound` — nonexistent ID returns error
 
 **Validation gate:** `go test ./model/... -count=1` exits 0, output contains "PASS"
+
+## Module: main.go
+
+**Package:** `main`
+
+**HTTP Server** on configurable port (default 8890) with REST API + embedded HTML UI.
+
+**API Endpoints:**
+```
+GET  /api/tasks              → List all tasks (optional ?status=todo|doing|done filter)
+POST /api/tasks              → Create task (JSON body: {title, description})
+GET  /api/tasks/:id          → Get single task
+PATCH /api/tasks/:id         → Update task (JSON body: {title?, description?, status?})
+DELETE /api/tasks/:id        → Delete task
+GET  /                       → Serve embedded HTML kanban board UI
+```
+
+**Response format:** JSON. Tasks as `{"tasks": [...]}` for list, single task object for get/create/update.
+**Error format:** `{"error": "message"}` with appropriate HTTP status codes (400, 404, 405).
+**CORS:** Allow all origins (`Access-Control-Allow-Origin: *`).
+
+**Embedded HTML UI features:**
+- Three columns: To Do, In Progress, Done
+- Add task form (title + description)
+- Move tasks between columns with buttons
+- Delete button per task
+- Auto-refresh every 5 seconds
+- Shows task count per column
+
+**Implementation notes:**
+- Use `net/http` standard library (no framework)
+- CRITICAL: Use Go backtick raw string literals (` `) for the HTML constant — NOT double quotes. Backtick strings don't interpret escape sequences, which is essential for HTML containing JavaScript.
+- Global `store` variable (in-memory, no persistence)
+- `handleTasks` for /api/tasks (GET list, POST create)
+- `handleTask` for /api/tasks/:id (GET, PATCH, DELETE)
+- `handleUI` for / (serves HTML string constant)
+- HTML embedded as Go string constant `uiHTML`
+- Port from environment or default 8890
+
+**Validation gate:** `go build .` exits 0 AND `go test -count=1 -run TestUIReturnsHTML` exits 0
+
+## Module: main_test.go
+
+**Package:** `main` (same package — uses httptest)
+
+**12 HTTP integration tests:**
+1. `TestUIReturnsHTML` — GET / returns 200 with HTML containing "Task Board"
+2. `TestCreateTaskViaAPI` — POST /api/tasks returns 201 with task JSON
+3. `TestCreateTaskEmptyTitle` — POST with empty title returns 400
+4. `TestListTasks` — Create 2, GET /api/tasks returns 2 tasks
+5. `TestListTasksWithFilter` — Filter by status returns correct subset
+6. `TestGetTask` — GET /api/tasks/:id returns correct task
+7. `TestGetTaskNotFound` — GET nonexistent returns 404
+8. `TestUpdateTaskStatus` — PATCH with status changes it
+9. `TestUpdateTaskTitle` — PATCH with title changes it
+10. `TestDeleteTask` — DELETE then GET returns 404
+11. `TestDeleteTaskNotFound` — DELETE nonexistent returns 404
+12. `TestEmptyListReturnsEmptyArray` — GET /api/tasks with no tasks returns {"tasks":[]}
+
+**Validation gate:** `go test -count=1` exits 0, all 12 pass
