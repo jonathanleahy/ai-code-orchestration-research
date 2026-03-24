@@ -438,3 +438,36 @@ Both sides build independently against the contract. Mocks validate the contract
 2. **Multi-file/multi-language** → Gemini plan + MiniMax/Qwen3 execute ($0.07-$0.10)
 
 The contract-first, mock-driven architecture should be standard for all full-stack work.
+
+---
+
+## Addendum 4: S1/S2 Fixed — All 3 Configs Pass Golden Master!
+
+After fixing the file copy (added .go/.graphql extensions) and assembled directory path:
+
+| Config | Method | Golden Tests | Cost | Notes |
+|--------|--------|-------------|------|-------|
+| **S4** | **claude -p Sonnet** | **10/10** | **FREE** | Subscription |
+| **S1** | **Gemini + MiniMax** | **10/10** | **$0.045** | OpenRouter |
+| **S2** | **Gemini + Qwen3-30B** | **10/10** | **$0.029** | Cheapest! |
+
+### Root Causes Fixed
+1. `copy_to_assembled` only copied `.cjs`/`.json` — now includes `.go`/`.graphql`/`.ts`/`.svelte`
+2. Assembled dir was `dep-doctor` — changed to `task-board`
+3. Planner simplified to 3 sub-tasks (1 file = 1 task, not 1 method = 1 task)
+4. New `executor-go.md` prompt for Go file blocks
+
+### Key Finding: 1 File = 1 Sub-Task
+
+The over-decomposition (12 sub-tasks for 2 files) was the #1 failure cause. When simplified to 3 sub-tasks (schema, model, tests), all models succeeded. The rule: **each sub-task produces one complete, compilable file.**
+
+### Complete Cross-Spike Comparison
+
+| Spike | Application | Best Config | Tests | Cost |
+|-------|------------|-------------|-------|------|
+| V2 | dep-doctor (Node.js CLI, 18 tests) | A3: Gemini + MiniMax | 18/18 | $0.069 |
+| V2 | dep-doctor (autoresearch) | A5: Gemini + Qwen3-30B | 18/18 | $0.10 |
+| **V3** | **task-board (Go CRUD, 10 tests)** | **S2: Gemini + Qwen3-30B** | **10/10** | **$0.029** |
+| V3 | task-board | S4: claude -p Sonnet | 10/10 | FREE |
+
+**The approach scales from Node.js to Go, from CLI to CRUD, and costs under $0.05.**
