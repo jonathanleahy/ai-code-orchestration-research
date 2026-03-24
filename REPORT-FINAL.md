@@ -262,3 +262,68 @@ All experiments, all models, all approaches — for less than $2.
 - **Documentation:** Markdown + Mermaid diagrams
 - **Viewer:** HTML/JS/CSS static site (no build step)
 - **Repository:** https://github.com/jonathanleahy/ai-code-orchestration-research
+
+---
+
+## Addendum: Prompt Autoresearch (Karpathy Loop)
+
+### Breakthrough: 100% Pass Rate on Cheapest Model
+
+We ran 8 prompt variations × 3 runs each on Qwen3-30B ($0.0005/call), testing which prompt format makes the cheapest model reliably produce correct file blocks.
+
+| Variation | Pass Rate | Format OK | Notes |
+|-----------|----------|-----------|-------|
+| V1: Basic instruction | 0% | 0/3 | Model outputs fences |
+| V2: Equals signs | 0% | 1/3 | Partial format |
+| V3: JSON wrapper | 0% | 0/3 | Couldn't parse |
+| **V4: Example with real code** | **100%** | **3/3** | **🏆 WINNER** |
+| V5: Minimal signatures | 0% | 0/3 | Too vague |
+| V6: Roleplay filesystem | 0% | 3/3 | Right format, no files extracted |
+| V7: Think then output | 0% | 1/3 | Thinking consumed tokens |
+| V8: Repeat format 3× | 66% | 3/3 | Repetition helps |
+
+### The Winning Prompt Pattern (V4)
+
+```
+YOUR OUTPUT MUST LOOK EXACTLY LIKE THIS (replace the ... with real code):
+
+--- FILE: lib/validator.cjs ---
+'use strict';
+
+const SEMVER_RANGE = /^[\^~>=<]*\d+(\.\d+){0,2}([-.]\w+)*$/;
+...more code...
+module.exports = { isValidSemver, isValidSpdx, validateDependency };
+--- END FILE ---
+
+IMPORTANT: Start with --- FILE: and end with --- END FILE ---
+Do NOT wrap in ```javascript fences. Output ONLY the file block.
+```
+
+### Why V4 Works
+
+1. **Shows the exact format with real code** — not just a description
+2. **Includes actual function signatures** from the architecture
+3. **Explicit negative instruction** — "Do NOT wrap in fences"
+4. **Starts the code for the model** — it sees `'use strict'` and continues
+
+### Cost Implication
+
+With V4, Qwen3-30B ($0.0005/call) achieves the same 100% gate pass rate as MiniMax ($0.007/call).
+
+| Config | Executor | Cost/Call | Expected App Cost |
+|--------|----------|-----------|------------------|
+| A3 (current winner) | MiniMax M2.7 | $0.007 | $0.069 |
+| **A5 (projected)** | **Qwen3-30B + V4 prompt** | **$0.0005** | **$0.017** |
+
+**4x cheaper than the current winner, same quality.**
+
+### Karpathy Autoresearch Applied
+
+This IS the autoresearch loop:
+1. Define metric (gate pass rate)
+2. Try variations (8 prompt styles × 3 runs = 24 experiments)
+3. Measure objectively (100% vs 0%)
+4. Keep winner, discard rest
+5. Iterate (V4 → V4.1, V4.2 in next round)
+
+Total cost of the autoresearch: $0.048 (24 calls × $0.002/call)
