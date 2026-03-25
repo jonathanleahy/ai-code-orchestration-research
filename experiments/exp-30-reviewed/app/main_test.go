@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 	"app/store"
 )
@@ -913,5 +914,70 @@ func TestActivityEmptyDetails(t *testing.T) {
 
 	if status := w.Code; status != http.StatusCreated {
 		t.Errorf("handler returned wrong status code: got %v", status)
+	}
+}
+
+func TestExportCSV_Empty(t *testing.T) {
+	s = store.NewStore()
+
+	req := httptest.NewRequest("GET", "/api/clients/export", nil)
+	w := httptest.NewRecorder()
+	handleExportClientsAPI(w, req)
+
+	if status := w.Code; status != http.StatusOK {
+		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusOK)
+	}
+
+	body := w.Body.String()
+	lines := strings.Split(strings.TrimSpace(body), "\n")
+	if len(lines) != 1 {
+		t.Errorf("expected only header row, got %d lines", len(lines))
+	}
+
+	expected := "ID,Name,Company,Email,Phone,Status"
+	if lines[0] != expected {
+		t.Errorf("header mismatch: got %q want %q", lines[0], expected)
+	}
+}
+
+func TestExportCSV_WithData(t *testing.T) {
+	s = store.NewStore()
+
+	client1 := &store.Client{Name: "Client A", Email: "a@example.com", Phone: "123-456-7890"}
+	s.CreateClient(client1)
+
+	client2 := &store.Client{Name: "Client B", Email: "b@example.com", Phone: "999-888-7777"}
+	s.CreateClient(client2)
+
+	req := httptest.NewRequest("GET", "/api/clients/export", nil)
+	w := httptest.NewRecorder()
+	handleExportClientsAPI(w, req)
+
+	if status := w.Code; status != http.StatusOK {
+		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusOK)
+	}
+
+	body := w.Body.String()
+	lines := strings.Split(strings.TrimSpace(body), "\n")
+	if len(lines) != 3 {
+		t.Errorf("expected 3 lines (header + 2 clients), got %d lines", len(lines))
+	}
+
+	expected := "ID,Name,Company,Email,Phone,Status"
+	if lines[0] != expected {
+		t.Errorf("header mismatch: got %q want %q", lines[0], expected)
+	}
+}
+
+func TestExportCSV_ContentType(t *testing.T) {
+	s = store.NewStore()
+
+	req := httptest.NewRequest("GET", "/api/clients/export", nil)
+	w := httptest.NewRecorder()
+	handleExportClientsAPI(w, req)
+
+	ct := w.Header().Get("Content-Type")
+	if ct != "text/csv; charset=utf-8" {
+		t.Errorf("handler returned wrong content type: got %q want %q", ct, "text/csv; charset=utf-8")
 	}
 }
