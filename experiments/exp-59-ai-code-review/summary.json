@@ -1,0 +1,28 @@
+{
+  "total_cost": 0.015024,
+  "findings": [
+    {
+      "reviewer": "Senior Go Engineer",
+      "critical": 7,
+      "major": 11,
+      "minor": 2,
+      "verdict": "APPROVE"
+    },
+    {
+      "reviewer": "Security Specialist",
+      "critical": 1,
+      "major": 0,
+      "minor": 0,
+      "verdict": "REQUEST CHANGES"
+    },
+    {
+      "reviewer": "Performance Engineer",
+      "critical": 0,
+      "major": 0,
+      "minor": 0,
+      "verdict": "REQUEST CHANGES"
+    }
+  ],
+  "total_critical": 8,
+  "total_major": 11
+}
