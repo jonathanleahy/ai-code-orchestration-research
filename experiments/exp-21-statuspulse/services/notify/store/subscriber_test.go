@@ -13,24 +13,20 @@ func TestAddSubscriber(t *testing.T) {
 		t.Fatalf("AddSubscriber failed: %v", err)
 	}
 
+	if subscriber.ID == "" {
+		t.Error("Subscriber ID should not be empty")
+	}
 	if subscriber.Name != "Test" {
 		t.Errorf("Expected name 'Test', got '%s'", subscriber.Name)
 	}
-
 	if subscriber.WebhookURL != "http://example.com/webhook" {
 		t.Errorf("Expected webhook URL 'http://example.com/webhook', got '%s'", subscriber.WebhookURL)
 	}
-
 	if !reflect.DeepEqual(subscriber.Events, []string{"event1", "event2"}) {
 		t.Errorf("Expected events ['event1', 'event2'], got %v", subscriber.Events)
 	}
-
 	if !subscriber.Active {
-		t.Error("Expected subscriber to be active")
-	}
-
-	if subscriber.ID == "" {
-		t.Error("Expected subscriber ID to be set")
+		t.Error("Subscriber should be active by default")
 	}
 }
 
@@ -70,7 +66,7 @@ func TestListSubscribers(t *testing.T) {
 
 	subscribers := store.ListSubscribers()
 	if len(subscribers) != 0 {
-		t.Errorf("Expected 0 subscribers, got %d", len(subscribers))
+		t.Errorf("Expected empty list, got %d subscribers", len(subscribers))
 	}
 
 	store.AddSubscriber("Test1", "http://example.com/webhook1", []string{"event1"})
@@ -107,7 +103,6 @@ func TestGetMatchingAll(t *testing.T) {
 	if len(matching) != 1 {
 		t.Errorf("Expected 1 matching subscriber, got %d", len(matching))
 	}
-
 	if matching[0].Name != "Test1" {
 		t.Errorf("Expected Test1 to match")
 	}

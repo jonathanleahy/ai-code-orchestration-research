@@ -2,32 +2,30 @@
   "results": [
     {
       "service": "monitor",
-      "success": true,
-      "cost": 0.00804,
-      "tests_pass": 0,
-      "tests_total": 0,
-      "store_file": true,
-      "test_file": false
+      "success": false,
+      "cost": 0.008772,
+      "reason": "compile",
+      "error": "# statuspulse/monitor/store\n# [statuspulse/monitor/store]\nvet: store/check_test.go:134:7: cannot use StatusUp (constant \"up\" of string type CheckStatus) as *Store value in assignment\n"
     },
     {
       "service": "incidents",
-      "success": true,
-      "cost": 0.00573,
-      "tests_pass": 0,
-      "tests_total": 0,
+      "success": false,
+      "cost": 0.010275,
+      "tests_pass": 11,
+      "tests_total": 12,
       "store_file": true,
-      "test_file": false
+      "test_file": true
     },
     {
       "service": "notify",
       "success": false,
-      "cost": 0.006684,
+      "cost": 0.006672,
       "tests_pass": 7,
       "tests_total": 8,
       "store_file": true,
       "test_file": true
     }
   ],
-  "total_cost": 0.020454,
-  "passes": 2
+  "total_cost": 0.025719000000000002,
+  "passes": 0
 }

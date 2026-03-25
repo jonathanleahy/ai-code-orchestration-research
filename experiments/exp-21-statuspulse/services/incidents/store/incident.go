@@ -65,6 +65,7 @@ func (s *Store) Create(title, description string, status IncidentStatus, severit
 	if status == "" {
 		status = StatusInvestigating
 	}
+
 	if severity == "" {
 		severity = SeverityMinor
 	}
@@ -81,15 +82,18 @@ func (s *Store) Create(title, description string, status IncidentStatus, severit
 		Severity:    severity,
 		CreatedAt:   now,
 		UpdatedAt:   now,
-		Timeline: []*TimelineEntry{
-			{
-				ID:        fmt.Sprintf("tl-%d", s.nextTlID),
-				Message:   "Incident created",
-				Status:    status,
-				CreatedAt: now,
-			},
-		},
+		Timeline:    make([]*TimelineEntry, 0),
 	}
+
+	// Add timeline entry
+	tlEntry := &TimelineEntry{
+		ID:        fmt.Sprintf("tl-%d", s.nextTlID),
+		Message:   "Incident created",
+		Status:    status,
+		CreatedAt: now,
+	}
+	s.nextTlID++
+	incident.Timeline = append(incident.Timeline, tlEntry)
 
 	s.mu.Lock()
 	s.incidents[id] = incident
@@ -120,9 +124,11 @@ func (s *Store) List(status *IncidentStatus, openOnly bool) []*Incident {
 		if status != nil && incident.Status != *status {
 			continue
 		}
+
 		if openOnly && incident.Status == StatusResolved {
 			continue
 		}
+
 		result = append(result, incident)
 	}
 
@@ -139,22 +145,26 @@ func (s *Store) Update(id string, status *IncidentStatus, description *string, m
 	}
 
 	now := time.Now().Format(time.RFC3339)
+
 	if status != nil {
 		incident.Status = *status
 	}
+
 	if description != nil {
 		incident.Description = *description
 	}
+
 	if message != nil {
-		tlID := fmt.Sprintf("tl-%d", s.nextTlID)
-		s.nextTlID++
-		incident.Timeline = append(incident.Timeline, &TimelineEntry{
-			ID:        tlID,
+		tlEntry := &TimelineEntry{
+			ID:        fmt.Sprintf("tl-%d", s.nextTlID),
 			Message:   *message,
 			Status:    incident.Status,
 			CreatedAt: now,
-		})
+		}
+		s.nextTlID++
+		incident.Timeline = append(incident.Timeline, tlEntry)
 	}
+
 	incident.UpdatedAt = now
 
 	return incident, nil
@@ -177,14 +187,14 @@ func (s *Store) Resolve(id string, message string) (*Incident, error) {
 	incident.Status = StatusResolved
 	incident.ResolvedAt = now
 
-	tlID := fmt.Sprintf("tl-%d", s.nextTlID)
-	s.nextTlID++
-	incident.Timeline = append(incident.Timeline, &TimelineEntry{
-		ID:        tlID,
+	tlEntry := &TimelineEntry{
+		ID:        fmt.Sprintf("tl-%d", s.nextTlID),
 		Message:   message,
 		Status:    incident.Status,
 		CreatedAt: now,
-	})
+	}
+	s.nextTlID++
+	incident.Timeline = append(incident.Timeline, tlEntry)
 
 	return incident, nil
 }
@@ -193,8 +203,7 @@ func (s *Store) Delete(id string) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	_, exists := s.incidents[id]
-	if !exists {
+	if _, exists := s.incidents[id]; !exists {
 		return fmt.Errorf("incident not found")
 	}
 

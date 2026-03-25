@@ -147,7 +147,7 @@ func (s *Store) GetResults(checkID string, limit int) []*Result {
 	defer s.mu.RUnlock()
 
 	results, exists := s.results[checkID]
-	if !exists || len(results) == 0 {
+	if !exists {
 		return []*Result{}
 	}
 

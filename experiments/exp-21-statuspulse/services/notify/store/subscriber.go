@@ -71,8 +71,8 @@ func (s *Store) ListSubscribers() []*Subscriber {
 	defer s.mu.RUnlock()
 
 	subscribers := make([]*Subscriber, 0, len(s.subscribers))
-	for _, subscriber := range s.subscribers {
-		subscribers = append(subscribers, subscriber)
+	for _, sub := range s.subscribers {
+		subscribers = append(subscribers, sub)
 	}
 	return subscribers
 }
@@ -104,13 +104,13 @@ func (s *Store) GetMatchingSubscribers(event string) []*Subscriber {
 	defer s.mu.RUnlock()
 
 	var matching []*Subscriber
-	for _, subscriber := range s.subscribers {
-		if !subscriber.Active {
+	for _, sub := range s.subscribers {
+		if !sub.Active {
 			continue
 		}
-		for _, e := range subscriber.Events {
+		for _, e := range sub.Events {
 			if e == "all" || e == event {
-				matching = append(matching, subscriber)
+				matching = append(matching, sub)
 				break
 			}
 		}
