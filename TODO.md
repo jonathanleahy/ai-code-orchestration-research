@@ -111,3 +111,40 @@
 - [ ] Each new feature adds its own Playwright tests
 - [ ] Gate: build fails if any regression test fails
 - [ ] AI agent runs AFTER scripted tests to find NEW bugs
+
+## NEW SPIKE: Documentation Orchestration
+
+### Exp 63: Auto-Generate Project Documentation
+- [ ] README.md from code (API endpoints, how to run, env vars)
+- [ ] API docs from Go handler signatures (Swagger/OpenAPI style)
+- [ ] User guide from wireframes + running app (step-by-step with descriptions)
+- [ ] Architecture Decision Records from reviewer feedback
+- [ ] Changelog from progressive enhancement iterations
+
+### Exp 64: Review Stage Evidence Trail
+- [ ] Each reviewer produces a sign-off document (verdict, items checked, issues found)
+- [ ] Checklist format: YES/NO per item with reviewer name + timestamp
+- [ ] Aggregate report: "8/10 reviewers APPROVE, 2 REQUEST CHANGES"
+- [ ] Issue tracker: every finding logged with severity, owner, resolution status
+- [ ] Final gate report: all issues resolved or accepted with justification
+
+### Exp 65: Test Report Generation
+- [ ] Test summary: pass/fail count, coverage %, mutation score
+- [ ] Per-test-type breakdown: unit, integration, Playwright, adversarial, security
+- [ ] Trend: coverage over progressive iterations (iter 1: 40%, iter 5: 90%)
+- [ ] Failure analysis: what failed, why, how it was fixed
+- [ ] Auto-generated from go test + gosec + Playwright output
+
+### Exp 66: Security Audit Report
+- [ ] Consolidated report: gosec + govulncheck + pen test + adversarial + OWASP
+- [ ] Per-finding: severity, description, affected code, remediation, status
+- [ ] Executive summary: Critical/High/Medium/Low counts
+- [ ] Compliance checklist: OWASP Top 10 coverage (checked/not checked)
+- [ ] GDPR data map: what PII exists, where, who, retention
+
+### Exp 67: User Documentation
+- [ ] Getting started guide (register, first client, first invoice)
+- [ ] Feature-by-feature guide with text wireframes as illustrations
+- [ ] FAQ generated from persona pain points
+- [ ] API reference for integrations
+- [ ] Admin guide (deployment, backup, monitoring)
