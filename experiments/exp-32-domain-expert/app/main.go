@@ -76,7 +76,7 @@ func dashboardHandler(w http.ResponseWriter, r *http.Request) {
 
 	htmlContent := dashboardHTML(filtered, search)
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	w.Header().Set("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'")
+	w.Header().Set("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'")
 	fmt.Fprint(w, htmlContent)
 }
 
@@ -128,7 +128,7 @@ func clientProfileHandler(w http.ResponseWriter, r *http.Request) {
 
 	htmlContent := clientProfileHTML(client, tab, clientInvoices, clientActivities)
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	w.Header().Set("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'")
+	w.Header().Set("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'")
 	fmt.Fprint(w, htmlContent)
 }
 
@@ -160,21 +160,21 @@ func activitiesHandler(w http.ResponseWriter, r *http.Request) {
 func createClientHandler(w http.ResponseWriter, r *http.Request) {
 	htmlContent := createClientFormHTML()
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	w.Header().Set("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'")
+	w.Header().Set("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'")
 	fmt.Fprint(w, htmlContent)
 }
 
 // apiCreateClientHandler creates a client via API
 func apiCreateClientHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		json.NewEncoder(w).Encode(map[string]string{"error": "Method not allowed"})
 		return
 	}
 
-	if err := r.ParseForm(); err != nil {
-		http.Error(w, "Invalid form", http.StatusBadRequest)
-		return
-	}
+	// Parse both url-encoded and multipart forms
+	r.ParseMultipartForm(10 << 20)
 
 	// Validation
 	name := strings.TrimSpace(r.FormValue("name"))
@@ -182,12 +182,16 @@ func apiCreateClientHandler(w http.ResponseWriter, r *http.Request) {
 	phone := strings.TrimSpace(r.FormValue("phone"))
 
 	if name == "" {
-		http.Error(w, "Name is required", http.StatusBadRequest)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"error": "Name is required"})
 		return
 	}
 
 	if email != "" && !isValidEmail(email) {
-		http.Error(w, "Invalid email format", http.StatusBadRequest)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"error": "Invalid email format"})
 		return
 	}
 
@@ -589,7 +593,7 @@ func invoicePrintHandler(w http.ResponseWriter, r *http.Request) {
 
 	htmlContent := invoicePrintHTML(invoice, client)
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	w.Header().Set("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'")
+	w.Header().Set("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'")
 	fmt.Fprint(w, htmlContent)
 }
 
@@ -793,7 +797,14 @@ func createClientFormHTML() string {
 				method: 'POST',
 				body: formData
 			})
-			.then(function(r) { return r.json(); })
+			.then(function(r) {
+				return r.json().then(function(data) {
+					if (!r.ok) {
+						throw new Error(data.error || 'Request failed');
+					}
+					return data;
+				});
+			})
 			.then(function(data) {
 				document.getElementById('successMsg').style.display = 'block';
 				setTimeout(function() {
@@ -801,7 +812,7 @@ func createClientFormHTML() string {
 				}, 1500);
 			})
 			.catch(function(err) {
-				alert('Error: ' + err);
+				alert('Error: ' + err.message);
 			});
 		});
 	</script>
