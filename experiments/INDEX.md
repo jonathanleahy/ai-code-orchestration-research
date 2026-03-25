@@ -4,7 +4,12 @@
 
 **Can AI go from a one-line idea to a running, tested, reviewed product?**
 
-32 experiments across code generation, product design, 8-reviewer panels, and browser testing. Key finding: **22 API tests + 8 reviewers missed 3 bugs that Playwright found in 10 seconds.**
+38 experiments across code generation, product design, 10-reviewer panels, progressive enhancement, and browser testing.
+
+**Three key findings:**
+1. **Playwright catches what nothing else does** — 4 bugs missed by 26 passing tests + 10 approved reviews
+2. **Progressive enhancement has ZERO regressions** — build one feature at a time, verify after each (Exp 38: 5 iterations, 32/32 tests)
+3. **Domain Expert + Constrained Simplicity** — all features present, simply implemented, 60% cheaper than domain-only
 
 ## The Pipeline: $0.40-0.96 from Idea to Reviewed Product
 
@@ -126,7 +131,20 @@ graph LR
 | UI/UX expert | Hierarchy, feedback | $0.006 | 31 |
 | Accessibility | ARIA, keyboard, contrast | $0.005 | 31 |
 | OWASP security | XSS, CSP (broke the app!) | $0.009 | 31-32 |
-| **Playwright** | **3 bugs nothing else found** | **~$0.10** | **32** |
+| **Playwright** | **4 bugs nothing else found** | **~$0.10** | **32, 37** |
+| SaaS UX designer | 6 missing patterns | $0.005 | 37 |
+| Code architecture | DRY, separation | $0.005 | 37 |
+| Constrained simplicity | Simplify HOW not WHETHER | $0.005 | 36 |
+
+## Build Approaches Compared
+
+| Approach | Lines | Tests | Regressions | Cost | Verdict |
+|----------|-------|-------|-------------|------|---------|
+| One-shot, domain only (32) | 1516 | 22/22 | Store tests failed | $0.96 | Too complex |
+| One-shot, simplicity only (34) | 518 | 13/13 | — | $0.20 | Missing features |
+| One-shot, both (36) | 1191 | 29/29 | — | $0.39 | Good balance |
+| 10-reviewer panel (37) | 426 | 26/26 | — | $0.34 | SaaS patterns |
+| **Progressive, 5 iters (38)** | **1121** | **32/32** | **ZERO** | **$0.82** | **Most reliable** |
 
 ## Cost Summary
 
@@ -135,14 +153,22 @@ graph LR
 | Spikes V1-V3 (original) | ~$3.00 |
 | Experiments 13-21 (code gen + multi-service) | ~$1.05 |
 | Experiments 22-30 (design + reviewers) | ~$2.50 |
-| Experiments 31-33 (post-code + features) | ~$1.20 |
-| **Total research cost** | **~$7.75** |
-| **Cost per reviewed app** | **$0.40-0.96** |
+| Experiments 31-38 (post-code + features + progressive) | ~$3.50 |
+| **Total research cost** | **~$10.05** |
+| **Cost per reviewed app** | **$0.34-0.96** |
+
+## What We Proved
+
+1. **$0.035 of pre-code reviews** catches features the brief missed, workflow gaps, SaaS patterns, competitive positioning, and over-engineering
+2. **Progressive enhancement** is the most reliable build method — zero regressions across 5 iterations
+3. **Playwright testing is non-negotiable** — 4 bugs missed by everything else
+4. **Domain + constrained simplicity** is the sweet spot for one-shot builds
+5. **10 reviewers at $0.035** — no diminishing returns, each finds unique issues
 
 ## Next Steps
 
-- **Playwright persona testing** — automate browser journey verification
-- **Simplicity agent** — "is this necessary? is this the simplest way?" at every stage
-- **Progressive enhancement** — build simple, add features one at a time
-- **Domain expert from brief** — auto-generate domain reviewer based on product type
+- **Automated Playwright journeys** — run after every build automatically
+- **20-reviewer experiment** — test diminishing returns
 - **Pipeline integration** — wire into Dark Factory daemon
+- **Different languages** — TypeScript, Python
+- **Real deployment** — Docker + VPS

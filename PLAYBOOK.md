@@ -1,0 +1,150 @@
+# AI Code Orchestration Playbook
+
+**How to go from a one-line idea to a running, tested, reviewed product.**
+
+Based on 38 experiments. Total research cost: ~$10.
+
+---
+
+## The Pipeline
+
+```
+1. BRIEF                    → One-line idea
+2. PERSONA DISCOVERY         → 3 personas, interviews, MVP ($0.01)
+3. PRE-CODE REVIEW (7)       → Dev, Product, QA, Market, Domain, SaaS UX, Simplicity ($0.035)
+4. REVISE                    → Incorporate all feedback ($0.005)
+5. GO TYPES                  → Exact type signatures ($0.007)
+6. BUILD (progressive)       → One feature at a time, verify after each ($0.10-0.20 per iteration)
+7. POST-CODE REVIEW (3)      → Code Architecture, Accessibility, OWASP ($0.015)
+8. APPLY FIXES + REBUILD     → Fix issues, re-test ($0.05-0.20)
+9. PLAYWRIGHT                → Personas click through the app (essential)
+10. SHIP
+```
+
+**Total cost: $0.40-0.96 per product.**
+
+---
+
+## Pre-Code Reviewers (7)
+
+Run BEFORE any code is written. Review the spec/wireframes.
+
+| # | Reviewer | Checks | Cost | Exp |
+|---|---------|--------|------|-----|
+| 1 | **Dev Architect** | Architecture, cost, $5 VPS viability, security | $0.005 | 25 |
+| 2 | **Product Owner** | Every CRUD action has a button/form. Every persona journey has a matching screen. | $0.006 | 30 |
+| 3 | **QA Engineer** | Empty forms, duplicates, delete with children, empty states, network errors, back navigation | $0.004 | 30 |
+| 4 | **Market Analyst** | vs HubSpot/Zoho Free. Differentiation. Would someone pay $15/month? | $0.005 | 30 |
+| 5 | **Domain Expert** | Workflow-specific. For invoicing: line items, print, send, pay, void, due date, overdue. Auto-generate from brief. | $0.006 | 32 |
+| 6 | **SaaS UX Designer** | Breadcrumbs, toasts (not alerts), confirmations on delete, back buttons, empty states with CTA, responsive, search, consistent button colors | $0.005 | 37 |
+| 7 | **Constrained Simplicity** | Cannot cut features. Can simplify HOW. Address=textarea not 5 fields. Print=browser print not PDF library. | $0.005 | 36 |
+
+**Total: $0.035. Each finds unique issues.**
+
+---
+
+## Post-Code Reviewers (3)
+
+Run AFTER code is built. Review actual HTML/Go code.
+
+| # | Reviewer | Checks | Cost | Exp |
+|---|---------|--------|------|-----|
+| 8 | **Code Architecture** | Separation of concerns, DRY, handler size <50 lines, error consistency | $0.005 | 37 |
+| 9 | **Accessibility** | WCAG 2.1 AA, ARIA labels, form labels, keyboard nav, color contrast, heading hierarchy | $0.005 | 31 |
+| 10 | **OWASP Security** | XSS (html.EscapeString), CSRF, CORS, input validation, no secrets in source | $0.005 | 31 |
+
+**Total: $0.015. IMPORTANT: re-run ALL tests after applying fixes (Exp 32: CSP fix broke inline JS).**
+
+---
+
+## Build Method: Progressive Enhancement
+
+Don't build everything at once. Add one feature at a time.
+
+```
+Iteration 1: Client CRUD (add, list, view)        → test → PASS
+Iteration 2: + Edit + Delete                       → test → PASS (old tests too)
+Iteration 3: + Activity log                        → test → PASS (old tests too)
+Iteration 4: + Invoices                            → test → PASS (old tests too)
+Iteration 5: + Search + print                      → test → PASS (old tests too)
+```
+
+**Why:** Exp 38 — 5 iterations, 32/32 tests, ZERO regressions. Exp 32 — one-shot with 10 features, store tests failed (too complex).
+
+**Rule:** Each iteration must pass ALL existing tests before proceeding.
+
+---
+
+## Playwright Testing (Non-Negotiable)
+
+Run after EVERY build. Simulates real users clicking through the app.
+
+**Bugs only Playwright catches (Exp 32, 37):**
+| Bug | API Tests | Reviewers | Playwright |
+|-----|----------|-----------|-----------|
+| CSP blocks inline JS | PASS | Approved | CAUGHT |
+| Plain text error → JSON parse fail | PASS | Approved | CAUGHT |
+| ParseForm ignores multipart FormData | PASS | Approved | CAUGHT |
+| Modal overlay blocks all clicks | PASS | Approved | CAUGHT |
+
+**4 bugs, all with passing tests and approved reviews. Only clicking found them.**
+
+---
+
+## Go Code Rules (from experiments)
+
+| Rule | Why | Exp |
+|------|-----|-----|
+| Exact type signatures in spec | Prevents V-Model type mismatches (0% → 93%) | 17 |
+| `r.ParseMultipartForm` not `r.ParseForm` | FormData sends multipart, ParseForm ignores it | 32 |
+| Return JSON errors, not `http.Error` plain text | JS `.json()` fails on plain text | 32 |
+| No `Content-Security-Policy` with inline JS | CSP `script-src 'self'` blocks embedded `<script>` | 32 |
+| String concatenation in JS, not template literals | Go backticks can't contain backticks | 15, 18 |
+| `goimports -w .` before testing | Fixes 40% of model errors for free | 4, 16 |
+| `fix-address-of-const.py` after goimports | Fixes `&constant` errors (shared blind spot) | 16 |
+| One store per test function, no shared state | Prevents test order dependencies | 38 |
+| Address as single string, not struct | Simpler, fewer fields, less to break | 36 |
+| Invoice status as string, not state machine | "draft"/"sent"/"paid"/"void" — simple and correct | 36 |
+
+---
+
+## Cost Breakdown
+
+| Component | Cost | % of Total |
+|-----------|------|-----------|
+| Pre-code reviews (7) | $0.035 | 4% |
+| Post-code reviews (3) | $0.015 | 2% |
+| Store code (Qwen3-30B) | $0.01-0.02 | 2% |
+| HTTP server (claude -p) | $0.15-0.25 | 40% |
+| HTTP tests (claude -p) | $0.10-0.20 | 30% |
+| Store tests (Qwen3-30B) | $0.01-0.02 | 2% |
+| Auto-fix loop | $0.00-0.01 | 1% |
+| Playwright | ~$0.10 | 15% |
+| **Total** | **$0.40-0.82** | |
+
+**$0.05 of reviews saves $0.50 of rework.**
+
+---
+
+## Tools Created
+
+| Tool | Purpose | Location |
+|------|---------|----------|
+| parse-blocks-v2.py | Hardened file parser (8 formats) | scripts/dev-spike-v3/ |
+| fix-address-of-const.py | Go &constant auto-fix | scripts/dev-spike-v3/ |
+| exp27-fully-automated.py | Full pipeline script | scripts/dev-spike-v3/ |
+| exp30-full-reviewed.py | 4-reviewer pipeline | scripts/dev-spike-v3/ |
+| exp37-full-panel.py | 10-reviewer pipeline | scripts/dev-spike-v3/ |
+| exp38-progressive.py | Progressive enhancement | scripts/dev-spike-v3/ |
+
+---
+
+## For Dark Factory Integration
+
+1. **Blueprint stage** → add exact Go types (already done: IR-EXP17)
+2. **New stage: Persona Discovery** → between brainstorm and blueprint
+3. **New stage: Pre-code Review** → 7 reviewers before development
+4. **Development stage** → progressive enhancement (one feature at a time)
+5. **New stage: Post-code Review** → 3 reviewers after development
+6. **Testing stage** → add Playwright journey testing
+7. **Auto-fix loop** → goimports + gofmt + fix-address-of-const after every code generation
