@@ -72,9 +72,21 @@ const FILES = {
             '_folder': true,
             'README.md': 'experiments/exp-16/README.md'
         },
+        'exp-17': {
+            '_folder': true,
+            'README.md': 'experiments/exp-17/README.md'
+        },
         'exp-18': {
             '_folder': true,
             'README.md': 'experiments/exp-18/README.md'
+        },
+        'exp-19': {
+            '_folder': true,
+            'README.md': 'experiments/exp-19/README.md'
+        },
+        'exp-20': {
+            '_folder': true,
+            'README.md': 'experiments/exp-20/README.md'
         },
         'spike-v1': {
             '_folder': true,

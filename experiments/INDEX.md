@@ -49,7 +49,10 @@ graph LR
 | [14](exp-14/README.md) | Model Routing + Retry | 50% (model only) | $0.111 | Retry works for fixable errors, not blind spots |
 | [15](exp-15/README.md) | Tiered Escalation | **100%** T1 only! | $0.030 | Better prompt fixed backtick — cheapest model does it all |
 | [16](exp-16/README.md) | Sub-Task Granularity (v2) | **100%** (5/5) | $0.115 | 2 files/task + auto-fix = 100% on cheapest model |
+| [17](exp-17/README.md) | V-Model Full Loop | **100%** (3/3) | $0.037 | Spec→build works; acceptance test extraction needs work |
 | [18](exp-18/README.md) | Full Pipeline E2E | 0% (main.go) | $0.167 | Prompt hint works in isolation, fails in context |
+| [19](exp-19/README.md) | V2 Re-run (dep-doctor) | 94% compile | $0.084 | Compile gate 0%→94%; golden tests need planner |
+| [20](exp-20/README.md) | URL Shortener (new app) | Store works | $0.019 | Approach generalises; claude -p needs foreground |
 
 ## Spike Progression
 
