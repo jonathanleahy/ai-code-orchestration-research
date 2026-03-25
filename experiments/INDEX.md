@@ -65,6 +65,7 @@ graph TD
 | [26](exp-26-tests/README.md) | **Add Test Layers** | 33/36 (92%) | $0.12 | Store + acceptance + HTTP tests, $0.33 total with code |
 | [27](exp-27-automated/README.md) | **Fully Automated** | 41/41 (100%) | $0.49 | CRM with invoices, 720 lines, zero intervention |
 | [29](exp-29-crm-gqlgen/README.md) | **CRM + gqlgen GraphQL** | BUILD PASS | ~$0.50 | Pipeline needs iterative mode for code generation |
+| [30](exp-30-reviewed/README.md) | **4-Reviewer Panel CRM** | 51/51 (100%) | $0.40 | Product reviewer caught missing Add/Delete; all fixed |
 
 ## Spike Progression
 

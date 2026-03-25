@@ -1,60 +1,80 @@
 # Research TODO
 
-## Completed
-- [x] **Autoresearch executor prompts** — 3/4 sub-tasks at 100% on Qwen3-30B
-- [x] **Index page with experiment map** — experiments/INDEX.md with Mermaid diagrams, results table
-- [x] **Per-experiment directories** — 12 experiment READMEs in exp-01/ through exp-12/
-- [x] **Spike V3 Report** — experiments/spike-v3/REPORT.md (architecture, contract-first, backtick case study)
-- [x] **Autoresearch Report** — experiments/spike-v3/autoresearch-report.md (methodology, results, winning prompts)
-- [x] **Compile-Fix Pipeline** — experiments/spike-v3/compile-fix-pipeline.md (gate pipeline, per-language configs)
-- [x] **Escalation Strategy** — experiments/spike-v3/escalation-strategy.md (cost analysis, when it works/doesn't)
-- [x] **Escalation on Failure** — exp-01: 0/5, shared blind spots can't be escalated
-- [x] **Claude Subscription Models** — exp-06: Haiku 3x faster, both pass
-- [x] **Full-Stack App (70s)** — exp-12: 7 files, builds, tests, runs, FREE
-- [x] **Auto-Fix Pipeline measurement** — exp-04: 40-60% of errors fixed free
-- [x] **MiniMax Backtick Hint** — exp-08: 2/3 with explicit hint
-- [x] **V-Model Pattern (conceptual)** — exp-10: pattern works, blocked by parser
-- [x] **Model Routing (single-shot)** — exp-05: 0/5, proves retry loop essential
+## Completed (29 experiments)
+- [x] Exp 1-18: Code generation (prompts, models, auto-fix, V-Model, parser)
+- [x] Exp 19-21: Multi-service + different apps (StatusPulse, URL shortener)
+- [x] Exp 22-23: Product design (journeys, personas, wireframes)
+- [x] Exp 24-26: Wireframes→code, full pipeline, test layers
+- [x] Exp 27-28: Fully automated pipeline (bookmark manager, CRM)
+- [x] Exp 29: gqlgen GraphQL (iterative pipeline for code generation)
+- [x] Exp 30: 4-reviewer panel (dev, product, QA, market) — RUNNING
 
-## Experiments to Run
+## Next Experiments
 
-### Parser Hardening (Exp 13)
-- [ ] Production-grade file block parser
-- [ ] Handle: truncated END markers, code fences, package declarations, filename hints
-- [ ] Measure: re-run exp-09 (API-only full app) with improved parser
-- [ ] Target: reduce 40% parser failure rate to <5%
+### Exp 31: Personas USE the Running App (Playwright)
+- [ ] Build app from brief
+- [ ] Start the server
+- [ ] Use Playwright to simulate each persona doing their journey
+- [ ] Persona 1: "I tried to add a client and the button didn't work"
+- [ ] Persona 2: "I searched for 'Acme' and got no results even though I just added it"
+- [ ] Report what works and what doesn't — test the PRODUCT, not the code
+- [ ] Measures: journey completion rate per persona
 
-### Full Pipeline Retry for Model Routing (Exp 14)
-- [ ] Re-run exp-05 (model routing) WITH retry loop instead of single-shot
-- [ ] Route: schema/model → Qwen3-30B, main.go → MiniMax or Gemini
-- [ ] Measure: does routing save cost vs. one model for everything?
+### Exp 32: Regression Testing (Change a Feature)
+- [ ] Take a working app with passing tests
+- [ ] Change one thing: rename a field, change a default, alter a validation
+- [ ] Run the test suite — do the tests catch the change?
+- [ ] Measures: what % of intentional changes are caught by tests
+- [ ] Tests test quality, not just test count
 
-### Re-run V1+V2 with All Improvements (Exp 15)
-- [ ] Take winning prompts from autoresearch
-- [ ] Add compile gate + auto-fix
-- [ ] Re-run V1 (11 models) and V2 (dep-doctor CLI)
-- [ ] Compare: improvement delta and cost delta
+### Exp 33: Add Feature to Existing App
+- [ ] Take the CRM from Exp 28/30
+- [ ] Brief: "Add CSV export for client list"
+- [ ] Tests whether the pipeline handles ENHANCEMENT, not just greenfield
+- [ ] Must not break existing tests
+- [ ] Measures: feature added + all old tests still pass
 
-### Sub-Task Granularity (Exp 16)
-- [ ] Test 2-3 files per sub-task (halves API calls)
-- [ ] Measure: quality drop threshold
-- [ ] Test: task.go + task_test.go as one sub-task (fixes model_test 0%)
+### Exp 34: Docker Build + Deploy
+- [ ] Take a passing app
+- [ ] Generate Dockerfile
+- [ ] Build Docker image
+- [ ] Deploy to VPS (or local Docker)
+- [ ] Verify it runs at the deployed URL
+- [ ] Measures: time from passing tests to live URL
 
-### V-Model Full Loop (Exp 17)
-- [ ] Fix parser to enable exp-10 completion
-- [ ] Blueprint → spec + hidden acceptance tests
-- [ ] Executor builds from spec only
-- [ ] Run acceptance gate after build
-- [ ] Measure: feedback loop iterations to pass
+### Exp 35: Screenshot → Product
+- [ ] Input: screenshot of a competitor (HubSpot, Instatus, etc.)
+- [ ] Claude reads the screenshot
+- [ ] Extracts: layout, features, navigation, style
+- [ ] Generates wireframes + spec + code matching the screenshot
+- [ ] Measures: how close is the result to the original?
 
-## Future Directions
+### Exp 36: Minimum Viable Pipeline (How Cheap?)
+- [ ] Strip everything: 1 persona, no wireframes, just types → code → tests
+- [ ] What's the absolute floor cost for a working app?
+- [ ] Compare: full pipeline ($0.50) vs minimal pipeline ($?)
+- [ ] At what point does removing steps reduce quality?
 
-### Bigger Applications
-- [ ] SvelteKit + Go GraphQL full stack (2000+ lines)
-- [ ] Test contract-first + mock-driven with parallel frontend/backend
-- [ ] Measure: does the approach scale?
+### Exp 37: Multi-Language (TypeScript/Node.js)
+- [ ] Same pipeline but target TypeScript instead of Go
+- [ ] Uses: npm, Express/Fastify, Vitest
+- [ ] Measures: does the approach generalize beyond Go?
 
-### Pipeline Integration
-- [ ] Integrate winning strategy into Dark Factory daemon
-- [ ] A/B test: new approach vs current claude -p approach
-- [ ] Measure: cost per pipeline item, success rate, time
+### Exp 38: Real Database (PostgreSQL)
+- [ ] Replace in-memory store with PostgreSQL
+- [ ] Generate migrations, connection pooling, queries
+- [ ] Measures: how much more complex is the pipeline for persistent storage?
+
+### Exp 39: AI Code Review (Model Reviews Model)
+- [ ] One model writes the code
+- [ ] Different model reviews it (security, quality, patterns)
+- [ ] Reviewer can REQUEST CHANGES → code model fixes
+- [ ] Like pr-review.sh but for AI-generated code
+- [ ] Measures: what issues does the reviewer catch?
+
+### Exp 40: Progressive Enhancement (MVP → V2 → V3)
+- [ ] Build MVP from brief
+- [ ] Personas use it → feedback
+- [ ] Add features based on feedback (not a new brief)
+- [ ] Repeat 3 times
+- [ ] Measures: does the app improve with each iteration? Do tests keep passing?
