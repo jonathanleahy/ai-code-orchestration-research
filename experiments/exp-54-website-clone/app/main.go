@@ -20,6 +20,10 @@ const html = `<!DOCTYPE html>
 			box-sizing: border-box;
 		}
 
+		html {
+			scroll-behavior: smooth;
+		}
+
 		html, body {
 			width: 100%;
 			height: 100%;
@@ -39,20 +43,20 @@ const html = `<!DOCTYPE html>
 			padding: 0 40px;
 		}
 
-		h1, h2, h3 {
+		h1, h2, h3, h4 {
 			font-family: Georgia, "Times New Roman", serif;
 			font-weight: normal;
 			letter-spacing: -0.02em;
 		}
 
 		h1 {
-			font-size: 64px;
+			font-size: 80px;
 			line-height: 1.2;
 			margin-bottom: 24px;
 		}
 
 		h2 {
-			font-size: 48px;
+			font-size: 40px;
 			line-height: 1.2;
 			margin-bottom: 32px;
 		}
@@ -62,18 +66,23 @@ const html = `<!DOCTYPE html>
 			margin-bottom: 16px;
 		}
 
+		h4 {
+			font-size: 18px;
+			margin-bottom: 16px;
+		}
+
 		p {
 			font-size: 16px;
-			line-height: 1.8;
+			line-height: 1.7;
 			color: #333;
 		}
 
 		.section-label {
 			text-transform: uppercase;
 			font-size: 12px;
-			letter-spacing: 2px;
+			letter-spacing: 3px;
 			color: #d4727a;
-			font-weight: 600;
+			font-weight: 500;
 			margin-bottom: 48px;
 		}
 
@@ -88,11 +97,12 @@ const html = `<!DOCTYPE html>
 			align-items: center;
 			padding: 32px 40px;
 			border-bottom: 1px solid #f0f0f0;
+			box-shadow: 0 1px 0 rgba(0,0,0,0.05);
 		}
 
 		.nav-logo {
-			font-size: 18px;
-			font-weight: 600;
+			font-size: 24px;
+			font-weight: bold;
 			letter-spacing: -0.5px;
 			font-family: Georgia, 'Times New Roman', serif;
 		}
@@ -124,28 +134,30 @@ const html = `<!DOCTYPE html>
 		.hero {
 			padding: 150px 40px;
 			text-align: left;
+			border-bottom: 1px solid #eee;
 		}
 
 		.hero-label {
 			text-transform: uppercase;
-			font-size: 13px;
-			letter-spacing: 2px;
+			font-size: 12px;
+			letter-spacing: 3px;
 			color: #d4727a;
 			margin-bottom: 32px;
 			display: block;
+			font-weight: 500;
 		}
 
 		.hero-title {
-			font-size: 72px;
+			font-size: 80px;
 			font-family: Georgia, 'Times New Roman', serif;
-			line-height: 1.1;
+			line-height: 0.95;
 			margin-bottom: 48px;
 			max-width: 700px;
 		}
 
 		.hero-body {
-			font-size: 18px;
-			line-height: 1.8;
+			font-size: 16px;
+			line-height: 1.7;
 			max-width: 550px;
 			color: #333;
 		}
@@ -160,10 +172,10 @@ const html = `<!DOCTYPE html>
 		.logo-bar-label {
 			text-transform: uppercase;
 			font-size: 12px;
-			letter-spacing: 2px;
+			letter-spacing: 3px;
 			color: #d4727a;
 			margin-bottom: 48px;
-			font-weight: 600;
+			font-weight: 500;
 		}
 
 		.logos {
@@ -175,9 +187,11 @@ const html = `<!DOCTYPE html>
 		}
 
 		.logo-item {
-			font-size: 18px;
+			font-size: 14px;
 			font-weight: 700;
-			color: #000;
+			color: #999;
+			text-transform: uppercase;
+			letter-spacing: 1.5px;
 		}
 
 		/* Services */
@@ -207,6 +221,11 @@ const html = `<!DOCTYPE html>
 			display: flex;
 			align-items: center;
 			gap: 16px;
+			transition: color 0.2s;
+		}
+
+		.service-title:hover {
+			color: #d4727a;
 		}
 
 		.service-title::after {
@@ -225,9 +244,15 @@ const html = `<!DOCTYPE html>
 			background-color: #fafafa;
 		}
 
+		.how-section h2 {
+			font-size: 40px;
+			font-weight: bold;
+			margin-bottom: 32px;
+		}
+
 		.how-intro {
-			font-size: 18px;
-			line-height: 1.8;
+			font-size: 16px;
+			line-height: 1.7;
 			max-width: 700px;
 			margin-bottom: 80px;
 			color: #333;
@@ -236,7 +261,7 @@ const html = `<!DOCTYPE html>
 		.how-grid {
 			display: grid;
 			grid-template-columns: repeat(3, 1fr);
-			gap: 60px;
+			gap: 48px;
 		}
 
 		.how-item h3 {
@@ -245,9 +270,9 @@ const html = `<!DOCTYPE html>
 		}
 
 		.how-item p {
-			font-size: 15px;
-			line-height: 1.8;
-			color: #555;
+			font-size: 16px;
+			line-height: 1.7;
+			color: #333;
 		}
 
 		/* CTA */
@@ -259,7 +284,7 @@ const html = `<!DOCTYPE html>
 		}
 
 		.cta-title {
-			font-size: 48px;
+			font-size: 40px;
 			font-family: Georgia, serif;
 			margin-bottom: 48px;
 			color: #fff;
@@ -274,7 +299,7 @@ const html = `<!DOCTYPE html>
 			font-size: 16px;
 			font-weight: 600;
 			border: 2px solid #fff;
-			padding: 12px 32px;
+			padding: 16px 32px;
 			border-radius: 4px;
 			transition: all 0.2s;
 		}
@@ -302,16 +327,16 @@ const html = `<!DOCTYPE html>
 
 		.case-study {
 			padding: 32px;
-			background-color: #f9fafb;
+			border-left: 4px solid #d4727a;
 			border-radius: 8px;
 		}
 
 		.case-study-label {
 			text-transform: uppercase;
-			font-size: 11px;
-			letter-spacing: 2px;
+			font-size: 12px;
+			letter-spacing: 3px;
 			color: #d4727a;
-			font-weight: 600;
+			font-weight: 500;
 			margin-bottom: 16px;
 			display: block;
 		}
@@ -324,9 +349,9 @@ const html = `<!DOCTYPE html>
 		}
 
 		.case-study-text {
-			font-size: 15px;
-			line-height: 1.8;
-			color: #555;
+			font-size: 16px;
+			line-height: 1.7;
+			color: #333;
 			margin-bottom: 20px;
 		}
 
@@ -342,7 +367,7 @@ const html = `<!DOCTYPE html>
 		}
 
 		.case-study-link:hover {
-			color: #c95661;
+			color: #d4727a;
 		}
 
 		.case-study-link::after {
@@ -365,6 +390,12 @@ const html = `<!DOCTYPE html>
 
 		.learn-more-section .section-label {
 			color: #999;
+		}
+
+		.learn-more-section h2 {
+			font-size: 40px;
+			color: #fff;
+			margin-bottom: 48px;
 		}
 
 		.learn-more-links {
@@ -391,7 +422,7 @@ const html = `<!DOCTYPE html>
 		}
 
 		.learn-more-link:hover {
-			color: #e8a0a4;
+			color: #d4727a;
 		}
 
 		.learn-more-cta {
@@ -412,12 +443,13 @@ const html = `<!DOCTYPE html>
 			border: 2px solid #fff;
 			padding: 12px 32px;
 			border-radius: 4px;
+			background-color: transparent;
 			transition: all 0.2s;
 		}
 
 		.learn-more-button:hover {
-			background-color: #fff;
-			color: #1a1a1a;
+			border-color: #d4727a;
+			color: #d4727a;
 		}
 
 		.learn-more-email {
@@ -428,7 +460,7 @@ const html = `<!DOCTYPE html>
 		}
 
 		.learn-more-email:hover {
-			color: #e8a0a4;
+			color: #d4727a;
 		}
 
 		.blog-grid {
@@ -448,21 +480,21 @@ const html = `<!DOCTYPE html>
 			color: #d4727a;
 			margin-bottom: 12px;
 			text-transform: uppercase;
-			letter-spacing: 0.5px;
-			font-weight: 600;
+			letter-spacing: 3px;
+			font-weight: 500;
 		}
 
 		.blog-title {
-			font-size: 24px;
+			font-size: 28px;
 			font-family: Georgia, serif;
 			margin-bottom: 12px;
 			font-weight: bold;
 		}
 
 		.blog-excerpt {
-			font-size: 14px;
+			font-size: 16px;
 			line-height: 1.7;
-			color: #666;
+			color: #333;
 			margin-bottom: 16px;
 		}
 
@@ -476,7 +508,7 @@ const html = `<!DOCTYPE html>
 		}
 
 		.blog-read-more:hover {
-			color: #c95661;
+			color: #d4727a;
 		}
 
 		/* Benefits Section */
@@ -495,18 +527,21 @@ const html = `<!DOCTYPE html>
 
 		.benefit-item {
 			text-align: left;
+			border-top: 1px solid #ddd;
+			padding-top: 24px;
 		}
 
 		.benefit-item h3 {
-			font-size: 20px;
+			font-size: 18px;
 			font-family: Georgia, serif;
+			font-weight: bold;
 			margin-bottom: 16px;
 		}
 
 		.benefit-item p {
-			font-size: 15px;
-			line-height: 1.8;
-			color: #666;
+			font-size: 16px;
+			line-height: 1.7;
+			color: #333;
 		}
 
 		/* Approach Section */
@@ -521,13 +556,13 @@ const html = `<!DOCTYPE html>
 		}
 
 		.approach-section h2 {
-			font-size: 48px;
+			font-size: 40px;
 			margin-bottom: 32px;
 		}
 
 		.approach-text {
 			font-size: 16px;
-			line-height: 1.8;
+			line-height: 1.7;
 			color: #333;
 		}
 
@@ -558,7 +593,7 @@ const html = `<!DOCTYPE html>
 		}
 
 		.learn-more-card h3 {
-			font-size: 22px;
+			font-size: 24px;
 			font-family: Georgia, serif;
 			margin-bottom: 24px;
 		}
@@ -579,7 +614,7 @@ const html = `<!DOCTYPE html>
 		footer::before {
 			content: "&";
 			display: block;
-			font-size: 80px;
+			font-size: 120px;
 			line-height: 1;
 			margin-bottom: 60px;
 			font-family: Georgia, serif;
@@ -598,11 +633,11 @@ const html = `<!DOCTYPE html>
 
 		.footer-column h4 {
 			font-size: 12px;
-			font-weight: 600;
+			font-weight: 500;
 			margin-bottom: 24px;
 			text-transform: uppercase;
-			letter-spacing: 2px;
-			color: #999;
+			letter-spacing: 3px;
+			color: #d4727a;
 		}
 
 		.footer-column ul {
@@ -622,10 +657,11 @@ const html = `<!DOCTYPE html>
 
 		.footer-column a[href^="mailto"] {
 			color: #d4727a;
+			font-family: 'Courier New', monospace;
 		}
 
 		.footer-column a:hover {
-			color: #fff;
+			color: #d4727a;
 		}
 
 		.footer-column p {
@@ -635,11 +671,39 @@ const html = `<!DOCTYPE html>
 		}
 
 		.footer-copyright {
-			text-align: center;
 			border-top: 1px solid #333;
 			padding-top: 40px;
+		}
+
+		.footer-copyright-top {
+			text-align: center;
 			font-size: 13px;
 			color: #666;
+			margin-bottom: 24px;
+		}
+
+		.footer-copyright-top p {
+			margin: 4px 0;
+			color: #666;
+		}
+
+		.footer-copyright-bottom {
+			display: flex;
+			justify-content: center;
+			gap: 32px;
+			font-size: 13px;
+			color: #666;
+			flex-wrap: wrap;
+		}
+
+		.footer-copyright-bottom a {
+			color: #999;
+			text-decoration: none;
+			transition: color 0.2s;
+		}
+
+		.footer-copyright-bottom a:hover {
+			color: #d4727a;
 		}
 
 		.social-icons {
@@ -672,6 +736,7 @@ const html = `<!DOCTYPE html>
 			font-size: 14px;
 			line-height: 1.8;
 			color: #999;
+			font-family: 'Courier New', monospace;
 		}
 
 		.office-address p {
@@ -741,7 +806,7 @@ const html = `<!DOCTYPE html>
 	<!-- Hero -->
 	<section class="hero">
 		<div class="hero-label">A GLOBAL PRODUCT & UX DESIGN COMPANY</div>
-		<h1 class="hero-title">Competitive Advantage by <span class="pink">Design</span>.</h1>
+		<h1 class="hero-title">Competitive<br>Advantage<br>by <span class="pink">Design</span>.</h1>
 		<p class="hero-body">We partner with world-class businesses to transform <span class="pink">customer experience</span> through strategic product design. We're obsessed with understanding <span class="pink">user needs</span> and creating solutions that are <span class="pink">brilliantly easy to use</span>. Our team delivers measurable impact that drives competitive advantage.</p>
 	</section>
 
@@ -781,6 +846,7 @@ const html = `<!DOCTYPE html>
 	<section class="how-section">
 		<div class="container">
 			<div class="section-label">How we do it –</div>
+			<h2>Putting the <span class="pink">customer at the centre</span></h2>
 			<p class="how-intro">We believe exceptional product experiences start with a relentless focus on the customer. Every decision we make, every design we craft, and every recommendation we offer is grounded in deep customer understanding and measurable impact.</p>
 			<div class="how-grid">
 				<div class="how-item">
@@ -918,7 +984,7 @@ const html = `<!DOCTYPE html>
 	<!-- Learn More -->
 	<section class="learn-more-section">
 		<div class="container">
-			<h2 style="font-size: 48px; color: #fff; margin-bottom: 48px;">Learn more on what we do</h2>
+			<h2>Learn more on what we do</h2>
 			<div class="learn-more-links">
 				<a href="#services" class="learn-more-link">Our Approach</a>
 				<a href="#services" class="learn-more-link">UX/UI & Product Design</a>
@@ -976,7 +1042,14 @@ const html = `<!DOCTYPE html>
 			</div>
 		</div>
 		<div class="footer-copyright">
-			© 2025 Each&Other. All rights reserved.
+			<div class="footer-copyright-top">
+				<p>Copyright © 2026 Each&Other Ltd.</p>
+				<p>Registered in Ireland. No. 545982</p>
+			</div>
+			<div class="footer-copyright-bottom">
+				<span>© 2026 Each&Other. All rights reserved.</span>
+				<a href="#privacy">Privacy Policy</a>
+			</div>
 		</div>
 	</footer>
 </body>
