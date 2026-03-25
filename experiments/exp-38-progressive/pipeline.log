@@ -1,0 +1,55 @@
+============================================================
+  EXP 38: Progressive Enhancement
+  5 iterations, each adds one feature
+============================================================
+
+  === Iteration 1: Client CRUD ===
+    Before: 0 lines, 0 tests
+$0.1185
+    After: 323 lines (+323), 7/7 tests (+7)
+    Build: PASS, Regression: NO
+
+  === Iteration 2: Edit + Delete ===
+    Before: 323 lines, 7 tests
+$0.1014
+    After: 461 lines (+138), 12/12 tests (+5)
+    Build: PASS, Regression: NO
+
+  === Iteration 3: Activity Log ===
+    Before: 461 lines, 12 tests
+$0.1476
+    After: 650 lines (+189), 18/18 tests (+6)
+    Build: PASS, Regression: NO
+
+  === Iteration 4: Simple Invoices ===
+    Before: 650 lines, 18 tests
+$0.2401
+    After: 924 lines (+274), 27/27 tests (+9)
+    Build: PASS, Regression: NO
+
+  === Iteration 5: Search + Print ===
+    Before: 924 lines, 27 tests
+$0.2088
+    After: 1121 lines (+197), 32/32 tests (+5)
+    Build: PASS, Regression: NO
+
+============================================================
+  EXP 38: RESULTS
+============================================================
+  Iterations: 5
+  Final: 1121 lines, 32/32 tests
+  Regressions: NONE
+  Cost: $0.8165
+
+  Iter  Feature              Lines        Tests        Regress    Cost
+  ----- -------------------- ------------ ------------ ---------- --------
+  1     Client CRUD          +323        +7          NO         $0.119
+  2     Edit + Delete        +138        +5          NO         $0.101
+  3     Activity Log         +189        +6          NO         $0.148
+  4     Simple Invoices      +274        +9          NO         $0.240
+  5     Search + Print       +197        +5          NO         $0.209
+
+  vs one-shot builds:
+    Exp 32 (domain): 1516 lines, $0.96
+    Exp 36 (domain+simple): 1191 lines, $0.39
+    Exp 38 (progressive): 1121 lines, $0.82

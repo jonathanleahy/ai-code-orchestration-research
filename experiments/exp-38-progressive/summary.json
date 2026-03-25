@@ -1,0 +1,86 @@
+{
+  "total_cost": 0.8164991500000001,
+  "total_lines": 1121,
+  "final_tests": {
+    "pass": 32,
+    "fail": 0
+  },
+  "any_regression": false,
+  "iterations": [
+    {
+      "iteration": 1,
+      "name": "Client CRUD",
+      "lines_before": 0,
+      "lines_after": 323,
+      "lines_added": 323,
+      "tests_before": 0,
+      "tests_after": 7,
+      "tests_added": 7,
+      "tests_pass": 7,
+      "tests_fail": 0,
+      "regression": false,
+      "builds": true,
+      "cost": 0.11852885000000003
+    },
+    {
+      "iteration": 2,
+      "name": "Edit + Delete",
+      "lines_before": 323,
+      "lines_after": 461,
+      "lines_added": 138,
+      "tests_before": 7,
+      "tests_after": 12,
+      "tests_added": 5,
+      "tests_pass": 12,
+      "tests_fail": 0,
+      "regression": false,
+      "builds": true,
+      "cost": 0.10136984999999998
+    },
+    {
+      "iteration": 3,
+      "name": "Activity Log",
+      "lines_before": 461,
+      "lines_after": 650,
+      "lines_added": 189,
+      "tests_before": 12,
+      "tests_after": 18,
+      "tests_added": 6,
+      "tests_pass": 18,
+      "tests_fail": 0,
+      "regression": false,
+      "builds": true,
+      "cost": 0.14764300000000002
+    },
+    {
+      "iteration": 4,
+      "name": "Simple Invoices",
+      "lines_before": 650,
+      "lines_after": 924,
+      "lines_added": 274,
+      "tests_before": 18,
+      "tests_after": 27,
+      "tests_added": 9,
+      "tests_pass": 27,
+      "tests_fail": 0,
+      "regression": false,
+      "builds": true,
+      "cost": 0.24012305
+    },
+    {
+      "iteration": 5,
+      "name": "Search + Print",
+      "lines_before": 924,
+      "lines_after": 1121,
+      "lines_added": 197,
+      "tests_before": 27,
+      "tests_after": 32,
+      "tests_added": 5,
+      "tests_pass": 32,
+      "tests_fail": 0,
+      "regression": false,
+      "builds": true,
+      "cost": 0.20883440000000003
+    }
+  ]
+}
