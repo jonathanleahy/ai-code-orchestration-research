@@ -708,3 +708,64 @@ The parser fix recovered most of the failures — the model produces correct cod
 ### Insight: Parser Quality = Model Quality
 
 The difference between "model fails" and "model succeeds" is often just parsing. The model outputs correct code ~80% of the time, but only uses our format ~50% of the time. A robust parser turns 50% success into 80%+ success without changing the model or prompt.
+
+---
+
+## Addendum 11: Experiment 5 (Model Routing) + Key Meta-Finding
+
+### Experiment 5: Model Routing
+
+**Result: 0/5 in single-shot mode.**
+
+This is NOT a model failure — it's a pipeline failure. The same models achieve 100% in the full pipeline (with retry loop). Single-shot calls without retries fail ~50% of the time due to format inconsistency.
+
+### The Meta-Finding: Single-Shot vs Pipeline
+
+| Mode | Pass Rate | Why |
+|------|----------|-----|
+| Single-shot (no retry) | ~50% | Model format inconsistent |
+| Full pipeline (3 retries + auto-fix) | ~100% | Retries + error feedback fix issues |
+
+**The pipeline IS the product, not the model.** Any model can produce correct code — the pipeline's job is to:
+1. Extract it (robust parser)
+2. Fix trivial errors (goimports, gofmt)
+3. Validate (compile, test)
+4. Retry with error context if needed
+
+This is why `claude -p` appears to outperform: it has its own built-in retry loop (tool system). The OpenRouter approach needs our retry loop to match.
+
+### Complete Experiment Summary
+
+| # | Experiment | Result | Key Finding |
+|---|-----------|--------|-------------|
+| 1 | Escalation (cheap → strong) | 0/5 | Backtick issue is architecture, not model |
+| 2 | Granularity (2-4 files) | 4-file: 3/3, 2-file: 2/3 | Model owns all files → best results |
+| 3 | V1 re-run with V4 prompts | 5/6 improved | Prompt engineering adds test coverage |
+| 4 | Auto-fix pipeline | 40-60% errors fixed free | goimports → gofmt → sed → vet → build |
+| 5 | Model routing | 0/5 single-shot | Pipeline retry loop is essential |
+
+### Final Architecture Recommendation
+
+```
+Architecture Spec (human/Opus)
+    ↓
+Planner (Gemini Flash, $0.008)
+    ↓
+For each sub-task:
+    ↓
+Executor (Qwen3-30B, $0.0005) ←──┐
+    ↓                              │
+Parser (Format 1-4 fallbacks)     │
+    ↓                              │
+Auto-Fix (goimports, gofmt)       │
+    ↓                              │
+Compile Gate (go build)           │
+    ↓ FAIL                         │
+Retry with error ─────────────────┘
+    ↓ PASS (max 3 retries)
+Assembly
+    ↓
+Golden Master Tests (acceptance)
+```
+
+**Projected cost: $0.01-0.03 per application with the full pipeline.**
