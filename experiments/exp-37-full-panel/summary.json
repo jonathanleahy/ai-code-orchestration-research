@@ -1,0 +1,18 @@
+{
+  "brief": "Build a CRM for freelancers with client management, activity history, invoicing, and address book",
+  "total_cost": 0.33912305,
+  "store_lines": 3,
+  "server_lines": 426,
+  "http_tests": {
+    "pass": 26,
+    "fail": 0
+  },
+  "builds": true,
+  "reviewers_pre": 7,
+  "reviewers_post": 3,
+  "reviewer_findings": {
+    "product": 6,
+    "domain": 2,
+    "saas_ux": 6
+  }
+}

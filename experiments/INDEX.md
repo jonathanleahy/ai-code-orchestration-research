@@ -79,6 +79,7 @@ graph TD
 | [34](exp-34-simplicity/README.md) | **Simplicity Agent** | 13/13, 173+345 lines | $0.20 | 70% less code, 79% cheaper than Exp 32 |
 | [35](exp-35-playwright/README.md) | **Playwright Journeys** | 3 pass, 5 fail | — | Simplicity agent cut features from the brief |
 | [36](exp-36-constrained-simplicity/README.md) | **Domain + Constrained Simplicity** | 29/29, 249+942 lines | $0.39 | Sweet spot: all features, simply built, 60% cheaper |
+| [37](exp-37-full-panel/README.md) | **10-Reviewer Panel** | 26/26, 426 lines | $0.34 | 7 pre-code + 3 post-code, SaaS patterns included |
 
 ## Spike Progression
 
