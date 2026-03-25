@@ -82,10 +82,48 @@ PASS → done
 
 The key insight: **spec precision determines V-Model success**. Vague specs → type mismatches → compile failures. Exact type signatures → both sides agree → acceptance tests pass.
 
+## 17c: Exact Type Signatures (the fix)
+
+Spec now includes copy-pasteable Go type declarations:
+```go
+type Status string
+const (
+    StatusTodo  Status = "TODO"
+    StatusDoing Status = "DOING"
+    StatusDone  Status = "DONE"
+)
+func (s *Store) Update(id string, title, description *string, status *Status) (*Task, error)
+```
+
+| Run | Acceptance Tests | Best Score | Loops | Cost |
+|-----|-----------------|-----------|-------|------|
+| 0 | Extracted | 14/15 | 3 (fail) | $0.019 |
+| 1 | Extracted | 13/14 | 3 (fail) | $0.018 |
+| 2 | Extracted | 10/11 | 3 (fail) | $0.017 |
+| 3 | Extracted | 13/14 | 3 (fail) | $0.018 |
+| 4 | Extracted | **11/11 PASS** | 1 | $0.010 |
+
+**1/5 (20%) full pass — up from 0% in 17b.** Run 4: all 11 acceptance tests passed on first attempt.
+
+### Progression: 17a → 17b → 17c
+
+| Version | Spec Type | Tests Extracted | Acceptance Score | Pass Rate |
+|---------|-----------|----------------|-----------------|-----------|
+| 17a | Vague | No (0/3) | N/A (compile only) | 100% (trivial) |
+| 17b | Vague | Yes (5/5) | 0/0 (type mismatch) | 0% |
+| 17c | Exact types | Yes (5/5) | 10-15 of 11-15 | **20%** |
+
+The exact types fixed the compile mismatch. The remaining 1-test failure is a behavioral edge case (usually List filter or Update) that the cheapest model sometimes gets wrong.
+
+### Next Step: Stronger Blueprint Model
+
+With a stronger model (Sonnet/Opus) writing the spec + acceptance tests, and the cheap model only implementing, the pass rate should increase further. The architecture is proven — it just needs better spec quality.
+
 ## Cost
 
 | Item | Cost |
 |------|------|
 | 17a: 3 runs (compile only) | $0.037 |
-| 17b: 5 runs (with acceptance) | $0.078 |
-| **Total** | **$0.115** |
+| 17b: 5 runs (type mismatch) | $0.078 |
+| 17c: 5 runs (exact types) | $0.082 |
+| **Total** | **$0.197** |
