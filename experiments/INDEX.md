@@ -2,15 +2,15 @@
 
 ## Research Question
 
-**Can AI go from a one-line idea to a running product? What's the cheapest way?**
+**Can AI go from a one-line idea to a running, tested, reviewed product?**
 
-25 experiments across code generation, product design, and end-to-end pipelines. Tested 11+ models, 4 architectures, persona interviews, dev review gates, and V-Model verification. Total research cost: ~$5.00.
+32 experiments across code generation, product design, 8-reviewer panels, and browser testing. Key finding: **22 API tests + 8 reviewers missed 3 bugs that Playwright found in 10 seconds.**
 
-## The Answer: $0.21 from Idea to Product
+## The Pipeline: $0.40-0.96 from Idea to Reviewed Product
 
 ```mermaid
 graph TD
-    Brief["Brief: 8 words"] --> Personas["Persona Discovery<br/>$0.004"]
+    Brief["Brief: 8 words"] --> Personas["Persona Discovery<br/>$0.01"]
     Personas --> MVP["MVP Synthesis<br/>$0.005"]
     MVP --> Screens["Screen Wireframes<br/>$0.008"]
     Screens --> DevReview["Dev Review Gate<br/>$0.007"]
@@ -18,20 +18,27 @@ graph TD
     Revise --> Types["Go Types<br/>$0.007"]
     Types --> Store["Store Layer<br/>Qwen3-30B $0.013"]
     Store --> Server["HTTP Server<br/>claude -p $0.16"]
-    Server --> Product["Compiled Product<br/>713 lines"]
+    Server --> PostReview["Post-Code Review<br/>UX + A11y + Security"]
+    PostReview --> Fix["Apply Fixes<br/>+ Rebuild"]
+    Fix --> Playwright["Playwright Testing<br/>Personas USE the app"]
+    Playwright --> Product["Verified Product"]
 
     style Brief fill:#4488ff,color:#fff
     style DevReview fill:#f59e0b,color:#000
+    style PostReview fill:#8b5cf6,color:#fff
+    style Playwright fill:#ef4444,color:#fff
     style Product fill:#22c55e,color:#000
 ```
 
-## Top 5 Findings
+## Top 7 Findings
 
-1. **Persona interviews find features the brief missed** (Exp 23) — "recurring invoices" wasn't in the brief but 3/4 personas demanded it
-2. **Dev review catches complexity before code** (Exp 25) — PDF generation, SMTP, PII concerns caught at $0.007, not at development
-3. **Prompt wording > model choice** (Exp 3, 15) — same model goes 0% → 100% with better prompt
-4. **Auto-fix is free money** (Exp 4, 16) — goimports + &constant fix catches 40-60% of errors
-5. **Wireframes produce better code** (Exp 24) — 6 routes/106 lines vs 3 routes/493 lines
+1. **Playwright catches what 22 tests + 8 reviewers miss** (Exp 32) — CSP blocking JS, multipart form parsing, JSON error responses. 3 bugs, 0 caught by anything else.
+2. **Persona interviews find features the brief missed** (Exp 23) — "recurring invoices" wasn't in the brief but 3/4 personas demanded it
+3. **Domain expert found ALL 10 invoicing features missing** (Exp 32) — print, pay, void, line items, tax, recurring. Generic reviewers missed all of these.
+4. **Dev review catches complexity before code** (Exp 25) — PDF generation, SMTP, PII concerns caught at $0.007
+5. **Progressive enhancement > one-shot builds** (Exp 32 vs 33) — 10 features at once: $0.96, tests fail. One feature at a time: $0.23, zero regression.
+6. **Prompt wording > model choice** (Exp 3, 15) — same model goes 0% → 100% with better prompt
+7. **Post-code security fixes can break the app** (Exp 32) — CSP header blocked all inline JavaScript
 
 ## All Experiments
 
@@ -78,59 +85,60 @@ graph TD
 | [V2](spike-v2/REPORT.md) | Node.js CLI (dep-doctor) | 10 files, 18 tests | 18/18 | A3: $0.069, A5: $0.10 |
 | [V3](spike-v3/REPORT.md) | Go CRUD (task-board) | 6 files, 22 tests | 22/22 | Haiku: FREE in 70s |
 
-## Architecture Diagram
+## The 8-Reviewer Panel
 
 ```mermaid
-graph TD
-    Schema["📋 Schema / Contract<br/>(schema.graphql)"]
-
-    Schema --> Planner["🧠 Planner<br/>Decompose into sub-tasks"]
-    Planner --> |"Sub-task list"| Executor
-
-    subgraph "Per Sub-Task"
-        Executor["⚡ Executor<br/>(cheapest model)"]
-        Executor --> Parser["📄 Parser<br/>Extract file blocks"]
-        Parser --> AutoFix["🔧 Auto-Fix<br/>goimports, gofmt, sed"]
-        AutoFix --> Gate["🚦 Gate<br/>go build, go vet, go test"]
-        Gate --> |FAIL| Retry["♻️ Retry / Escalate"]
-        Retry --> Executor
-        Gate --> |PASS| Assemble
+graph LR
+    subgraph "Pre-Code (review spec)"
+        R1["Dev Architect<br/>cost, architecture"]
+        R2["Product Owner<br/>CRUD completeness"]
+        R3["QA Engineer<br/>edge cases, errors"]
+        R4["Market Analyst<br/>vs competitors"]
+        R5["Domain Expert<br/>workflow-specific"]
     end
 
-    Assemble["📦 Assemble"] --> Accept["✅ Acceptance Tests<br/>(golden master)"]
+    subgraph "Post-Code (review HTML)"
+        R6["UI/UX Expert<br/>layout, hierarchy"]
+        R7["Accessibility<br/>WCAG 2.1 AA"]
+        R8["OWASP Security<br/>XSS, CSP, auth"]
+    end
 
-    style Schema fill:#4488ff,color:#fff
-    style Executor fill:#22c55e,color:#000
-    style AutoFix fill:#8b5cf6,color:#fff
-    style Gate fill:#f59e0b,color:#000
-    style Accept fill:#22c55e,color:#000
+    subgraph "Browser Testing"
+        R9["Playwright<br/>personas USE the app"]
+    end
+
+    style R5 fill:#f59e0b,color:#000
+    style R9 fill:#ef4444,color:#fff
 ```
 
-## Top 5 Findings
-
-1. **Prompt wording > model choice** — V4 prompt took Qwen3-30B from 0% to 100% pass rate. The prompt says "just output the file content" instead of procedural instructions.
-
-2. **The pipeline IS the product** — Single-shot calls fail ~50%. The same models hit 100% with retry loop + auto-fix + structural gates. Invest in infrastructure, not expensive models.
-
-3. **Auto-fix is free money** — goimports + gofmt + unused-var sed fixes 40-60% of model errors without any API call. Always run structural fixes before retrying.
-
-4. **Subscription beats API** — Haiku builds a full-stack app in 70 seconds for FREE. API equivalent costs ~$0.12. For subscription users, this is the optimal path.
-
-5. **Parser is the bottleneck** — 40% of API-model failures are parser extraction issues, not model quality. A production-grade parser would make all-API builds reliable.
+| Reviewer | What They Catch | Cost | Exp |
+|----------|----------------|------|-----|
+| Persona interviews | Features brief missed | $0.005 | 23 |
+| Dev architect | Over-engineering | $0.005 | 25 |
+| Product owner | Missing CRUD buttons | $0.006 | 30 |
+| QA engineer | Missing error states | $0.004 | 30 |
+| Market analyst | No differentiation | $0.005 | 30 |
+| Domain expert | 10/10 workflows missing | $0.006 | 32 |
+| UI/UX expert | Hierarchy, feedback | $0.006 | 31 |
+| Accessibility | ARIA, keyboard, contrast | $0.005 | 31 |
+| OWASP security | XSS, CSP (broke the app!) | $0.009 | 31-32 |
+| **Playwright** | **3 bugs nothing else found** | **~$0.10** | **32** |
 
 ## Cost Summary
 
 | Category | Cost |
 |----------|------|
-| Spikes V1-V3 (original research) | ~$3.00 |
-| Experiments 13-18 (code generation) | ~$0.80 |
-| Experiments 19-21 (multi-service) | ~$0.25 |
-| Experiments 22-25 (product design + pipeline) | ~$0.55 |
-| **Total research cost** | **~$4.60** |
-| **Cost per app (proven)** | **$0.02-0.21** |
+| Spikes V1-V3 (original) | ~$3.00 |
+| Experiments 13-21 (code gen + multi-service) | ~$1.05 |
+| Experiments 22-30 (design + reviewers) | ~$2.50 |
+| Experiments 31-33 (post-code + features) | ~$1.20 |
+| **Total research cost** | **~$7.75** |
+| **Cost per reviewed app** | **$0.40-0.96** |
 
 ## Next Steps
 
-- **Add test layers**: Store tests (2-file), acceptance tests (V-Model), HTTP integration tests
-- **Pipeline integration**: Wire winning strategy into Dark Factory daemon
-- **Blueprint update**: Persona discovery + dev review + exact types as standard stages
+- **Playwright persona testing** — automate browser journey verification
+- **Simplicity agent** — "is this necessary? is this the simplest way?" at every stage
+- **Progressive enhancement** — build simple, add features one at a time
+- **Domain expert from brief** — auto-generate domain reviewer based on product type
+- **Pipeline integration** — wire into Dark Factory daemon
