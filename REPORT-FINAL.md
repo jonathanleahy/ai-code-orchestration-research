@@ -945,3 +945,57 @@ The parser is the weakest link. A production-quality parser would eliminate 40% 
 - OpenRouter API: ~$1.50 (576 calls)
 - Claude subscription: included (4-5 claude -p runs)
 - **Total: ~$1.50 for 13 experiments, 3 spikes, 4 working applications**
+
+---
+
+## Addendum 15: Experiments 10-11 — V-Model + PR Review Gate
+
+### Experiment 10: V-Model Pattern
+
+**Architecture:**
+```
+Blueprint (Gemini) → spec + test data + acceptance tests
+    ↓
+Executor (MiniMax) → builds code from spec (never sees acceptance tests)
+    ↓
+Unit tests (during build) → verify internal correctness
+    ↓
+Acceptance tests (after build) → verify behaviour against hidden criteria
+```
+
+**Result:** Blueprint produced all 3 artifacts ($0.014). Executor built code ($0.018). Unit tests had compile issues (same parser/type problems). Total: $0.032.
+
+**The pattern works conceptually** — the blueprint created meaningful acceptance tests and the executor built code from the spec alone. With the parser fixes, this would complete the loop.
+
+### Experiment 11: PR Review Gate 🏆
+
+**Three models reviewed the golden master code:**
+
+| Model | Verdict | Score | Security | Quality | Cost |
+|-------|---------|-------|----------|---------|------|
+| Qwen3-30B | REQUEST_CHANGES | 5/10 | 2 issues | 5 issues | $0.003 |
+| MiniMax | APPROVE | 8/10 | 1 issue | 4 issues | $0.005 |
+| Gemini Flash | REQUEST_CHANGES | 6/10 | 2 issues | 8 issues | $0.006 |
+
+**Key findings:**
+- All models found real security issues in human-written code
+- Gemini found the most quality issues (8)
+- MiniMax was most balanced (approved with notes)
+- A review gate adds $0.003-0.006 per file — trivial cost for quality assurance
+- **This should be standard in the pipeline** — catches issues tests miss
+
+**Security issues found by AI reviewers:**
+- Race condition potential in Store operations
+- No input sanitization on task descriptions
+- No limit on task count (potential memory exhaustion)
+
+These are legitimate findings that unit tests don't catch.
+
+### Cost of Adding Review Gate to Pipeline
+
+| Without review | With review | Difference |
+|---------------|------------|------------|
+| $0.009 (hybrid) | $0.009 + $0.005 = $0.014 | +$0.005 (+55%) |
+| FREE (subscription) | FREE + $0.005 = $0.005 | +$0.005 |
+
+**$0.005 for security + quality review is a bargain.** The review catches real issues that testing misses.
