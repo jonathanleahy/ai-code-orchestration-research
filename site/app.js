@@ -88,6 +88,41 @@ const FILES = {
             '_folder': true,
             'README.md': 'experiments/exp-20/README.md'
         },
+        'exp-21-statuspulse': {
+            '_folder': true,
+            'README.md': 'experiments/exp-21-statuspulse/README.md',
+            'services': {
+                '_folder': true,
+                'monitor': {
+                    '_folder': true,
+                    'main.go': 'experiments/exp-21-statuspulse/services/monitor/main.go',
+                    'store': {
+                        '_folder': true,
+                        'check.go': 'experiments/exp-21-statuspulse/services/monitor/store/check.go'
+                    }
+                },
+                'incidents': {
+                    '_folder': true,
+                    'main.go': 'experiments/exp-21-statuspulse/services/incidents/main.go',
+                    'store': {
+                        '_folder': true,
+                        'incident.go': 'experiments/exp-21-statuspulse/services/incidents/store/incident.go'
+                    }
+                },
+                'notify': {
+                    '_folder': true,
+                    'main.go': 'experiments/exp-21-statuspulse/services/notify/main.go',
+                    'store': {
+                        '_folder': true,
+                        'subscriber.go': 'experiments/exp-21-statuspulse/services/notify/store/subscriber.go'
+                    }
+                },
+                'gateway': {
+                    '_folder': true,
+                    'main.go': 'experiments/exp-21-statuspulse/services/gateway/main.go'
+                }
+            }
+        },
         'spike-v1': {
             '_folder': true,
             'REPORT.md': 'experiments/spike-v1/REPORT.md',
