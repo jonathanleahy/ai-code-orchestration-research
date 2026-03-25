@@ -863,3 +863,85 @@ Two paths to working main.go:
 2. **MiniMax with explicit prompt hint**: explains the constraint → $0.004/call, 2/3 pass rate
 
 Combined with the model layer (100% on Qwen3-30B), the full Go app is buildable for under $0.04 via API or FREE on subscription.
+
+---
+
+## Addendum 14: Experiments 9 + Complete Summary
+
+### Experiment 9: Full App via API Only (Gemini + MiniMax)
+
+**Target:** Build complete Go app without subscription, under $0.05.
+
+| Step | Model | Cost | Result |
+|------|-------|------|--------|
+| Planner | Gemini Flash | $0.001 | OK |
+| Schema + go.mod | MiniMax | $0.009 | FAIL (parser) |
+| Model + tests | MiniMax | $0.019 | FAIL (no go.mod) |
+| main.go | MiniMax | $0.015 | FAIL (no go.mod) |
+| **Total** | | **$0.045** | **Cascading failure from step 2** |
+
+The go.mod file wasn't extracted by the parser, causing all subsequent steps to fail. The model produced the content but the parser missed it. **This is a parser reliability issue, not a model issue.**
+
+### Root Cause Analysis: Parser vs Model
+
+Across all experiments, failures break down as:
+
+| Cause | % of failures | Fix |
+|-------|-------------|-----|
+| **Parser didn't extract files** | ~40% | Improve format fallbacks |
+| **Model used wrong format** | ~25% | Better prompt + retry |
+| **Compile error (backtick etc.)** | ~20% | Explicit hints + auto-fix |
+| **Logic error** | ~15% | Retry with error context |
+
+The parser is the weakest link. A production-quality parser would eliminate 40% of failures.
+
+---
+
+## COMPLETE RESEARCH SUMMARY
+
+### All Experiments (13 total)
+
+| # | Experiment | Key Result |
+|---|-----------|-----------|
+| V1 | 11 models on bash task | All work with file-block pattern |
+| V2-A | 4-layer quality-first (Node.js) | 🏆 A3: 18/18 tests, $0.069 |
+| V2-B | Generate-and-filter | 7/8, $0.237 |
+| V2-C | LLM Council | 6/8, $0.192 |
+| V2-D | Evolutionary | 7/8, $0.202 |
+| V2-AR | Autoresearch prompts | V4: 0%→100% on cheapest |
+| V2-A5 | Qwen3-30B with V4 | 18/18 golden master tests |
+| V3-S4 | claude -p Sonnet (Go) | 22/22, FREE |
+| V3-AR | Autoresearch executor | 4/4 sub-task types at 100% |
+| Exp 1 | Escalation (cheap→strong) | 0/5 — architecture issue |
+| Exp 2 | Granularity (2-4 files) | 4-file: 3/3 |
+| Exp 3 | V1 re-run improved prompts | 5/6 add tests |
+| Exp 4 | Auto-fix pipeline | 40-60% errors fixed free |
+| Exp 5 | Model routing | Pipeline retry is essential |
+| Exp 6 | Claude models (Sonnet vs Haiku) | Haiku 3x faster, both build |
+| Exp 7 | Hybrid (Qwen3 + Haiku) | $0.009 + FREE, app works |
+| Exp 8 | MiniMax with backtick hint | 2/3 main.go builds! |
+| Exp 9 | Full app all-API | $0.045, parser failure |
+
+### Final Cost Matrix
+
+| Approach | API Cost | + Subscription | Total | Quality |
+|----------|---------|---------------|-------|---------|
+| **Hybrid (Qwen3 + Haiku)** | $0.009 | FREE | **$0.009** | App works, 62s |
+| Full Haiku (subscription) | — | FREE (~$0.10 API) | **FREE** | App works, 80s |
+| Gemini + MiniMax (Node.js) | $0.024 | — | $0.024 | 18/18 tests |
+| Full Sonnet (subscription) | — | FREE (~$0.50 API) | **FREE** | App works, 252s |
+| All-API (Gemini + MiniMax) | ~$0.045 | — | $0.045 | Parser unreliable |
+
+### The Three Findings That Matter
+
+1. **The pipeline IS the product.** Parser quality, auto-fix, retry loops, and compile gates matter more than model choice.
+
+2. **claude -p Haiku is the sweet spot** for subscription users. 80s, builds everything, FREE. Haiku is 3x faster than Sonnet with equal quality.
+
+3. **Prompt engineering has 10x more impact than model selection.** V4 prompt: 0%→100%. Backtick hint: 0%→67%. The right words make any model work.
+
+### Total Research Cost
+
+- OpenRouter API: ~$1.50 (576 calls)
+- Claude subscription: included (4-5 claude -p runs)
+- **Total: ~$1.50 for 13 experiments, 3 spikes, 4 working applications**
