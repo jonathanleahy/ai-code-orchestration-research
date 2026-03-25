@@ -1,43 +1,91 @@
 # Experiment 17: V-Model Full Loop
 
 ## Hypothesis
-Blueprint produces spec + hidden acceptance tests. Executor builds from spec only. Acceptance tests run after build as surprise verification.
+Blueprint AI produces spec + hidden acceptance tests. Executor AI builds from spec only. Hidden tests run as surprise verification after build.
 
 ## Setup
-- Model: Qwen3-30B for both blueprint and executor
-- Blueprint outputs: spec.md + acceptance_test.go (hidden from executor)
-- Executor builds: model/task.go from spec only
-- Acceptance gate: runs hidden tests after build
-- Feedback loop: up to 3 iterations
-- 3 runs
 
-## Results
+### 17a (original)
+- Single API call for spec + tests → tests not extracted (parser issue)
+- Result: 3/3 PASS but compile-only (no acceptance verification)
 
-| Run | Blueprint | Spec | Acceptance Tests | Executor | Loops | Cost |
-|-----|-----------|------|-----------------|----------|-------|------|
-| 0 | OK | OK | MISSING | PASS (compiles) | 1 | $0.011 |
-| 1 | OK | OK | MISSING | PASS (compiles) | 1 | $0.013 |
-| 2 | OK | OK | MISSING | PASS (compiles) | 1 | $0.012 |
+### 17b (fixed extraction)
+- Separate API calls for spec and acceptance tests (guaranteed extraction)
+- Acceptance tests extracted in all 5 runs
+- Feedback loop: failed test names sent back (not test code)
+- 5 runs, 3 loops max
 
-**Pass rate: 3/3 (100%) — but without acceptance test verification.**
+## Results (17b)
 
-## Key Finding
+| Run | Spec | Tests Extracted | Build Loops | Acceptance | Cost |
+|-----|------|----------------|-------------|-----------|------|
+| 0 | OK | OK | 3 (all fail) | 0/0 (compile error) | $0.014 |
+| 1 | OK | OK | 3 (all fail) | 0/0 (compile error) | $0.016 |
+| 2 | OK | OK | 3 (all fail) | 0/0 (compile error) | $0.016 |
+| 3 | OK | OK | 3 (all fail) | 0/0 (compile error) | $0.016 |
+| 4 | OK | OK | 3 (all fail) | 0/0 (compile error) | $0.016 |
 
-The V-Model pattern works for spec → build, but the **blueprint fails to generate parseable acceptance tests**. The model outputs the test code but the parser doesn't extract `acceptance_test.go` from the response (it gets mixed into explanation text).
+**0/5 — acceptance tests never compile against the generated code.**
 
-### What Works
-- Blueprint generates high-quality specs from requirements
-- Executor builds compiling code from those specs on first attempt
-- The spec → build pipeline is reliable at $0.012/run
+## Root Cause
 
-### What Needs Work
-- Acceptance test extraction (parser needs to handle `.go` files outside standard locations)
-- The feedback loop never activates because the compile check passes without acceptance tests
-- Need explicit "output acceptance_test.go as a separate file block" in the blueprint prompt
+The acceptance tests and the executor produce **incompatible types**:
+
+```
+Acceptance tests expect:  StatusTodo = "TODO",  StatusDoing = "DOING"
+Executor produces:        StatusTodo = "todo",  StatusInProgress = "in_progress"
+
+Acceptance tests expect:  Update(id, title, desc *string, status *Status)
+Executor produces:        Update(id string, updates map[string]interface{})
+```
+
+Two separate Qwen3-30B calls interpret the same spec differently. This is the fundamental V-Model challenge: **the spec must be precise enough that two independent implementations agree on types.**
+
+## What The V-Model Caught
+
+This is actually the V-Model **working correctly** — it caught a real integration failure that a compile gate alone would miss. The acceptance tests are a stricter gate than `go build`.
+
+## Fix for Production
+
+The spec must include **exact Go type signatures**, not just descriptions:
+
+```markdown
+## BAD (ambiguous)
+Status type with constants: Todo, Doing, Done
+
+## GOOD (exact)
+type Status string
+const (
+    StatusTodo  Status = "TODO"
+    StatusDoing Status = "DOING"
+    StatusDone  Status = "DONE"
+)
+func (s *Store) Update(id string, title, description *string, status *Status) (*Task, error)
+```
+
+When the spec includes exact signatures, both the test writer and code writer produce compatible output.
+
+## Revised V-Model Architecture
+
+```
+Blueprint (stronger model) → spec with EXACT type signatures + hidden tests
+                                    ↓
+Executor (cheap model)    → builds from spec (types are unambiguous)
+                                    ↓
+Auto-fix                  → goimports + gofmt + &constant
+                                    ↓
+Acceptance gate           → hidden tests (surprise verification)
+                                    ↓
+FAIL → feedback (test names only) → retry
+PASS → done
+```
+
+The key insight: **spec precision determines V-Model success**. Vague specs → type mismatches → compile failures. Exact type signatures → both sides agree → acceptance tests pass.
 
 ## Cost
 
 | Item | Cost |
 |------|------|
-| 3 runs × (blueprint + executor) | $0.037 |
-| **Total** | **$0.037** |
+| 17a: 3 runs (compile only) | $0.037 |
+| 17b: 5 runs (with acceptance) | $0.078 |
+| **Total** | **$0.115** |
