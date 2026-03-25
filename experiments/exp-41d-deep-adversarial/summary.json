@@ -1,0 +1,255 @@
+{
+  "total_tests": 47,
+  "passed": 36,
+  "failed": 11,
+  "findings": [
+    "FAIL: SQLi in search \u2192 0",
+    "FAIL: SQLi in client ID \u2192 0",
+    "FAIL: GET /admin \u2192 200",
+    "FAIL: GET /api/internal \u2192 200",
+    "FAIL: GET /.env \u2192 200",
+    "FAIL: GET /debug \u2192 200",
+    "FAIL: Unicode name \u2192 400",
+    "FAIL: Emoji name \u2192 400",
+    "FAIL: RTL text name \u2192 400",
+    "FAIL: HTML entities in name \u2192 400",
+    "FAIL: 404 page \u2192 200"
+  ],
+  "results": [
+    {
+      "name": "Empty name",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "name": "Whitespace-only name",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "name": "Name with only spaces and tabs",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "name": "1000-char name",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "name": "10000-char name",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "name": "Name with null bytes",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "name": "Invalid email format",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "name": "Email with spaces",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "name": "XSS in name <script>",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "name": "XSS in name img onerror",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "name": "XSS in email",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "name": "XSS in search param",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "name": "XSS in URL path",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "name": "Stored XSS check (view)",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "name": "SQLi in name",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "name": "SQLi in search",
+      "status": 0,
+      "passed": false
+    },
+    {
+      "name": "SQLi in client ID",
+      "status": 0,
+      "passed": false
+    },
+    {
+      "name": "Path traversal ../",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "name": "Path traversal encoded",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "name": "Path traversal null byte",
+      "status": 404,
+      "passed": true
+    },
+    {
+      "name": "PUT on clients",
+      "status": 405,
+      "passed": true
+    },
+    {
+      "name": "PATCH on clients",
+      "status": 405,
+      "passed": true
+    },
+    {
+      "name": "DELETE on clients list",
+      "status": 405,
+      "passed": true
+    },
+    {
+      "name": "JSON body to form endpoint",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "name": "XML body",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "name": "Empty body POST",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "name": "Multipart with file upload attempt",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "name": "Very large POST body (100KB)",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "name": "GET /admin",
+      "status": 200,
+      "passed": false
+    },
+    {
+      "name": "GET /api",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "name": "GET /api/internal",
+      "status": 200,
+      "passed": false
+    },
+    {
+      "name": "GET /.env",
+      "status": 200,
+      "passed": false
+    },
+    {
+      "name": "GET /debug",
+      "status": 200,
+      "passed": false
+    },
+    {
+      "name": "GET /favicon.ico",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "name": "GET /robots.txt",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "name": "Unicode name",
+      "status": 400,
+      "passed": false
+    },
+    {
+      "name": "Emoji name",
+      "status": 400,
+      "passed": false
+    },
+    {
+      "name": "RTL text name",
+      "status": 400,
+      "passed": false
+    },
+    {
+      "name": "HTML entities in name",
+      "status": 400,
+      "passed": false
+    },
+    {
+      "name": "Concurrent creates",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "name": "Health endpoint",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "name": "API returns JSON",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "name": "404 page",
+      "status": 200,
+      "passed": false
+    },
+    {
+      "name": "Client list not empty",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "name": "Host header injection",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "name": "X-Forwarded-For spoofing",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "name": "Accept: text/xml",
+      "status": 200,
+      "passed": true
+    }
+  ]
+}

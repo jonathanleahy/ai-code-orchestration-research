@@ -1,0 +1,178 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - heading "CRM Dashboard" [level=1] [ref=e4]
+    - paragraph [ref=e5]: Manage your clients
+  - generic [ref=e6]:
+    - heading "Add New Client" [level=2] [ref=e7]
+    - generic [ref=e8]:
+      - generic [ref=e9]:
+        - generic [ref=e10]:
+          - generic [ref=e11]: Name
+          - textbox "Name" [ref=e12]
+        - generic [ref=e13]:
+          - generic [ref=e14]: Email
+          - textbox "Email" [ref=e15]
+        - generic [ref=e16]:
+          - generic [ref=e17]: Phone
+          - textbox "Phone" [ref=e18]
+      - button "Add Client" [ref=e19] [cursor=pointer]
+  - generic [ref=e20]:
+    - heading "Clients List" [level=2] [ref=e21]
+    - textbox "Search clients by name or email..." [ref=e23]
+    - table [ref=e24]:
+      - rowgroup [ref=e25]:
+        - row "Name Email Phone Created Action" [ref=e26]:
+          - columnheader "Name" [ref=e27]
+          - columnheader "Email" [ref=e28]
+          - columnheader "Phone" [ref=e29]
+          - columnheader "Created" [ref=e30]
+          - columnheader "Action" [ref=e31]
+      - rowgroup [ref=e32]:
+        - row "Test User test@x.com 123-456-7890 Mar 25, 2026 View" [ref=e33]:
+          - cell "Test User" [ref=e34]
+          - cell "test@x.com" [ref=e35]
+          - cell "123-456-7890" [ref=e36]
+          - cell "Mar 25, 2026" [ref=e37]
+          - cell "View" [ref=e38]:
+            - link "View" [ref=e39] [cursor=pointer]:
+              - /url: /client/20260325183853-0016
+        - row "Test test@x.com 123-456-7890 Mar 25, 2026 View" [ref=e40]:
+          - cell "Test" [ref=e41]
+          - cell "test@x.com" [ref=e42]
+          - cell "123-456-7890" [ref=e43]
+          - cell "Mar 25, 2026" [ref=e44]
+          - cell "View" [ref=e45]:
+            - link "View" [ref=e46] [cursor=pointer]:
+              - /url: /client/20260325183834-0010
+        - row "Test User test@x.com 123-456-7890 Mar 25, 2026 View" [ref=e47]:
+          - cell "Test User" [ref=e48]
+          - cell "test@x.com" [ref=e49]
+          - cell "123-456-7890" [ref=e50]
+          - cell "Mar 25, 2026" [ref=e51]
+          - cell "View" [ref=e52]:
+            - link "View" [ref=e53] [cursor=pointer]:
+              - /url: /client/20260325183836-0011
+        - row "Test test@x.com 123-456-7890 Mar 25, 2026 View" [ref=e54]:
+          - cell "Test" [ref=e55]
+          - cell "test@x.com" [ref=e56]
+          - cell "123-456-7890" [ref=e57]
+          - cell "Mar 25, 2026" [ref=e58]
+          - cell "View" [ref=e59]:
+            - link "View" [ref=e60] [cursor=pointer]:
+              - /url: /client/20260325183843-0013
+        - row "Test test@x.com 123-456-7890 Mar 25, 2026 View" [ref=e61]:
+          - cell "Test" [ref=e62]
+          - cell "test@x.com" [ref=e63]
+          - cell "123-456-7890" [ref=e64]
+          - cell "Mar 25, 2026" [ref=e65]
+          - cell "View" [ref=e66]:
+            - link "View" [ref=e67] [cursor=pointer]:
+              - /url: /client/20260325183849-0015
+        - row "Edited Name john@example.com 555-0101 Mar 25, 2026 View" [ref=e68]:
+          - cell "Edited Name" [ref=e69]
+          - cell "john@example.com" [ref=e70]
+          - cell "555-0101" [ref=e71]
+          - cell "Mar 25, 2026" [ref=e72]
+          - cell "View" [ref=e73]:
+            - link "View" [ref=e74] [cursor=pointer]:
+              - /url: /client/20260325180441-0001
+        - row "Jane Smith jane@example.com 555-0102 Mar 25, 2026 View" [ref=e75]:
+          - cell "Jane Smith" [ref=e76]
+          - cell "jane@example.com" [ref=e77]
+          - cell "555-0102" [ref=e78]
+          - cell "Mar 25, 2026" [ref=e79]
+          - cell "View" [ref=e80]:
+            - link "View" [ref=e81] [cursor=pointer]:
+              - /url: /client/20260325180441-0002
+        - row "Test User invalid-email 123-456-7890 Mar 25, 2026 View" [ref=e82]:
+          - cell "Test User" [ref=e83]
+          - cell "invalid-email" [ref=e84]
+          - cell "123-456-7890" [ref=e85]
+          - cell "Mar 25, 2026" [ref=e86]
+          - cell "View" [ref=e87]:
+            - link "View" [ref=e88] [cursor=pointer]:
+              - /url: /client/20260325183825-0005
+        - row "Test test@x.com 123-456-7890 Mar 25, 2026 View" [ref=e89]:
+          - cell "Test" [ref=e90]
+          - cell "test@x.com" [ref=e91]
+          - cell "123-456-7890" [ref=e92]
+          - cell "Mar 25, 2026" [ref=e93]
+          - cell "View" [ref=e94]:
+            - link "View" [ref=e95] [cursor=pointer]:
+              - /url: /client/20260325183830-0008
+        - row "Test test@x.com invalid-phone-format Mar 25, 2026 View" [ref=e96]:
+          - cell "Test" [ref=e97]
+          - cell "test@x.com" [ref=e98]
+          - cell "invalid-phone-format" [ref=e99]
+          - cell "Mar 25, 2026" [ref=e100]
+          - cell "View" [ref=e101]:
+            - link "View" [ref=e102] [cursor=pointer]:
+              - /url: /client/20260325183831-0009
+        - row "Test User test@x.com 123-456-7890 Mar 25, 2026 View" [ref=e103]:
+          - cell "Test User" [ref=e104]
+          - cell "test@x.com" [ref=e105]
+          - cell "123-456-7890" [ref=e106]
+          - cell "Mar 25, 2026" [ref=e107]
+          - cell "View" [ref=e108]:
+            - link "View" [ref=e109] [cursor=pointer]:
+              - /url: /client/20260325183901-0018
+        - row "Test test@x.com 123-456-7890 Mar 25, 2026 View" [ref=e110]:
+          - cell "Test" [ref=e111]
+          - cell "test@x.com" [ref=e112]
+          - cell "123-456-7890" [ref=e113]
+          - cell "Mar 25, 2026" [ref=e114]
+          - cell "View" [ref=e115]:
+            - link "View" [ref=e116] [cursor=pointer]:
+              - /url: /client/20260325183828-0007
+        - row "Test test@x.com 123-456-7890 Mar 25, 2026 View" [ref=e117]:
+          - cell "Test" [ref=e118]
+          - cell "test@x.com" [ref=e119]
+          - cell "123-456-7890" [ref=e120]
+          - cell "Mar 25, 2026" [ref=e121]
+          - cell "View" [ref=e122]:
+            - link "View" [ref=e123] [cursor=pointer]:
+              - /url: /client/20260325183841-0012
+        - row "Test test@x.com 123-456-7890 Mar 25, 2026 View" [ref=e124]:
+          - cell "Test" [ref=e125]
+          - cell "test@x.com" [ref=e126]
+          - cell "123-456-7890" [ref=e127]
+          - cell "Mar 25, 2026" [ref=e128]
+          - cell "View" [ref=e129]:
+            - link "View" [ref=e130] [cursor=pointer]:
+              - /url: /client/20260325183857-0017
+        - row "Test User test@x.com 123-456-7890 Mar 25, 2026 View" [ref=e131]:
+          - cell "Test User" [ref=e132]
+          - cell "test@x.com" [ref=e133]
+          - cell "123-456-7890" [ref=e134]
+          - cell "Mar 25, 2026" [ref=e135]
+          - cell "View" [ref=e136]:
+            - link "View" [ref=e137] [cursor=pointer]:
+              - /url: /client/20260325183908-0019
+        - row "wqewqeqw qwewq@erter.com 456 Mar 25, 2026 View" [ref=e138]:
+          - cell "wqewqeqw" [ref=e139]
+          - cell "qwewq@erter.com" [ref=e140]
+          - cell "456" [ref=e141]
+          - cell "Mar 25, 2026" [ref=e142]
+          - cell "View" [ref=e143]:
+            - link "View" [ref=e144] [cursor=pointer]:
+              - /url: /client/20260325183512-0004
+        - row "Test test@x.com invalid-phone-format Mar 25, 2026 View" [ref=e145]:
+          - cell "Test" [ref=e146]
+          - cell "test@x.com" [ref=e147]
+          - cell "invalid-phone-format" [ref=e148]
+          - cell "Mar 25, 2026" [ref=e149]
+          - cell "View" [ref=e150]:
+            - link "View" [ref=e151] [cursor=pointer]:
+              - /url: /client/20260325183827-0006
+        - row "Test User test@x.com 123-456-7890 Mar 25, 2026 View" [ref=e152]:
+          - cell "Test User" [ref=e153]
+          - cell "test@x.com" [ref=e154]
+          - cell "123-456-7890" [ref=e155]
+          - cell "Mar 25, 2026" [ref=e156]
+          - cell "View" [ref=e157]:
+            - link "View" [ref=e158] [cursor=pointer]:
+              - /url: /client/20260325183847-0014
+```
