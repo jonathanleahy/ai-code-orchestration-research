@@ -123,6 +123,56 @@ const FILES = {
                 }
             }
         },
+        'exp-22-journeys': {
+            '_folder': true,
+            'README.md': 'experiments/exp-22-journeys/README.md',
+            '01-user-journeys.md': 'experiments/exp-22-journeys/01-user-journeys.md',
+            '02-screen-map.md': 'experiments/exp-22-journeys/02-screen-map.md',
+            '03-wireframes.md': 'experiments/exp-22-journeys/03-wireframes.md',
+            '04-comparison.md': 'experiments/exp-22-journeys/04-comparison.md'
+        },
+        'exp-23-personas': {
+            '_folder': true,
+            'README.md': 'experiments/exp-23-personas/README.md',
+            '01-personas.md': 'experiments/exp-23-personas/01-personas.md',
+            '02-interviews.md': 'experiments/exp-23-personas/02-interviews.md',
+            '03-mvp.md': 'experiments/exp-23-personas/03-mvp.md',
+            '04-mvp-acceptance.md': 'experiments/exp-23-personas/04-mvp-acceptance.md',
+            '05-screens-v1.md': 'experiments/exp-23-personas/05-screens-v1.md',
+            '06-screen-review-v1.md': 'experiments/exp-23-personas/06-screen-review-v1.md'
+        },
+        'exp-24-wireframes-to-code': {
+            '_folder': true,
+            'README.md': 'experiments/exp-24-wireframes-to-code/README.md'
+        },
+        'exp-25-full-pipeline': {
+            '_folder': true,
+            'README.md': 'experiments/exp-25-full-pipeline/README.md',
+            '01-discover.md': 'experiments/exp-25-full-pipeline/01-discover.md',
+            '04-dev-review.md': 'experiments/exp-25-full-pipeline/04-dev-review.md',
+            '05-revised-mvp.md': 'experiments/exp-25-full-pipeline/05-revised-mvp.md',
+            '06-go-types.md': 'experiments/exp-25-full-pipeline/06-go-types.md'
+        },
+        'exp-26-tests': {
+            '_folder': true,
+            'README.md': 'experiments/exp-26-tests/README.md'
+        },
+        'exp-27-automated': {
+            '_folder': true,
+            'README.md': 'experiments/exp-27-automated/README.md'
+        },
+        'exp-29-crm-gqlgen': {
+            '_folder': true,
+            'README.md': 'experiments/exp-29-crm-gqlgen/README.md'
+        },
+        'exp-30-reviewed': {
+            '_folder': true,
+            'README.md': 'experiments/exp-30-reviewed/README.md',
+            '04b-product-review.md': 'experiments/exp-30-reviewed/04b-product-review.md',
+            '04c-qa-review.md': 'experiments/exp-30-reviewed/04c-qa-review.md',
+            '04d-market-review.md': 'experiments/exp-30-reviewed/04d-market-review.md',
+            '05-revised-mvp.md': 'experiments/exp-30-reviewed/05-revised-mvp.md'
+        },
         'spike-v1': {
             '_folder': true,
             'REPORT.md': 'experiments/spike-v1/REPORT.md',
