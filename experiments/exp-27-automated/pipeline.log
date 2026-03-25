@@ -1,34 +1,32 @@
 ============================================================
   FULLY AUTOMATED PIPELINE
-  Brief: "Build a bookmark manager with tags and search"
+  Brief: "Build a CRM with invoice generator, client history, comments, address book, and GraphQL gqlgen backend"
 ============================================================
 
   [1] Personas + Interviews
-      $0.0019
+      $0.0016
   [2] MVP + Dev Review
-      $0.0045
+      $0.0055
   [3] Go Types + Wireframes
-      $0.0052
+      $0.0067
   [4] Store + Tests (Qwen3-30B)
-      store.go: OK ($0.0075)
+      store.go: OK ($0.0085)
   [5] Store Tests
-      store_test.go: OK ($0.0146)
+      store_test.go: OK ($0.0210)
   [6] Auto-Fix Loop (max 3 attempts)
-      Attempt 0: 6/11 (5 failing)
-      Attempt 1: 4/6 (2 failing)
-      Attempt 2: 4/6 (2 failing)
-      Final store tests: 4/6
+      Attempt 0: 16/16 PASS
+      Final store tests: 16/16
   [7] HTTP Server (claude -p)
-      main.go: PASS (314 lines, $0.0850)
+      main.go: PASS (720 lines, $0.2265)
   [8] HTTP Tests (claude -p)
-      HTTP tests: 20/20 ($0.1756)
+      HTTP tests: 25/25 ($0.2160)
 
 ============================================================
   FULLY AUTOMATED PIPELINE — RESULTS
 ============================================================
-  Brief: "Build a bookmark manager with tags and search"
+  Brief: "Build a CRM with invoice generator, client history, comments, address book, and GraphQL gqlgen backend"
   Store: COMPILES
-  Server: COMPILES (314 lines)
-  Tests: 24/26 pass (92%)
-  Cost: $0.3229
+  Server: COMPILES (720 lines)
+  Tests: 41/41 pass (100%)
+  Cost: $0.4858
   App: /tmp/ai-code-orchestration-research/experiments/exp-27-automated/app

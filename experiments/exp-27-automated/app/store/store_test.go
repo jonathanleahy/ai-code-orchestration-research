@@ -1,296 +1,774 @@
 package store
 
 import (
-	"os"
-	"reflect"
 	"testing"
+	"time"
 )
 
-func TestCreateBookmark(t *testing.T) {
+func TestGetClient(t *testing.T) {
 	store := NewStore()
 
-	b := &Bookmark{
-		URL:         "https://example.com",
-		Title:       "Example",
-		Description: "An example site",
-		Tags: []Tag{
-			{Name: "test", Color: "blue"},
-		},
-	}
-
-	err := store.CreateBookmark(b)
+	// Test getting non-existent client
+	client, err := store.GetClient("non-existent")
 	if err != nil {
-		t.Fatalf("CreateBookmark failed: %v", err)
+		t.Errorf("GetClient returned error: %v", err)
+	}
+	if client != nil {
+		t.Errorf("GetClient should return nil for non-existent client, got: %v", client)
 	}
 
-	if b.ID == "" {
-		t.Error("Bookmark ID should be generated")
+	// Test getting existing client
+	clientID := "test-client"
+	clientData := &Client{
+		ID:        clientID,
+		Name:      "Test Client",
+		Email:     "test@example.com",
+		Phone:     "123-456-7890",
+		Address:   Address{Street: "123 Main St", City: "Test City", State: "TS", ZipCode: "12345", Country: "USA"},
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
 	}
 
-	if b.CreatedAt.IsZero() {
-		t.Error("Bookmark CreatedAt should be set")
-	}
+	store.CreateClient(clientData)
 
-	if b.UpdatedAt.IsZero() {
-		t.Error("Bookmark UpdatedAt should be set")
-	}
-
-	// Verify the bookmark was actually stored
-	retrieved, err := store.GetBookmark(b.ID)
+	result, err := store.GetClient(clientID)
 	if err != nil {
-		t.Fatalf("Failed to retrieve created bookmark: %v", err)
+		t.Errorf("GetClient returned error: %v", err)
 	}
-
-	if retrieved.ID != b.ID {
-		t.Errorf("Expected ID %s, got %s", b.ID, retrieved.ID)
+	if result == nil {
+		t.Errorf("GetClient should return client, got nil")
+	}
+	if result.ID != clientID {
+		t.Errorf("GetClient returned wrong client ID: got %s, want %s", result.ID, clientID)
 	}
 }
 
-func TestGetBookmark(t *testing.T) {
+func TestGetClients(t *testing.T) {
 	store := NewStore()
 
-	// Create a bookmark first
-	b := &Bookmark{
-		URL:   "https://example.com",
-		Title: "Example",
-	}
-	store.CreateBookmark(b)
-
-	// Test retrieving existing bookmark
-	retrieved, err := store.GetBookmark(b.ID)
+	// Test getting empty list
+	clients, err := store.GetClients()
 	if err != nil {
-		t.Fatalf("GetBookmark failed: %v", err)
+		t.Errorf("GetClients returned error: %v", err)
+	}
+	if len(clients) != 0 {
+		t.Errorf("GetClients should return empty slice, got %d items", len(clients))
 	}
 
-	if retrieved.ID != b.ID {
-		t.Errorf("Expected ID %s, got %s", b.ID, retrieved.ID)
+	// Test getting multiple clients
+	client1 := &Client{
+		ID:        "client1",
+		Name:      "Client 1",
+		Email:     "client1@example.com",
+		Phone:     "111-111-1111",
+		Address:   Address{Street: "111 First St", City: "City 1", State: "S1", ZipCode: "11111", Country: "USA"},
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
 	}
 
-	// Test retrieving non-existing bookmark
-	_, err = store.GetBookmark("nonexistent")
-	if err == nil {
-		t.Error("Expected error for non-existent bookmark")
+	client2 := &Client{
+		ID:        "client2",
+		Name:      "Client 2",
+		Email:     "client2@example.com",
+		Phone:     "222-222-2222",
+		Address:   Address{Street: "222 Second St", City: "City 2", State: "S2", ZipCode: "22222", Country: "USA"},
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
 	}
-	if !os.IsNotExist(err) {
-		t.Errorf("Expected IsNotExist error, got %v", err)
+
+	store.CreateClient(client1)
+	store.CreateClient(client2)
+
+	clients, err = store.GetClients()
+	if err != nil {
+		t.Errorf("GetClients returned error: %v", err)
+	}
+	if len(clients) != 2 {
+		t.Errorf("GetClients should return 2 clients, got %d", len(clients))
+	}
+
+	// Check that both clients are returned
+	clientIDs := make(map[string]bool)
+	for _, client := range clients {
+		clientIDs[client.ID] = true
+	}
+
+	if !clientIDs["client1"] {
+		t.Errorf("GetClients should return client1")
+	}
+	if !clientIDs["client2"] {
+		t.Errorf("GetClients should return client2")
 	}
 }
 
-func TestUpdateBookmark(t *testing.T) {
+func TestCreateClient(t *testing.T) {
 	store := NewStore()
 
-	// Create a bookmark first
-	b := &Bookmark{
-		URL:         "https://example.com",
-		Title:       "Example",
-		Description: "An example site",
-		Tags: []Tag{
-			{Name: "test", Color: "blue"},
-		},
-	}
-	store.CreateBookmark(b)
-
-	// Update the bookmark
-	updated := &Bookmark{
-		URL:         "https://updated.com",
-		Title:       "Updated Example",
-		Description: "An updated example site",
-		Tags: []Tag{
-			{Name: "updated", Color: "red"},
-		},
+	client := &Client{
+		ID:        "test-client",
+		Name:      "Test Client",
+		Email:     "test@example.com",
+		Phone:     "123-456-7890",
+		Address:   Address{Street: "123 Main St", City: "Test City", State: "TS", ZipCode: "12345", Country: "USA"},
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
 	}
 
-	err := store.UpdateBookmark(b.ID, updated)
+	err := store.CreateClient(client)
 	if err != nil {
-		t.Fatalf("UpdateBookmark failed: %v", err)
+		t.Errorf("CreateClient returned error: %v", err)
 	}
 
-	// Verify the update
-	retrieved, err := store.GetBookmark(b.ID)
+	// Verify client was created
+	result, err := store.GetClient("test-client")
 	if err != nil {
-		t.Fatalf("Failed to retrieve updated bookmark: %v", err)
+		t.Errorf("GetClient returned error: %v", err)
+	}
+	if result == nil {
+		t.Errorf("Client was not created")
 	}
 
-	if retrieved.URL != updated.URL {
-		t.Errorf("Expected URL %s, got %s", updated.URL, retrieved.URL)
+	// Verify fields match
+	if result.Name != "Test Client" {
+		t.Errorf("Client name mismatch: got %s, want Test Client", result.Name)
 	}
-
-	if retrieved.Title != updated.Title {
-		t.Errorf("Expected title %s, got %s", updated.Title, retrieved.Title)
-	}
-
-	if retrieved.Description != updated.Description {
-		t.Errorf("Expected description %s, got %s", updated.Description, retrieved.Description)
-	}
-
-	if !reflect.DeepEqual(retrieved.Tags, updated.Tags) {
-		t.Errorf("Expected tags %v, got %v", updated.Tags, retrieved.Tags)
-	}
-
-	if retrieved.UpdatedAt.IsZero() {
-		t.Error("Bookmark UpdatedAt should be updated")
-	}
-
-	// Test updating non-existing bookmark
-	err = store.UpdateBookmark("nonexistent", updated)
-	if err == nil {
-		t.Error("Expected error for non-existent bookmark")
-	}
-	if !os.IsNotExist(err) {
-		t.Errorf("Expected IsNotExist error, got %v", err)
+	if result.Email != "test@example.com" {
+		t.Errorf("Client email mismatch: got %s, want test@example.com", result.Email)
 	}
 }
 
-func TestDeleteBookmark(t *testing.T) {
+func TestUpdateClient(t *testing.T) {
 	store := NewStore()
 
-	// Create a bookmark first
-	b := &Bookmark{
-		URL:   "https://example.com",
-		Title: "Example",
+	// Create initial client
+	initialClient := &Client{
+		ID:        "test-client",
+		Name:      "Original Name",
+		Email:     "original@example.com",
+		Phone:     "111-111-1111",
+		Address:   Address{Street: "111 Original St", City: "Original City", State: "OR", ZipCode: "11111", Country: "USA"},
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
 	}
-	store.CreateBookmark(b)
+	store.CreateClient(initialClient)
 
-	// Verify it exists
-	_, err := store.GetBookmark(b.ID)
+	// Update client
+	updatedClient := &Client{
+		Name:      "Updated Name",
+		Email:     "updated@example.com",
+		Phone:     "222-222-2222",
+		Address:   Address{Street: "222 Updated St", City: "Updated City", State: "UP", ZipCode: "22222", Country: "USA"},
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+	}
+
+	err := store.UpdateClient("test-client", updatedClient)
 	if err != nil {
-		t.Fatalf("Bookmark should exist: %v", err)
+		t.Errorf("UpdateClient returned error: %v", err)
 	}
 
-	// Delete the bookmark
-	err = store.DeleteBookmark(b.ID)
+	// Verify update
+	result, err := store.GetClient("test-client")
 	if err != nil {
-		t.Fatalf("DeleteBookmark failed: %v", err)
+		t.Errorf("GetClient returned error: %v", err)
+	}
+	if result == nil {
+		t.Errorf("Client was not found after update")
 	}
 
-	// Verify it's gone
-	_, err = store.GetBookmark(b.ID)
-	if err == nil {
-		t.Error("Bookmark should be deleted")
+	if result.Name != "Updated Name" {
+		t.Errorf("Client name not updated: got %s, want Updated Name", result.Name)
 	}
-	if !os.IsNotExist(err) {
-		t.Errorf("Expected IsNotExist error, got %v", err)
+	if result.Email != "updated@example.com" {
+		t.Errorf("Client email not updated: got %s, want updated@example.com", result.Email)
+	}
+	if result.Phone != "222-222-2222" {
+		t.Errorf("Client phone not updated: got %s, want 222-222-2222", result.Phone)
 	}
 
-	// Test deleting non-existing bookmark
-	err = store.DeleteBookmark("nonexistent")
-	if err == nil {
-		t.Error("Expected error for non-existent bookmark")
+	// Verify that ID is preserved
+	if result.ID != "test-client" {
+		t.Errorf("Client ID was changed: got %s, want test-client", result.ID)
 	}
-	if !os.IsNotExist(err) {
-		t.Errorf("Expected IsNotExist error, got %v", err)
+
+	// Verify that UpdatedAt was updated
+	if result.UpdatedAt.IsZero() {
+		t.Errorf("Client UpdatedAt was not set")
 	}
 }
 
-func TestListBookmarks(t *testing.T) {
+func TestDeleteClient(t *testing.T) {
 	store := NewStore()
 
-	// Create some bookmarks
-	b1 := &Bookmark{
-		URL:   "https://example1.com",
-		Title: "Example 1",
+	// Create client
+	client := &Client{
+		ID:        "test-client",
+		Name:      "Test Client",
+		Email:     "test@example.com",
+		Phone:     "123-456-7890",
+		Address:   Address{Street: "123 Main St", City: "Test City", State: "TS", ZipCode: "12345", Country: "USA"},
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
 	}
-	b2 := &Bookmark{
-		URL:   "https://example2.com",
-		Title: "Example 2",
-	}
-	store.CreateBookmark(b1)
-	store.CreateBookmark(b2)
+	store.CreateClient(client)
 
-	// List all bookmarks
-	bookmarks, err := store.ListBookmarks()
+	// Verify client exists
+	result, err := store.GetClient("test-client")
 	if err != nil {
-		t.Fatalf("ListBookmarks failed: %v", err)
+		t.Errorf("GetClient returned error: %v", err)
+	}
+	if result == nil {
+		t.Errorf("Client was not created")
 	}
 
-	if len(bookmarks) != 2 {
-		t.Errorf("Expected 2 bookmarks, got %d", len(bookmarks))
+	// Delete client
+	err = store.DeleteClient("test-client")
+	if err != nil {
+		t.Errorf("DeleteClient returned error: %v", err)
 	}
 
-	// Verify we got the right bookmarks
-	foundB1 := false
-	foundB2 := false
-	for _, b := range bookmarks {
-		if b.ID == b1.ID {
-			foundB1 = true
-		}
-		if b.ID == b2.ID {
-			foundB2 = true
-		}
+	// Verify client was deleted
+	result, err = store.GetClient("test-client")
+	if err != nil {
+		t.Errorf("GetClient returned error: %v", err)
 	}
-
-	if !foundB1 {
-		t.Error("Bookmark 1 not found in list")
-	}
-	if !foundB2 {
-		t.Error("Bookmark 2 not found in list")
+	if result != nil {
+		t.Errorf("Client was not deleted")
 	}
 }
 
-func TestSearchBookmarks(t *testing.T) {
+func TestGetInvoice(t *testing.T) {
 	store := NewStore()
 
-	// Create some bookmarks with different tags
-	b1 := &Bookmark{
-		URL:         "https://example1.com",
-		Title:       "Example 1",
-		Description: "First example",
-		Tags: []Tag{
-			{Name: "tag1", Color: "red"},
-			{Name: "tag2", Color: "blue"},
-		},
-	}
-	b2 := &Bookmark{
-		URL:         "https://example2.com",
-		Title:       "Example 2",
-		Description: "Second example",
-		Tags: []Tag{
-			{Name: "tag2", Color: "blue"},
-			{Name: "tag3", Color: "green"},
-		},
-	}
-	store.CreateBookmark(b1)
-	store.CreateBookmark(b2)
-
-	// Search by tag
-	filter := SearchFilter{
-		Query: "",
-		Tags:  []string{"tag2"},
-	}
-	bookmarks, err := store.SearchBookmarks(filter)
+	// Test getting non-existent invoice
+	invoice, err := store.GetInvoice("non-existent")
 	if err != nil {
-		t.Fatalf("SearchBookmarks failed: %v", err)
+		t.Errorf("GetInvoice returned error: %v", err)
+	}
+	if invoice != nil {
+		t.Errorf("GetInvoice should return nil for non-existent invoice, got: %v", invoice)
 	}
 
-	if len(bookmarks) != 2 {
-		t.Errorf("Expected 2 bookmarks with tag2, got %d", len(bookmarks))
+	// Test getting existing invoice
+	invoiceID := "test-invoice"
+	invoiceData := &Invoice{
+		ID:          invoiceID,
+		ClientID:    "test-client",
+		Items:       []Item{{Description: "Test Item", Quantity: 1, Price: 100.0, Total: 100.0}},
+		TotalAmount: 100.0,
+		IssueDate:   time.Now(),
+		DueDate:     time.Now().Add(30 * 24 * time.Hour),
+		Status:      "draft",
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
 	}
 
-	// Search by query
-	filter = SearchFilter{
-		Query: "Example 1",
-		Tags:  []string{},
-	}
-	bookmarks, err = store.SearchBookmarks(filter)
+	store.CreateInvoice(invoiceData)
+
+	result, err := store.GetInvoice(invoiceID)
 	if err != nil {
-		t.Fatalf("SearchBookmarks failed: %v", err)
+		t.Errorf("GetInvoice returned error: %v", err)
 	}
+	if result == nil {
+		t.Errorf("GetInvoice should return invoice, got nil")
+	}
+	if result.ID != invoiceID {
+		t.Errorf("GetInvoice returned wrong invoice ID: got %s, want %s", result.ID, invoiceID)
+	}
+}
 
-	if len(bookmarks) != 1 {
-		t.Errorf("Expected 1 bookmark with query 'Example 1', got %d", len(bookmarks))
-	}
+func TestGetInvoices(t *testing.T) {
+	store := NewStore()
 
-	// Search by both query and tag
-	filter = SearchFilter{
-		Query: "Example",
-		Tags:  []string{"tag1"},
-	}
-	bookmarks, err = store.SearchBookmarks(filter)
+	// Test getting empty list
+	invoices, err := store.GetInvoices()
 	if err != nil {
-		t.Fatalf("SearchBookmarks failed: %v", err)
+		t.Errorf("GetInvoices returned error: %v", err)
+	}
+	if len(invoices) != 0 {
+		t.Errorf("GetInvoices should return empty slice, got %d items", len(invoices))
 	}
 
-	if len(bookmarks) != 1 {
-		t.Errorf("Expected 1 bookmark with query 'Example' and tag 'tag1', got %d", len(bookmarks))
+	// Test getting multiple invoices
+	invoice1 := &Invoice{
+		ID:          "invoice1",
+		ClientID:    "client1",
+		Items:       []Item{{Description: "Item 1", Quantity: 1, Price: 100.0, Total: 100.0}},
+		TotalAmount: 100.0,
+		IssueDate:   time.Now(),
+		DueDate:     time.Now().Add(30 * 24 * time.Hour),
+		Status:      "draft",
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
+	}
+
+	invoice2 := &Invoice{
+		ID:          "invoice2",
+		ClientID:    "client2",
+		Items:       []Item{{Description: "Item 2", Quantity: 2, Price: 50.0, Total: 100.0}},
+		TotalAmount: 100.0,
+		IssueDate:   time.Now(),
+		DueDate:     time.Now().Add(30 * 24 * time.Hour),
+		Status:      "sent",
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
+	}
+
+	store.CreateInvoice(invoice1)
+	store.CreateInvoice(invoice2)
+
+	invoices, err = store.GetInvoices()
+	if err != nil {
+		t.Errorf("GetInvoices returned error: %v", err)
+	}
+	if len(invoices) != 2 {
+		t.Errorf("GetInvoices should return 2 invoices, got %d", len(invoices))
+	}
+
+	// Check that both invoices are returned
+	invoiceIDs := make(map[string]bool)
+	for _, invoice := range invoices {
+		invoiceIDs[invoice.ID] = true
+	}
+
+	if !invoiceIDs["invoice1"] {
+		t.Errorf("GetInvoices should return invoice1")
+	}
+	if !invoiceIDs["invoice2"] {
+		t.Errorf("GetInvoices should return invoice2")
+	}
+}
+
+func TestCreateInvoice(t *testing.T) {
+	store := NewStore()
+
+	invoice := &Invoice{
+		ID:          "test-invoice",
+		ClientID:    "test-client",
+		Items:       []Item{{Description: "Test Item", Quantity: 1, Price: 100.0, Total: 100.0}},
+		TotalAmount: 100.0,
+		IssueDate:   time.Now(),
+		DueDate:     time.Now().Add(30 * 24 * time.Hour),
+		Status:      "draft",
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
+	}
+
+	err := store.CreateInvoice(invoice)
+	if err != nil {
+		t.Errorf("CreateInvoice returned error: %v", err)
+	}
+
+	// Verify invoice was created
+	result, err := store.GetInvoice("test-invoice")
+	if err != nil {
+		t.Errorf("GetInvoice returned error: %v", err)
+	}
+	if result == nil {
+		t.Errorf("Invoice was not created")
+	}
+
+	// Verify fields match
+	if result.ClientID != "test-client" {
+		t.Errorf("Invoice client ID mismatch: got %s, want test-client", result.ClientID)
+	}
+	if result.TotalAmount != 100.0 {
+		t.Errorf("Invoice total amount mismatch: got %f, want 100.0", result.TotalAmount)
+	}
+	if result.Status != "draft" {
+		t.Errorf("Invoice status mismatch: got %s, want draft", result.Status)
+	}
+}
+
+func TestUpdateInvoice(t *testing.T) {
+	store := NewStore()
+
+	// Create initial invoice
+	initialInvoice := &Invoice{
+		ID:          "test-invoice",
+		ClientID:    "test-client",
+		Items:       []Item{{Description: "Original Item", Quantity: 1, Price: 100.0, Total: 100.0}},
+		TotalAmount: 100.0,
+		IssueDate:   time.Now(),
+		DueDate:     time.Now().Add(30 * 24 * time.Hour),
+		Status:      "draft",
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
+	}
+	store.CreateInvoice(initialInvoice)
+
+	// Update invoice
+	updatedInvoice := &Invoice{
+		ClientID:    "updated-client",
+		Items:       []Item{{Description: "Updated Item", Quantity: 2, Price: 50.0, Total: 100.0}},
+		TotalAmount: 100.0,
+		IssueDate:   time.Now(),
+		DueDate:     time.Now().Add(60 * 24 * time.Hour),
+		Status:      "sent",
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
+	}
+
+	err := store.UpdateInvoice("test-invoice", updatedInvoice)
+	if err != nil {
+		t.Errorf("UpdateInvoice returned error: %v", err)
+	}
+
+	// Verify update
+	result, err := store.GetInvoice("test-invoice")
+	if err != nil {
+		t.Errorf("GetInvoice returned error: %v", err)
+	}
+	if result == nil {
+		t.Errorf("Invoice was not found after update")
+	}
+
+	if result.ClientID != "updated-client" {
+		t.Errorf("Invoice client ID not updated: got %s, want updated-client", result.ClientID)
+	}
+	if result.Status != "sent" {
+		t.Errorf("Invoice status not updated: got %s, want sent", result.Status)
+	}
+
+	// Verify that ID is preserved
+	if result.ID != "test-invoice" {
+		t.Errorf("Invoice ID was changed: got %s, want test-invoice", result.ID)
+	}
+
+	// Verify that UpdatedAt was updated
+	if result.UpdatedAt.IsZero() {
+		t.Errorf("Invoice UpdatedAt was not set")
+	}
+}
+
+func TestDeleteInvoice(t *testing.T) {
+	store := NewStore()
+
+	// Create invoice
+	invoice := &Invoice{
+		ID:          "test-invoice",
+		ClientID:    "test-client",
+		Items:       []Item{{Description: "Test Item", Quantity: 1, Price: 100.0, Total: 100.0}},
+		TotalAmount: 100.0,
+		IssueDate:   time.Now(),
+		DueDate:     time.Now().Add(30 * 24 * time.Hour),
+		Status:      "draft",
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
+	}
+	store.CreateInvoice(invoice)
+
+	// Verify invoice exists
+	result, err := store.GetInvoice("test-invoice")
+	if err != nil {
+		t.Errorf("GetInvoice returned error: %v", err)
+	}
+	if result == nil {
+		t.Errorf("Invoice was not created")
+	}
+
+	// Delete invoice
+	err = store.DeleteInvoice("test-invoice")
+	if err != nil {
+		t.Errorf("DeleteInvoice returned error: %v", err)
+	}
+
+	// Verify invoice was deleted
+	result, err = store.GetInvoice("test-invoice")
+	if err != nil {
+		t.Errorf("GetInvoice returned error: %v", err)
+	}
+	if result != nil {
+		t.Errorf("Invoice was not deleted")
+	}
+}
+
+func TestGetComments(t *testing.T) {
+	store := NewStore()
+
+	// Test getting comments for non-existent client
+	comments, err := store.GetComments("non-existent-client")
+	if err != nil {
+		t.Errorf("GetComments returned error: %v", err)
+	}
+	if len(comments) != 0 {
+		t.Errorf("GetComments should return empty slice, got %d items", len(comments))
+	}
+
+	// Test getting comments for existing client
+	comment1 := &Comment{
+		ID:        "comment1",
+		ClientID:  "test-client",
+		Content:   "First comment",
+		CreatedAt: time.Now(),
+	}
+
+	comment2 := &Comment{
+		ID:        "comment2",
+		ClientID:  "test-client",
+		Content:   "Second comment",
+		CreatedAt: time.Now(),
+	}
+
+	store.CreateComment(comment1)
+	store.CreateComment(comment2)
+
+	comments, err = store.GetComments("test-client")
+	if err != nil {
+		t.Errorf("GetComments returned error: %v", err)
+	}
+	if len(comments) != 2 {
+		t.Errorf("GetComments should return 2 comments, got %d", len(comments))
+	}
+
+	// Check that both comments are returned
+	commentIDs := make(map[string]bool)
+	for _, comment := range comments {
+		commentIDs[comment.ID] = true
+	}
+
+	if !commentIDs["comment1"] {
+		t.Errorf("GetComments should return comment1")
+	}
+	if !commentIDs["comment2"] {
+		t.Errorf("GetComments should return comment2")
+	}
+}
+
+func TestCreateComment(t *testing.T) {
+	store := NewStore()
+
+	comment := &Comment{
+		ID:        "test-comment",
+		ClientID:  "test-client",
+		Content:   "Test comment content",
+		CreatedAt: time.Now(),
+	}
+
+	err := store.CreateComment(comment)
+	if err != nil {
+		t.Errorf("CreateComment returned error: %v", err)
+	}
+
+	// Verify comment was created
+	result, err := store.GetComments("test-client")
+	if err != nil {
+		t.Errorf("GetComments returned error: %v", err)
+	}
+	if len(result) != 1 {
+		t.Errorf("Should have 1 comment, got %d", len(result))
+	}
+
+	if result[0].Content != "Test comment content" {
+		t.Errorf("Comment content mismatch: got %s, want Test comment content", result[0].Content)
+	}
+}
+
+func TestDeleteComment(t *testing.T) {
+	store := NewStore()
+
+	// Create comment
+	comment := &Comment{
+		ID:        "test-comment",
+		ClientID:  "test-client",
+		Content:   "Test comment content",
+		CreatedAt: time.Now(),
+	}
+	store.CreateComment(comment)
+
+	// Verify comment exists
+	comments, err := store.GetComments("test-client")
+	if err != nil {
+		t.Errorf("GetComments returned error: %v", err)
+	}
+	if len(comments) != 1 {
+		t.Errorf("Should have 1 comment, got %d", len(comments))
+	}
+
+	// Delete comment
+	err = store.DeleteComment("test-comment")
+	if err != nil {
+		t.Errorf("DeleteComment returned error: %v", err)
+	}
+
+	// Verify comment was deleted
+	comments, err = store.GetComments("test-client")
+	if err != nil {
+		t.Errorf("GetComments returned error: %v", err)
+	}
+	if len(comments) != 0 {
+		t.Errorf("Should have 0 comments after deletion, got %d", len(comments))
+	}
+}
+
+func TestGetHistory(t *testing.T) {
+	store := NewStore()
+
+	// Test getting history for non-existent client
+	history, err := store.GetHistory("non-existent-client")
+	if err != nil {
+		t.Errorf("GetHistory returned error: %v", err)
+	}
+	if len(history) != 0 {
+		t.Errorf("GetHistory should return empty slice, got %d items", len(history))
+	}
+
+	// Test getting history for existing client
+	entry1 := &HistoryEntry{
+		ID:        "entry1",
+		ClientID:  "test-client",
+		Note:      "First history entry",
+		CreatedAt: time.Now(),
+	}
+
+	entry2 := &HistoryEntry{
+		ID:        "entry2",
+		ClientID:  "test-client",
+		Note:      "Second history entry",
+		CreatedAt: time.Now(),
+	}
+
+	store.CreateHistory(entry1)
+	store.CreateHistory(entry2)
+
+	history, err = store.GetHistory("test-client")
+	if err != nil {
+		t.Errorf("GetHistory returned error: %v", err)
+	}
+	if len(history) != 2 {
+		t.Errorf("GetHistory should return 2 entries, got %d", len(history))
+	}
+
+	// Check that both entries are returned
+	entryIDs := make(map[string]bool)
+	for _, entry := range history {
+		entryIDs[entry.ID] = true
+	}
+
+	if !entryIDs["entry1"] {
+		t.Errorf("GetHistory should return entry1")
+	}
+	if !entryIDs["entry2"] {
+		t.Errorf("GetHistory should return entry2")
+	}
+}
+
+func TestCreateHistory(t *testing.T) {
+	store := NewStore()
+
+	entry := &HistoryEntry{
+		ID:        "test-entry",
+		ClientID:  "test-client",
+		Note:      "Test history entry",
+		CreatedAt: time.Now(),
+	}
+
+	err := store.CreateHistory(entry)
+	if err != nil {
+		t.Errorf("CreateHistory returned error: %v", err)
+	}
+
+	// Verify entry was created
+	result, err := store.GetHistory("test-client")
+	if err != nil {
+		t.Errorf("GetHistory returned error: %v", err)
+	}
+	if len(result) != 1 {
+		t.Errorf("Should have 1 history entry, got %d", len(result))
+	}
+
+	if result[0].Note != "Test history entry" {
+		t.Errorf("History entry note mismatch: got %s, want Test history entry", result[0].Note)
+	}
+}
+
+func TestSaveAndLoad(t *testing.T) {
+	store := NewStore()
+
+	// Create some test data
+	client := &Client{
+		ID:        "test-client",
+		Name:      "Test Client",
+		Email:     "test@example.com",
+		Phone:     "123-456-7890",
+		Address:   Address{Street: "123 Main St", City: "Test City", State: "TS", ZipCode: "12345", Country: "USA"},
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+	}
+
+	invoice := &Invoice{
+		ID:          "test-invoice",
+		ClientID:    "test-client",
+		Items:       []Item{{Description: "Test Item", Quantity: 1, Price: 100.0, Total: 100.0}},
+		TotalAmount: 100.0,
+		IssueDate:   time.Now(),
+		DueDate:     time.Now().Add(30 * 24 * time.Hour),
+		Status:      "draft",
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
+	}
+
+	comment := &Comment{
+		ID:        "test-comment",
+		ClientID:  "test-client",
+		Content:   "Test comment",
+		CreatedAt: time.Now(),
+	}
+
+	entry := &HistoryEntry{
+		ID:        "test-entry",
+		ClientID:  "test-client",
+		Note:      "Test history entry",
+		CreatedAt: time.Now(),
+	}
+
+	store.CreateClient(client)
+	store.CreateInvoice(invoice)
+	store.CreateComment(comment)
+	store.CreateHistory(entry)
+
+	// Test Save (should not error)
+	err := store.Save()
+	if err != nil {
+		t.Errorf("Save returned error: %v", err)
+	}
+
+	// Test Load (should not error)
+	err = store.Load()
+	if err != nil {
+		t.Errorf("Load returned error: %v", err)
+	}
+
+	// Verify data is still there
+	resultClient, err := store.GetClient("test-client")
+	if err != nil {
+		t.Errorf("GetClient returned error: %v", err)
+	}
+	if resultClient == nil {
+		t.Errorf("Client was not found after save/load")
+	}
+
+	resultInvoice, err := store.GetInvoice("test-invoice")
+	if err != nil {
+		t.Errorf("GetInvoice returned error: %v", err)
+	}
+	if resultInvoice == nil {
+		t.Errorf("Invoice was not found after save/load")
+	}
+
+	resultComments, err := store.GetComments("test-client")
+	if err != nil {
+		t.Errorf("GetComments returned error: %v", err)
+	}
+	if len(resultComments) != 1 {
+		t.Errorf("Should have 1 comment after save/load, got %d", len(resultComments))
+	}
+
+	resultHistory, err := store.GetHistory("test-client")
+	if err != nil {
+		t.Errorf("GetHistory returned error: %v", err)
+	}
+	if len(resultHistory) != 1 {
+		t.Errorf("Should have 1 history entry after save/load, got %d", len(resultHistory))
 	}
 }

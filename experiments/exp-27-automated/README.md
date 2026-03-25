@@ -1,7 +1,7 @@
 # Experiment 27: Fully Automated Pipeline
 
 ## Brief
-"Build a bookmark manager with tags and search"
+"Build a CRM with invoice generator, client history, comments, address book, and GraphQL gqlgen backend"
 
 ## Pipeline (zero intervention)
 1. Persona discovery + interviews
@@ -16,11 +16,11 @@
 
 | Component | Status | Tests |
 |-----------|--------|-------|
-| Store | COMPILES | 4/6 |
-| Server | COMPILES (314 lines) | 20/20 |
-| **Total** | | **24/26 (92%)** |
+| Store | COMPILES | 16/16 |
+| Server | COMPILES (720 lines) | 25/25 |
+| **Total** | | **41/41 (100%)** |
 
-## Cost: $0.3229
+## Cost: $0.4858
 
 ## Key: Auto-Fix Loop
 Store tests go through an auto-fix loop:

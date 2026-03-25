@@ -7,47 +7,92 @@ import (
 	"time"
 )
 
-// Bookmark represents a single bookmark entry
-type Bookmark struct {
+// Client represents a client in the CRM
+type Client struct {
+	ID        string    `json:"id"`
+	Name      string    `json:"name"`
+	Email     string    `json:"email"`
+	Phone     string    `json:"phone"`
+	Address   Address   `json:"address"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
+// Address represents a client's address
+type Address struct {
+	Street  string `json:"street"`
+	City    string `json:"city"`
+	State   string `json:"state"`
+	ZipCode string `json:"zip_code"`
+	Country string `json:"country"`
+}
+
+// Invoice represents an invoice
+type Invoice struct {
 	ID          string    `json:"id"`
-	URL         string    `json:"url"`
-	Title       string    `json:"title"`
-	Description string    `json:"description"`
-	Tags        []Tag     `json:"tags"`
+	ClientID    string    `json:"client_id"`
+	Items       []Item    `json:"items"`
+	TotalAmount float64   `json:"total_amount"`
+	IssueDate   time.Time `json:"issue_date"`
+	DueDate     time.Time `json:"due_date"`
+	Status      string    `json:"status"` // "draft", "sent", "paid"
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
 }
 
-// Tag represents a tag with color coding
-type Tag struct {
-	Name  string `json:"name"`
-	Color string `json:"color"`
+// Item represents an item on an invoice
+type Item struct {
+	Description string  `json:"description"`
+	Quantity    int     `json:"quantity"`
+	Price       float64 `json:"price"`
+	Total       float64 `json:"total"`
 }
 
-// SearchFilter holds parameters for filtering and searching
-type SearchFilter struct {
-	Query string   `json:"query"`
-	Tags  []string `json:"tags"`
+// Comment represents a note/comment on a client
+type Comment struct {
+	ID        string    `json:"id"`
+	ClientID  string    `json:"client_id"`
+	Content   string    `json:"content"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
-// ExportData holds the structure for exporting bookmarks
-type ExportData struct {
-	Bookmarks []Bookmark `json:"bookmarks"`
+// HistoryEntry represents a client interaction log
+type HistoryEntry struct {
+	ID        string    `json:"id"`
+	ClientID  string    `json:"client_id"`
+	Note      string    `json:"note"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
-// Store interface defines the required methods for bookmark management
+// Store interface defines the methods for data persistence
 type Store interface {
-	CreateBookmark(b *Bookmark) error
-	GetBookmark(id string) (*Bookmark, error)
-	UpdateBookmark(id string, b *Bookmark) error
-	DeleteBookmark(id string) error
-	ListBookmarks() ([]*Bookmark, error)
-	SearchBookmarks(filter SearchFilter) ([]*Bookmark, error)
-	FilterByTags(tags []string) ([]*Bookmark, error)
-	Export() (*ExportData, error)
-	Import(data *ExportData) error
-	SaveToFile(filename string) error
-	LoadFromFile(filename string) error
+	// Client methods
+	GetClient(id string) (*Client, error)
+	GetClients() ([]*Client, error)
+	CreateClient(client *Client) error
+	UpdateClient(id string, client *Client) error
+	DeleteClient(id string) error
+	SearchClients(query string) ([]*Client, error)
+
+	// Invoice methods
+	GetInvoice(id string) (*Invoice, error)
+	GetInvoices() ([]*Invoice, error)
+	CreateInvoice(invoice *Invoice) error
+	UpdateInvoice(id string, invoice *Invoice) error
+	DeleteInvoice(id string) error
+
+	// Comment methods
+	GetComments(clientID string) ([]*Comment, error)
+	CreateComment(comment *Comment) error
+	DeleteComment(id string) error
+
+	// History methods
+	GetHistory(clientID string) ([]*HistoryEntry, error)
+	CreateHistory(entry *HistoryEntry) error
+
+	// Persistence
+	Save() error
+	Load() error
 }
 ```
 
@@ -55,62 +100,76 @@ type Store interface {
 
 ## OUTPUT 2: Screen Wireframes
 
-### Dashboard Screen
+### Dashboard
 ```
 ┌─────────────────────────────────────────────────────┐
-│ [+] Add Bookmark   [Search] [Filter Tags] [Settings]│
+│ CRM Dashboard                                       │
 ├─────────────────────────────────────────────────────┤
-│ Title              | URL                    | Tags   │
+│ [+] New Client   [+] New Invoice   [Search]         │
 ├─────────────────────────────────────────────────────┤
-│ Example Site       | https://example.com    | [web]  │
-│ Another Page       | https://another.org    | [go]   │
-│ Project Docs       | https://docs.project   | [tech] │
+│ Clients: 5 | Invoices: 3 | Comments: 7              │
 ├─────────────────────────────────────────────────────┤
-│ [Edit] [Delete] [View Details]                      │
+│ Client List                                         │
+│ ┌────────────┬────────────┬────────────┬──────────┐ │
+│ │ Name       │ Email      │ Phone      │ Actions  │ │
+│ ├────────────┼────────────┼────────────┼──────────┤ │
+│ │ John Doe   │ john@email │ 123-456-78 │ Edit     │ │
+│ │ Jane Smith │ jane@email │ 987-654-32 │ View     │ │
+│ └────────────┴────────────┴────────────┴──────────┘ │
 └─────────────────────────────────────────────────────┘
 ```
 
-### Create Form Screen
+### Create Client Form
 ```
 ┌─────────────────────────────────────────────────────┐
-│ [Save] [Cancel]                                     │
+│ Create New Client                                   │
 ├─────────────────────────────────────────────────────┤
-│ Title: [_____________________________]             │
-│ URL:   [_____________________________]             │
-│ Desc:  [_____________________________]             │
-│ Tags:  [_____________________________]             │
-│ Color: [Red] [Blue] [Green] [Yellow] [Purple]      │
+│ Name: [_____________________________]              │
+│ Email: [_____________________________]              │
+│ Phone: [_____________________________]              │
+│ Street: [_____________________________]             │
+│ City: [_____________________________]               │
+│ State: [_____________________________]              │
+│ Zip Code: [_____]                                  │
+│ Country: [_____________________________]            │
 ├─────────────────────────────────────────────────────┤
-│ [Add Tag] [Remove Tag]                              │
+│ [Save Client] [Cancel]                              │
 └─────────────────────────────────────────────────────┘
 ```
 
-### Detail View Screen
+### Client Detail View
 ```
 ┌─────────────────────────────────────────────────────┐
-│ [Back] [Edit] [Delete]                              │
+│ Client Details: John Doe                            │
 ├─────────────────────────────────────────────────────┤
-│ Title: Example Site                                 │
-│ URL:   https://example.com                          │
-│ Desc:  This is a sample website                     │
-│ Tags:  [web] [important] [project]                  │
+│ Email: john@email.com                               │
+│ Phone: 123-456-7890                                 │
+│ Address: 123 Main St, City, State 12345, Country    │
 ├─────────────────────────────────────────────────────┤
-│ Created: 2024-01-01 12:00                           │
-│ Updated: 2024-01-02 14:30                           │
+│ Comments                                            │
+│ ┌─────────────────────────────────────────────────┐ │
+│ │ 2024-01-15 10:30 - Meeting scheduled           │ │
+│ │ 2024-01-14 14:22 - Sent proposal               │ │
+│ └─────────────────────────────────────────────────┘ │
+├─────────────────────────────────────────────────────┤
+│ [Edit] [Delete] [Add Comment] [Back to List]        │
 └─────────────────────────────────────────────────────┘
 ```
 
-### Settings Screen
+### Settings
 ```
 ┌─────────────────────────────────────────────────────┐
-│ [Save Settings] [Back]                              │
+│ Settings                                            │
 ├─────────────────────────────────────────────────────┤
-│ Auth: [Enable] [Disable]                            │
-│ HTTPS: [Enable] [Disable]                           │
-│ Rate Limit: [100 req/min] [500 req/min]             │
-│ Persistence: [Memory] [JSON File]                   │
-│ File Path: [_________________________]             │
+│ [x] Enable Email Notifications                      │
+│ [x] Auto Backup to JSON                             │
+│ [ ] Dark Mode                                       │
 ├─────────────────────────────────────────────────────┤
-│ [Export Data] [Import Data]                         │
+│ Authentication                                      │
+│ Username: [admin]                                   │
+│ Password: [********]                                │
+│ [Update Credentials]                                │
+├─────────────────────────────────────────────────────┤
+│ [Save Settings] [Back to Dashboard]                 │
 └─────────────────────────────────────────────────────┘
 ```

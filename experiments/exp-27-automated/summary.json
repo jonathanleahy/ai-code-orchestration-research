@@ -1,17 +1,17 @@
 {
-  "brief": "Build a bookmark manager with tags and search",
-  "total_cost": 0.3229112,
+  "brief": "Build a CRM with invoice generator, client history, comments, address book, and GraphQL gqlgen backend",
+  "total_cost": 0.48584375,
   "store_compiles": true,
   "server_builds": true,
-  "server_lines": 314,
+  "server_lines": 720,
   "store_tests": {
-    "pass": 4,
-    "fail": 2
-  },
-  "http_tests": {
-    "pass": 20,
+    "pass": 16,
     "fail": 0
   },
-  "total_tests": 26,
-  "total_pass": 24
+  "http_tests": {
+    "pass": 25,
+    "fail": 0
+  },
+  "total_tests": 41,
+  "total_pass": 41
 }

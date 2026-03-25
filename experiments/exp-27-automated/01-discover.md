@@ -1,23 +1,23 @@
 **Persona 1: Sarah Chen - Freelance Designer**
-Sarah is a 32-year-old freelance graphic designer who manages dozens of design resources, client files, and inspiration bookmarks across multiple projects. Her top pain points include losing track of important design references, spending excessive time searching through browser tabs, and struggling to categorize resources by project type or client. Her must-have feature would be advanced tag-based filtering with color-coded categories, and she would likely pay $10/month for this convenience. 
+Sarah runs a small design studio with 15 clients and handles all her business operations solo. Her top pain points are losing track of client payment history, manually creating invoices that often contain errors, and spending hours searching through emails for client details. She needs a CRM that automatically syncs with her email and integrates seamlessly with her design software. She would pay $10/month for this solution. 
 
 **Interview Answers:**
-1. "I waste 30+ minutes daily just finding the right design assets I bookmarked months ago. This would be a game-changer."
-2. "I need to quickly switch between client projects, so having tags that automatically filter by client or project type is essential."
-3. "I'd definitely pay $10/month - I spend that much on other productivity tools and this would save me so much time."
+1. "I spend 4 hours weekly just tracking payments and chasing clients - this would save me so much time."
+2. "The most important feature would be automatic invoice generation from client data."
+3. "Yes, $10/month is absolutely worth it if it saves me just one hour per week."
 
-**Persona 2: Marcus Rodriguez - Research Analyst**
-Marcus is a 45-year-old research analyst who curates hundreds of academic papers, industry reports, and news articles for his team's quarterly presentations. His top pain points are the inability to organize research by topic and methodology, difficulty finding previously saved articles, and the lack of collaborative features for sharing bookmarks with colleagues. His must-have feature is a robust search function that indexes both content and tags, and he would pay $10/month for this tool. 
-
-**Interview Answers:**
-1. "I have 500+ bookmarks but can't find anything without manually going through folders. A smart search with tag integration would save me 2 hours weekly."
-2. "I need to be able to tag articles by research methodology, industry sector, and date - this is crucial for my work."
-3. "I'd pay $10/month without hesitation. I have a subscription to similar tools and this would replace my current messy system."
-
-**Persona 3: Emma Thompson - Student**
-Emma is a 20-year-old graduate student juggling multiple research papers, course materials, and academic resources across different subjects. Her top pain points include mixing up bookmarks from different classes, difficulty finding resources for specific assignments, and the lack of mobile access to her bookmarks. Her must-have feature is a simple, mobile-friendly interface with subject-based tagging, and she would pay $10/month for this convenience. 
+**Persona 2: Marcus Rodriguez - Small Business Owner**
+Marcus owns a local marketing agency with 50+ clients and manages everything from his phone. His biggest challenges are scattered client information across multiple apps, difficulty tracking project comments and notes, and managing addresses manually. He requires a centralized system that works on mobile and syncs across devices. He would pay $10/month for this service.
 
 **Interview Answers:**
-1. "I have bookmarks from 5 different classes and always get confused about which ones are for which assignment. Subject tags would be perfect."
-2. "I need to access my bookmarks on my phone during study sessions - the mobile experience is crucial for me."
-3. "I'd pay $10/month if it helped me stay organized. I'm always looking for ways to improve my study efficiency."
+1. "I have client addresses in 3 different places - having one central address book would be game-changing."
+2. "Comments and history tracking is crucial for my team to stay aligned on projects."
+3. "I'd definitely pay $10/month if it meant I could finally organize all my client data in one place."
+
+**Persona 3: Jennifer Park - Startup Founder**
+Jennifer leads a growing SaaS startup with 200+ clients and manages client relationships across multiple departments. Her main pain points include lack of visibility into client history across teams, inefficient invoice generation process, and difficulty maintaining consistent client communication. She needs a robust system that can scale with her business and provide detailed analytics. She would pay $10/month.
+
+**Interview Answers:**
+1. "Our sales team needs access to complete client history to close deals faster."
+2. "The ability to generate invoices with one click and track payment status would be invaluable."
+3. "I'd pay $10/month if it helped us reduce client onboarding time by even 20%."

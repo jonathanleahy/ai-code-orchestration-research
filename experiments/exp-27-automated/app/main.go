@@ -2,313 +2,719 @@ package main
 
 import (
 	"encoding/json"
-	"io"
 	"log"
 	"net/http"
 	"strings"
+	"time"
 
 	"app/store"
+	"github.com/google/uuid"
 )
 
-var bookmarkStore store.Store
+var s store.Store
 
 func init() {
-	bookmarkStore = store.NewStore()
+	s = store.NewStore()
 }
 
 func main() {
-	http.HandleFunc("/", handleDashboard)
-	http.HandleFunc("/health", handleHealth)
+	mux := http.NewServeMux()
 
-	// Bookmark CRUD endpoints
-	http.HandleFunc("/api/bookmarks", func(w http.ResponseWriter, r *http.Request) {
-		setCORSHeaders(w)
-		if r.Method == http.MethodOptions {
-			w.WriteHeader(http.StatusOK)
-			return
-		}
-		if r.Method == http.MethodPost {
-			handleCreateBookmark(w, r)
-		} else if r.Method == http.MethodGet {
-			handleListBookmarks(w, r)
-		} else {
-			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		}
-	})
+	mux.HandleFunc("/health", handleHealth)
+	mux.HandleFunc("/", handleDashboard)
+	mux.HandleFunc("/api/clients", handleClients)
+	mux.HandleFunc("/api/clients/", handleClientByID)
+	mux.HandleFunc("/api/invoices", handleInvoices)
+	mux.HandleFunc("/api/invoices/", handleInvoiceByID)
+	mux.HandleFunc("/api/comments", handleComments)
+	mux.HandleFunc("/api/comments/", handleCommentByID)
+	mux.HandleFunc("/api/history", handleHistory)
 
-	http.HandleFunc("/api/bookmarks/", func(w http.ResponseWriter, r *http.Request) {
-		setCORSHeaders(w)
-		if r.Method == http.MethodOptions {
-			w.WriteHeader(http.StatusOK)
-			return
-		}
-		id := strings.TrimPrefix(r.URL.Path, "/api/bookmarks/")
-		if r.Method == http.MethodGet {
-			handleGetBookmark(w, r, id)
-		} else if r.Method == http.MethodPatch {
-			handleUpdateBookmark(w, r, id)
-		} else if r.Method == http.MethodDelete {
-			handleDeleteBookmark(w, r, id)
-		} else {
-			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		}
-	})
-
-	http.HandleFunc("/api/bookmarks/search", func(w http.ResponseWriter, r *http.Request) {
-		setCORSHeaders(w)
-		if r.Method == http.MethodOptions {
-			w.WriteHeader(http.StatusOK)
-			return
-		}
-		if r.Method == http.MethodPost {
-			handleSearchBookmarks(w, r)
-		} else {
-			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		}
-	})
-
-	log.Println("Server starting on :8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Println("Server starting at :8080")
+	log.Fatal(http.ListenAndServe(":8080", corsMiddleware(mux)))
 }
 
-func setCORSHeaders(w http.ResponseWriter) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-}
-
-func respondJSON(w http.ResponseWriter, data interface{}, statusCode int) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(statusCode)
-	json.NewEncoder(w).Encode(data)
+func corsMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+		next.ServeHTTP(w, r)
+	})
 }
 
 func handleHealth(w http.ResponseWriter, r *http.Request) {
-	setCORSHeaders(w)
-	respondJSON(w, map[string]string{"status": "ok"}, http.StatusOK)
-}
-
-func handleCreateBookmark(w http.ResponseWriter, r *http.Request) {
-	var b store.Bookmark
-	if err := json.NewDecoder(r.Body).Decode(&b); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-	if err := bookmarkStore.CreateBookmark(&b); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	respondJSON(w, b, http.StatusCreated)
-}
-
-func handleGetBookmark(w http.ResponseWriter, r *http.Request, id string) {
-	b, err := bookmarkStore.GetBookmark(id)
-	if err != nil {
-		http.Error(w, "Not found", http.StatusNotFound)
-		return
-	}
-	respondJSON(w, b, http.StatusOK)
-}
-
-func handleListBookmarks(w http.ResponseWriter, r *http.Request) {
-	bookmarks, err := bookmarkStore.ListBookmarks()
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	respondJSON(w, bookmarks, http.StatusOK)
-}
-
-func handleUpdateBookmark(w http.ResponseWriter, r *http.Request, id string) {
-	var b store.Bookmark
-	if err := json.NewDecoder(r.Body).Decode(&b); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-	if err := bookmarkStore.UpdateBookmark(id, &b); err != nil {
-		http.Error(w, "Not found", http.StatusNotFound)
-		return
-	}
-	b.ID = id
-	respondJSON(w, b, http.StatusOK)
-}
-
-func handleDeleteBookmark(w http.ResponseWriter, r *http.Request, id string) {
-	if err := bookmarkStore.DeleteBookmark(id); err != nil {
-		http.Error(w, "Not found", http.StatusNotFound)
-		return
-	}
-	w.WriteHeader(http.StatusNoContent)
-}
-
-func handleSearchBookmarks(w http.ResponseWriter, r *http.Request) {
-	var filter store.SearchFilter
-	if err := json.NewDecoder(r.Body).Decode(&filter); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-	bookmarks, err := bookmarkStore.SearchBookmarks(filter)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	respondJSON(w, bookmarks, http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
 }
 
 func handleDashboard(w http.ResponseWriter, r *http.Request) {
-	setCORSHeaders(w)
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	if r.URL.Path != "/" {
+		http.NotFound(w, r)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html")
+	w.WriteHeader(http.StatusOK)
 
-	bookmarks, _ := bookmarkStore.ListBookmarks()
+	clients, _ := s.GetClients()
+	invoices, _ := s.GetInvoices()
+	comments, _ := s.GetComments("")
+	history, _ := s.GetHistory("")
 
-	html := "<!DOCTYPE html>\n<html>\n<head>\n"
-	html = html + "<meta charset=\"UTF-8\">\n"
-	html = html + "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n"
-	html = html + "<title>Bookmark Dashboard</title>\n"
-	html = html + "<style>\n"
-	html = html + "body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }\n"
-	html = html + ".container { max-width: 1200px; margin: 0 auto; }\n"
-	html = html + ".header { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }\n"
-	html = html + "h1 { margin: 0; color: #333; }\n"
-	html = html + ".form-section { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }\n"
-	html = html + ".form-group { margin-bottom: 15px; }\n"
-	html = html + "label { display: block; font-weight: 600; margin-bottom: 5px; color: #333; }\n"
-	html = html + "input, textarea { width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-family: inherit; box-sizing: border-box; }\n"
-	html = html + "textarea { resize: vertical; min-height: 80px; }\n"
-	html = html + "button { background: #0066cc; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; }\n"
-	html = html + "button:hover { background: #0052a3; }\n"
-	html = html + ".bookmarks-section { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }\n"
-	html = html + ".bookmark-item { border: 1px solid #ddd; padding: 15px; border-radius: 4px; margin-bottom: 15px; background: #fafafa; }\n"
-	html = html + ".bookmark-title { font-weight: 600; color: #0066cc; margin-bottom: 5px; }\n"
-	html = html + ".bookmark-url { font-size: 14px; color: #666; margin-bottom: 8px; word-break: break-all; }\n"
-	html = html + ".bookmark-desc { font-size: 14px; color: #444; margin-bottom: 10px; }\n"
-	html = html + ".bookmark-tags { margin-bottom: 10px; }\n"
-	html = html + ".tag { display: inline-block; padding: 4px 8px; border-radius: 3px; font-size: 12px; margin-right: 5px; margin-bottom: 5px; }\n"
-	html = html + ".bookmark-actions { display: flex; gap: 10px; }\n"
-	html = html + ".btn-small { padding: 6px 12px; font-size: 12px; }\n"
-	html = html + ".btn-delete { background: #dc3545; }\n"
-	html = html + ".btn-delete:hover { background: #c82333; }\n"
-	html = html + ".empty { color: #999; font-style: italic; text-align: center; padding: 40px 20px; }\n"
-	html = html + "</style>\n"
-	html = html + "</head>\n<body>\n"
-	html = html + "<div class=\"container\">\n"
-	html = html + "<div class=\"header\"><h1>📚 Bookmark Dashboard</h1></div>\n"
-	html = html + "<div class=\"form-section\">\n"
-	html = html + "<h2>Add New Bookmark</h2>\n"
-	html = html + "<form id=\"bookmarkForm\">\n"
-	html = html + "<div class=\"form-group\">\n"
-	html = html + "<label>URL</label>\n"
-	html = html + "<input type=\"url\" id=\"url\" required placeholder=\"https://example.com\">\n"
-	html = html + "</div>\n"
-	html = html + "<div class=\"form-group\">\n"
-	html = html + "<label>Title</label>\n"
-	html = html + "<input type=\"text\" id=\"title\" required placeholder=\"Page title\">\n"
-	html = html + "</div>\n"
-	html = html + "<div class=\"form-group\">\n"
-	html = html + "<label>Description</label>\n"
-	html = html + "<textarea id=\"description\" placeholder=\"Optional description\"></textarea>\n"
-	html = html + "</div>\n"
-	html = html + "<div class=\"form-group\">\n"
-	html = html + "<label>Tags (comma-separated)</label>\n"
-	html = html + "<input type=\"text\" id=\"tags\" placeholder=\"web, tutorial, javascript\">\n"
-	html = html + "</div>\n"
-	html = html + "<button type=\"submit\">Add Bookmark</button>\n"
-	html = html + "</form>\n"
-	html = html + "</div>\n"
-	html = html + "<div class=\"bookmarks-section\">\n"
-	html = html + "<h2>Bookmarks (" + formatInt(len(bookmarks)) + ")</h2>\n"
+	clientsJSON, _ := json.Marshal(clients)
+	invoicesJSON, _ := json.Marshal(invoices)
+	commentsJSON, _ := json.Marshal(comments)
+	historyJSON, _ := json.Marshal(history)
 
-	if len(bookmarks) == 0 {
-		html = html + "<div class=\"empty\">No bookmarks yet. Add your first bookmark above!</div>\n"
-	} else {
-		for _, b := range bookmarks {
-			html = html + "<div class=\"bookmark-item\">\n"
-			html = html + "<div class=\"bookmark-title\">" + escapeHTML(b.Title) + "</div>\n"
-			html = html + "<div class=\"bookmark-url\"><a href=\"" + escapeHTML(b.URL) + "\" target=\"_blank\">" + escapeHTML(b.URL) + "</a></div>\n"
-			if b.Description != "" {
-				html = html + "<div class=\"bookmark-desc\">" + escapeHTML(b.Description) + "</div>\n"
-			}
-			if len(b.Tags) > 0 {
-				html = html + "<div class=\"bookmark-tags\">\n"
-				for _, tag := range b.Tags {
-					color := tag.Color
-					if color == "" {
-						color = "#e0e0e0"
-					}
-					html = html + "<span class=\"tag\" style=\"background: " + escapeHTML(color) + ";\">" + escapeHTML(tag.Name) + "</span>\n"
-				}
-				html = html + "</div>\n"
-			}
-			html = html + "<div class=\"bookmark-actions\">\n"
-			html = html + "<button class=\"btn-small\" onclick=\"editBookmark('" + escapeHTML(b.ID) + "')\">Edit</button>\n"
-			html = html + "<button class=\"btn-small btn-delete\" onclick=\"deleteBookmark('" + escapeHTML(b.ID) + "')\">Delete</button>\n"
-			html = html + "</div>\n"
-			html = html + "</div>\n"
+	html := `<!DOCTYPE html>
+<html>
+<head>
+	<title>CRM Dashboard</title>
+	<style>
+		body { font-family: sans-serif; margin: 20px; background: #f5f5f5; }
+		.container { max-width: 1200px; margin: 0 auto; }
+		h1 { color: #333; }
+		.section { background: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+		h2 { color: #0066cc; border-bottom: 2px solid #0066cc; padding-bottom: 10px; }
+		.form-group { margin-bottom: 15px; }
+		label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; }
+		input, textarea, select { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+		textarea { resize: vertical; min-height: 80px; }
+		button { background: #0066cc; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
+		button:hover { background: #0052a3; }
+		.list-item { padding: 10px; border: 1px solid #ddd; margin-bottom: 10px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; }
+		.list-item-content { flex: 1; }
+		.list-item button { margin-left: 10px; padding: 5px 10px; font-size: 12px; }
+		.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+		.delete-btn { background: #cc0000; }
+		.delete-btn:hover { background: #990000; }
+		.error { color: red; padding: 10px; background: #ffe6e6; border-radius: 4px; margin-bottom: 10px; }
+		.success { color: green; padding: 10px; background: #e6ffe6; border-radius: 4px; margin-bottom: 10px; }
+	</style>
+</head>
+<body>
+	<div class="container">
+		<h1>CRM Dashboard</h1>
+
+		<div class="grid">
+			<div class="section">
+				<h2>Clients</h2>
+				<div id="clientMessage"></div>
+				<form id="clientForm">
+					<div class="form-group">
+						<label>Name:</label>
+						<input type="text" name="name" required>
+					</div>
+					<div class="form-group">
+						<label>Email:</label>
+						<input type="email" name="email" required>
+					</div>
+					<div class="form-group">
+						<label>Phone:</label>
+						<input type="text" name="phone">
+					</div>
+					<div class="form-group">
+						<label>Street:</label>
+						<input type="text" name="street">
+					</div>
+					<div class="form-group">
+						<label>City:</label>
+						<input type="text" name="city">
+					</div>
+					<div class="form-group">
+						<label>State:</label>
+						<input type="text" name="state">
+					</div>
+					<div class="form-group">
+						<label>Zip Code:</label>
+						<input type="text" name="zip_code">
+					</div>
+					<div class="form-group">
+						<label>Country:</label>
+						<input type="text" name="country">
+					</div>
+					<button type="submit">Create Client</button>
+				</form>
+				<div id="clientsList"></div>
+			</div>
+
+			<div class="section">
+				<h2>Invoices</h2>
+				<div id="invoiceMessage"></div>
+				<form id="invoiceForm">
+					<div class="form-group">
+						<label>Client ID:</label>
+						<input type="text" name="client_id" required>
+					</div>
+					<div class="form-group">
+						<label>Item Description:</label>
+						<input type="text" name="item_description" required>
+					</div>
+					<div class="form-group">
+						<label>Item Quantity:</label>
+						<input type="number" name="item_quantity" value="1" required>
+					</div>
+					<div class="form-group">
+						<label>Item Price:</label>
+						<input type="number" name="item_price" step="0.01" required>
+					</div>
+					<div class="form-group">
+						<label>Status:</label>
+						<select name="status">
+							<option>draft</option>
+							<option>sent</option>
+							<option>paid</option>
+						</select>
+					</div>
+					<button type="submit">Create Invoice</button>
+				</form>
+				<div id="invoicesList"></div>
+			</div>
+		</div>
+
+		<div class="section">
+			<h2>Comments</h2>
+			<div id="commentMessage"></div>
+			<form id="commentForm">
+				<div class="form-group">
+					<label>Client ID:</label>
+					<input type="text" name="client_id" required>
+				</div>
+				<div class="form-group">
+					<label>Comment:</label>
+					<textarea name="content" required></textarea>
+				</div>
+				<button type="submit">Add Comment</button>
+			</form>
+			<div id="commentsList"></div>
+		</div>
+
+		<div class="section">
+			<h2>History</h2>
+			<div id="historyMessage"></div>
+			<form id="historyForm">
+				<div class="form-group">
+					<label>Client ID:</label>
+					<input type="text" name="client_id" required>
+				</div>
+				<div class="form-group">
+					<label>Note:</label>
+					<textarea name="note" required></textarea>
+				</div>
+				<button type="submit">Add History Entry</button>
+			</form>
+			<div id="historyList"></div>
+		</div>
+	</div>
+
+	<script>
+		var baseURL = window.location.origin + '/api';
+		var initialData = {
+			clients: ` + string(clientsJSON) + `,
+			invoices: ` + string(invoicesJSON) + `,
+			comments: ` + string(commentsJSON) + `,
+			history: ` + string(historyJSON) + `
+		};
+
+		function showMessage(elementId, message, isError) {
+			var el = document.getElementById(elementId);
+			el.className = isError ? 'error' : 'success';
+			el.textContent = message;
+			setTimeout(function() { el.textContent = ''; el.className = ''; }, 3000);
 		}
+
+		function loadClients() {
+			fetch(baseURL + '/clients').then(function(r) { return r.json(); }).then(function(clients) {
+				var html = '';
+				if (clients && clients.length > 0) {
+					for (var i = 0; i < clients.length; i++) {
+						var c = clients[i];
+						html = html + '<div class="list-item"><div class="list-item-content"><strong>' + (c.name || 'N/A') + '</strong> - ' + (c.email || 'N/A') + '</div>';
+						html = html + '<button class="delete-btn" onclick="deleteClient(\'' + c.id + '\')">Delete</button></div>';
+					}
+				}
+				document.getElementById('clientsList').innerHTML = html;
+			}).catch(function(e) { console.error(e); });
+		}
+
+		function loadInvoices() {
+			fetch(baseURL + '/invoices').then(function(r) { return r.json(); }).then(function(invoices) {
+				var html = '';
+				if (invoices && invoices.length > 0) {
+					for (var i = 0; i < invoices.length; i++) {
+						var inv = invoices[i];
+						html = html + '<div class="list-item"><div class="list-item-content"><strong>' + inv.id + '</strong> - Client: ' + inv.client_id + ' - ' + inv.status + ' - $' + inv.total_amount + '</div>';
+						html = html + '<button class="delete-btn" onclick="deleteInvoice(\'' + inv.id + '\')">Delete</button></div>';
+					}
+				}
+				document.getElementById('invoicesList').innerHTML = html;
+			}).catch(function(e) { console.error(e); });
+		}
+
+		function loadComments() {
+			fetch(baseURL + '/comments').then(function(r) { return r.json(); }).then(function(comments) {
+				var html = '';
+				if (comments && comments.length > 0) {
+					for (var i = 0; i < comments.length; i++) {
+						var cm = comments[i];
+						html = html + '<div class="list-item"><div class="list-item-content"><strong>' + cm.id + '</strong> - Client: ' + cm.client_id + ' - ' + cm.content + '</div>';
+						html = html + '<button class="delete-btn" onclick="deleteComment(\'' + cm.id + '\')">Delete</button></div>';
+					}
+				}
+				document.getElementById('commentsList').innerHTML = html;
+			}).catch(function(e) { console.error(e); });
+		}
+
+		function loadHistory() {
+			fetch(baseURL + '/history').then(function(r) { return r.json(); }).then(function(history) {
+				var html = '';
+				if (history && history.length > 0) {
+					for (var i = 0; i < history.length; i++) {
+						var h = history[i];
+						html = html + '<div class="list-item"><div class="list-item-content"><strong>' + h.id + '</strong> - Client: ' + h.client_id + ' - ' + h.note + '</div></div>';
+					}
+				}
+				document.getElementById('historyList').innerHTML = html;
+			}).catch(function(e) { console.error(e); });
+		}
+
+		function deleteClient(id) {
+			fetch(baseURL + '/clients/' + id, { method: 'DELETE' }).then(function() {
+				showMessage('clientMessage', 'Client deleted', false);
+				loadClients();
+			}).catch(function(e) { showMessage('clientMessage', 'Error: ' + e.message, true); });
+		}
+
+		function deleteInvoice(id) {
+			fetch(baseURL + '/invoices/' + id, { method: 'DELETE' }).then(function() {
+				showMessage('invoiceMessage', 'Invoice deleted', false);
+				loadInvoices();
+			}).catch(function(e) { showMessage('invoiceMessage', 'Error: ' + e.message, true); });
+		}
+
+		function deleteComment(id) {
+			fetch(baseURL + '/comments/' + id, { method: 'DELETE' }).then(function() {
+				showMessage('commentMessage', 'Comment deleted', false);
+				loadComments();
+			}).catch(function(e) { showMessage('commentMessage', 'Error: ' + e.message, true); });
+		}
+
+		document.getElementById('clientForm').addEventListener('submit', function(e) {
+			e.preventDefault();
+			var form = new FormData(this);
+			var clientData = {
+				id: 'client-' + Date.now(),
+				name: form.get('name'),
+				email: form.get('email'),
+				phone: form.get('phone'),
+				address: {
+					street: form.get('street'),
+					city: form.get('city'),
+					state: form.get('state'),
+					zip_code: form.get('zip_code'),
+					country: form.get('country')
+				},
+				created_at: new Date().toISOString(),
+				updated_at: new Date().toISOString()
+			};
+			fetch(baseURL + '/clients', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(clientData)
+			}).then(function() {
+				showMessage('clientMessage', 'Client created', false);
+				document.getElementById('clientForm').reset();
+				loadClients();
+			}).catch(function(e) { showMessage('clientMessage', 'Error: ' + e.message, true); });
+		});
+
+		document.getElementById('invoiceForm').addEventListener('submit', function(e) {
+			e.preventDefault();
+			var form = new FormData(this);
+			var qty = parseInt(form.get('item_quantity'));
+			var price = parseFloat(form.get('item_price'));
+			var invoiceData = {
+				id: 'inv-' + Date.now(),
+				client_id: form.get('client_id'),
+				items: [{
+					description: form.get('item_description'),
+					quantity: qty,
+					price: price,
+					total: qty * price
+				}],
+				total_amount: qty * price,
+				issue_date: new Date().toISOString(),
+				due_date: new Date(Date.now() + 30*24*60*60*1000).toISOString(),
+				status: form.get('status'),
+				created_at: new Date().toISOString(),
+				updated_at: new Date().toISOString()
+			};
+			fetch(baseURL + '/invoices', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(invoiceData)
+			}).then(function() {
+				showMessage('invoiceMessage', 'Invoice created', false);
+				document.getElementById('invoiceForm').reset();
+				loadInvoices();
+			}).catch(function(e) { showMessage('invoiceMessage', 'Error: ' + e.message, true); });
+		});
+
+		document.getElementById('commentForm').addEventListener('submit', function(e) {
+			e.preventDefault();
+			var form = new FormData(this);
+			var commentData = {
+				id: 'comment-' + Date.now(),
+				client_id: form.get('client_id'),
+				content: form.get('content'),
+				created_at: new Date().toISOString()
+			};
+			fetch(baseURL + '/comments', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(commentData)
+			}).then(function() {
+				showMessage('commentMessage', 'Comment created', false);
+				document.getElementById('commentForm').reset();
+				loadComments();
+			}).catch(function(e) { showMessage('commentMessage', 'Error: ' + e.message, true); });
+		});
+
+		document.getElementById('historyForm').addEventListener('submit', function(e) {
+			e.preventDefault();
+			var form = new FormData(this);
+			var historyData = {
+				id: 'hist-' + Date.now(),
+				client_id: form.get('client_id'),
+				note: form.get('note'),
+				created_at: new Date().toISOString()
+			};
+			fetch(baseURL + '/history', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(historyData)
+			}).then(function() {
+				showMessage('historyMessage', 'History entry created', false);
+				document.getElementById('historyForm').reset();
+				loadHistory();
+			}).catch(function(e) { showMessage('historyMessage', 'Error: ' + e.message, true); });
+		});
+
+		loadClients();
+		loadInvoices();
+		loadComments();
+		loadHistory();
+	</script>
+</body>
+</html>`
+
+	w.Write([]byte(html))
+}
+
+func handleClients(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	switch r.Method {
+	case http.MethodPost:
+		var client store.Client
+		if err := json.NewDecoder(r.Body).Decode(&client); err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+			return
+		}
+		if client.ID == "" {
+			client.ID = uuid.New().String()
+		}
+		if client.CreatedAt.IsZero() {
+			client.CreatedAt = time.Now()
+		}
+		if client.UpdatedAt.IsZero() {
+			client.UpdatedAt = time.Now()
+		}
+		if err := s.CreateClient(&client); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+			return
+		}
+		w.WriteHeader(http.StatusCreated)
+		json.NewEncoder(w).Encode(client)
+
+	case http.MethodGet:
+		clients, err := s.GetClients()
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+			return
+		}
+		if clients == nil {
+			clients = []*store.Client{}
+		}
+		json.NewEncoder(w).Encode(clients)
+
+	default:
+		w.WriteHeader(http.StatusMethodNotAllowed)
+	}
+}
+
+func handleClientByID(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	id := strings.TrimPrefix(r.URL.Path, "/api/clients/")
+	if id == "" || id == "/api/clients" {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"error": "invalid client id"})
+		return
 	}
 
-	html = html + "</div>\n"
-	html = html + "</div>\n"
-	html = html + "<script>\n"
-	html = html + "document.getElementById('bookmarkForm').addEventListener('submit', function(e) {\n"
-	html = html + "  e.preventDefault();\n"
-	html = html + "  const url = document.getElementById('url').value;\n"
-	html = html + "  const title = document.getElementById('title').value;\n"
-	html = html + "  const description = document.getElementById('description').value;\n"
-	html = html + "  const tagsInput = document.getElementById('tags').value;\n"
-	html = html + "  const tagsArray = tagsInput.split(',').map(t => t.trim()).filter(t => t !== '').map(t => ({name: t, color: '#e0e0e0'}));\n"
-	html = html + "  const bookmark = {url: url, title: title, description: description, tags: tagsArray};\n"
-	html = html + "  fetch('/api/bookmarks', {\n"
-	html = html + "    method: 'POST',\n"
-	html = html + "    headers: {'Content-Type': 'application/json'},\n"
-	html = html + "    body: JSON.stringify(bookmark)\n"
-	html = html + "  }).then(r => r.json()).then(data => {location.reload();}).catch(err => alert('Error: ' + err));\n"
-	html = html + "});\n"
-	html = html + "function deleteBookmark(id) {\n"
-	html = html + "  if (!confirm('Delete this bookmark?')) return;\n"
-	html = html + "  fetch('/api/bookmarks/' + id, {method: 'DELETE'}).then(() => {location.reload();}).catch(err => alert('Error: ' + err));\n"
-	html = html + "}\n"
-	html = html + "function editBookmark(id) {\n"
-	html = html + "  alert('Edit functionality would be implemented here for bookmark: ' + id);\n"
-	html = html + "}\n"
-	html = html + "</script>\n"
-	html = html + "</body>\n</html>\n"
+	switch r.Method {
+	case http.MethodGet:
+		client, err := s.GetClient(id)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+			return
+		}
+		if client == nil {
+			w.WriteHeader(http.StatusNotFound)
+			json.NewEncoder(w).Encode(map[string]string{"error": "client not found"})
+			return
+		}
+		json.NewEncoder(w).Encode(client)
 
-	io.WriteString(w, html)
-}
+	case http.MethodPatch:
+		var client store.Client
+		if err := json.NewDecoder(r.Body).Decode(&client); err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+			return
+		}
+		if err := s.UpdateClient(id, &client); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+			return
+		}
+		client.ID = id
+		json.NewEncoder(w).Encode(client)
 
-func escapeHTML(s string) string {
-	s = strings.ReplaceAll(s, "&", "&amp;")
-	s = strings.ReplaceAll(s, "<", "&lt;")
-	s = strings.ReplaceAll(s, ">", "&gt;")
-	s = strings.ReplaceAll(s, "\"", "&quot;")
-	s = strings.ReplaceAll(s, "'", "&#39;")
-	return s
-}
+	case http.MethodDelete:
+		if err := s.DeleteClient(id); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+			return
+		}
+		w.WriteHeader(http.StatusNoContent)
 
-func formatInt(n int) string {
-	switch n {
-	case 0:
-		return "0"
-	case 1:
-		return "1"
-	case 2:
-		return "2"
-	case 3:
-		return "3"
-	case 4:
-		return "4"
-	case 5:
-		return "5"
-	case 6:
-		return "6"
-	case 7:
-		return "7"
-	case 8:
-		return "8"
-	case 9:
-		return "9"
 	default:
-		return "many"
+		w.WriteHeader(http.StatusMethodNotAllowed)
+	}
+}
+
+func handleInvoices(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	switch r.Method {
+	case http.MethodPost:
+		var invoice store.Invoice
+		if err := json.NewDecoder(r.Body).Decode(&invoice); err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+			return
+		}
+		if invoice.ID == "" {
+			invoice.ID = uuid.New().String()
+		}
+		if invoice.CreatedAt.IsZero() {
+			invoice.CreatedAt = time.Now()
+		}
+		if invoice.UpdatedAt.IsZero() {
+			invoice.UpdatedAt = time.Now()
+		}
+		if err := s.CreateInvoice(&invoice); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+			return
+		}
+		w.WriteHeader(http.StatusCreated)
+		json.NewEncoder(w).Encode(invoice)
+
+	case http.MethodGet:
+		invoices, err := s.GetInvoices()
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+			return
+		}
+		if invoices == nil {
+			invoices = []*store.Invoice{}
+		}
+		json.NewEncoder(w).Encode(invoices)
+
+	default:
+		w.WriteHeader(http.StatusMethodNotAllowed)
+	}
+}
+
+func handleInvoiceByID(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	id := strings.TrimPrefix(r.URL.Path, "/api/invoices/")
+	if id == "" || id == "/api/invoices" {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"error": "invalid invoice id"})
+		return
+	}
+
+	switch r.Method {
+	case http.MethodGet:
+		invoice, err := s.GetInvoice(id)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+			return
+		}
+		if invoice == nil {
+			w.WriteHeader(http.StatusNotFound)
+			json.NewEncoder(w).Encode(map[string]string{"error": "invoice not found"})
+			return
+		}
+		json.NewEncoder(w).Encode(invoice)
+
+	case http.MethodPatch:
+		var invoice store.Invoice
+		if err := json.NewDecoder(r.Body).Decode(&invoice); err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+			return
+		}
+		if err := s.UpdateInvoice(id, &invoice); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+			return
+		}
+		invoice.ID = id
+		json.NewEncoder(w).Encode(invoice)
+
+	case http.MethodDelete:
+		if err := s.DeleteInvoice(id); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+			return
+		}
+		w.WriteHeader(http.StatusNoContent)
+
+	default:
+		w.WriteHeader(http.StatusMethodNotAllowed)
+	}
+}
+
+func handleComments(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	switch r.Method {
+	case http.MethodPost:
+		var comment store.Comment
+		if err := json.NewDecoder(r.Body).Decode(&comment); err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+			return
+		}
+		if comment.ID == "" {
+			comment.ID = uuid.New().String()
+		}
+		if comment.CreatedAt.IsZero() {
+			comment.CreatedAt = time.Now()
+		}
+		if err := s.CreateComment(&comment); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+			return
+		}
+		w.WriteHeader(http.StatusCreated)
+		json.NewEncoder(w).Encode(comment)
+
+	case http.MethodGet:
+		comments, err := s.GetComments("")
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+			return
+		}
+		if comments == nil {
+			comments = []*store.Comment{}
+		}
+		json.NewEncoder(w).Encode(comments)
+
+	default:
+		w.WriteHeader(http.StatusMethodNotAllowed)
+	}
+}
+
+func handleCommentByID(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	id := strings.TrimPrefix(r.URL.Path, "/api/comments/")
+	if id == "" || id == "/api/comments" {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"error": "invalid comment id"})
+		return
+	}
+
+	switch r.Method {
+	case http.MethodDelete:
+		if err := s.DeleteComment(id); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+			return
+		}
+		w.WriteHeader(http.StatusNoContent)
+
+	default:
+		w.WriteHeader(http.StatusMethodNotAllowed)
+	}
+}
+
+func handleHistory(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	switch r.Method {
+	case http.MethodPost:
+		var entry store.HistoryEntry
+		if err := json.NewDecoder(r.Body).Decode(&entry); err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+			return
+		}
+		if entry.ID == "" {
+			entry.ID = uuid.New().String()
+		}
+		if entry.CreatedAt.IsZero() {
+			entry.CreatedAt = time.Now()
+		}
+		if err := s.CreateHistory(&entry); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+			return
+		}
+		w.WriteHeader(http.StatusCreated)
+		json.NewEncoder(w).Encode(entry)
+
+	case http.MethodGet:
+		history, err := s.GetHistory("")
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+			return
+		}
+		if history == nil {
+			history = []*store.HistoryEntry{}
+		}
+		json.NewEncoder(w).Encode(history)
+
+	default:
+		w.WriteHeader(http.StatusMethodNotAllowed)
 	}
 }

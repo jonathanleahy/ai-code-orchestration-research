@@ -1,258 +1,290 @@
 package store
 
 import (
-	"encoding/json"
-	"io/ioutil"
-	"os"
-	"strings"
 	"sync"
 	"time"
 )
 
-// Bookmark represents a single bookmark entry
-type Bookmark struct {
+// Client represents a client in the CRM
+type Client struct {
+	ID        string    `json:"id"`
+	Name      string    `json:"name"`
+	Email     string    `json:"email"`
+	Phone     string    `json:"phone"`
+	Address   Address   `json:"address"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
+// Address represents a client's address
+type Address struct {
+	Street  string `json:"street"`
+	City    string `json:"city"`
+	State   string `json:"state"`
+	ZipCode string `json:"zip_code"`
+	Country string `json:"country"`
+}
+
+// Invoice represents an invoice
+type Invoice struct {
 	ID          string    `json:"id"`
-	URL         string    `json:"url"`
-	Title       string    `json:"title"`
-	Description string    `json:"description"`
-	Tags        []Tag     `json:"tags"`
+	ClientID    string    `json:"client_id"`
+	Items       []Item    `json:"items"`
+	TotalAmount float64   `json:"total_amount"`
+	IssueDate   time.Time `json:"issue_date"`
+	DueDate     time.Time `json:"due_date"`
+	Status      string    `json:"status"` // "draft", "sent", "paid"
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
 }
 
-// Tag represents a tag with color coding
-type Tag struct {
-	Name  string `json:"name"`
-	Color string `json:"color"`
+// Item represents an item on an invoice
+type Item struct {
+	Description string  `json:"description"`
+	Quantity    int     `json:"quantity"`
+	Price       float64 `json:"price"`
+	Total       float64 `json:"total"`
 }
 
-// SearchFilter holds parameters for filtering and searching
-type SearchFilter struct {
-	Query string   `json:"query"`
-	Tags  []string `json:"tags"`
+// Comment represents a note/comment on a client
+type Comment struct {
+	ID        string    `json:"id"`
+	ClientID  string    `json:"client_id"`
+	Content   string    `json:"content"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
-// ExportData holds the structure for exporting bookmarks
-type ExportData struct {
-	Bookmarks []Bookmark `json:"bookmarks"`
+// HistoryEntry represents a client interaction log
+type HistoryEntry struct {
+	ID        string    `json:"id"`
+	ClientID  string    `json:"client_id"`
+	Note      string    `json:"note"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
-// Store interface defines the required methods for bookmark management
+// Store interface defines the methods for data persistence
 type Store interface {
-	CreateBookmark(b *Bookmark) error
-	GetBookmark(id string) (*Bookmark, error)
-	UpdateBookmark(id string, b *Bookmark) error
-	DeleteBookmark(id string) error
-	ListBookmarks() ([]*Bookmark, error)
-	SearchBookmarks(filter SearchFilter) ([]*Bookmark, error)
-	FilterByTags(tags []string) ([]*Bookmark, error)
-	Export() (*ExportData, error)
-	Import(data *ExportData) error
-	SaveToFile(filename string) error
-	LoadFromFile(filename string) error
+	// Client methods
+	GetClient(id string) (*Client, error)
+	GetClients() ([]*Client, error)
+	CreateClient(client *Client) error
+	UpdateClient(id string, client *Client) error
+	DeleteClient(id string) error
+	SearchClients(query string) ([]*Client, error)
+
+	// Invoice methods
+	GetInvoice(id string) (*Invoice, error)
+	GetInvoices() ([]*Invoice, error)
+	CreateInvoice(invoice *Invoice) error
+	UpdateInvoice(id string, invoice *Invoice) error
+	DeleteInvoice(id string) error
+
+	// Comment methods
+	GetComments(clientID string) ([]*Comment, error)
+	CreateComment(comment *Comment) error
+	DeleteComment(id string) error
+
+	// History methods
+	GetHistory(clientID string) ([]*HistoryEntry, error)
+	CreateHistory(entry *HistoryEntry) error
+
+	// Persistence
+	Save() error
+	Load() error
 }
 
 // store implements the Store interface
 type store struct {
-	bookmarks map[string]*Bookmark
-	mu        sync.RWMutex
+	clients  map[string]*Client
+	invoices map[string]*Invoice
+	comments map[string]*Comment
+	history  map[string]*HistoryEntry
+	mu       sync.RWMutex
 }
 
-// NewStore creates and returns a new Store instance
+// NewStore creates a new in-memory store
 func NewStore() Store {
 	return &store{
-		bookmarks: make(map[string]*Bookmark),
+		clients:  make(map[string]*Client),
+		invoices: make(map[string]*Invoice),
+		comments: make(map[string]*Comment),
+		history:  make(map[string]*HistoryEntry),
 	}
 }
 
-// CreateBookmark adds a new bookmark to the store
-func (s *store) CreateBookmark(b *Bookmark) error {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-
-	b.ID = generateID()
-	b.CreatedAt = time.Now()
-	b.UpdatedAt = time.Now()
-	s.bookmarks[b.ID] = b
-	return nil
-}
-
-// GetBookmark retrieves a bookmark by its ID
-func (s *store) GetBookmark(id string) (*Bookmark, error) {
+// GetClient retrieves a client by ID
+func (s *store) GetClient(id string) (*Client, error) {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
-
-	b, exists := s.bookmarks[id]
+	client, exists := s.clients[id]
 	if !exists {
-		return nil, os.ErrNotExist
+		return nil, nil
 	}
-	return b, nil
+	return client, nil
 }
 
-// UpdateBookmark updates an existing bookmark
-func (s *store) UpdateBookmark(id string, b *Bookmark) error {
+// GetClients retrieves all clients
+func (s *store) GetClients() ([]*Client, error) {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	var clients []*Client
+	for _, client := range s.clients {
+		clients = append(clients, client)
+	}
+	return clients, nil
+}
+
+// CreateClient creates a new client
+func (s *store) CreateClient(client *Client) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
-
-	existing, exists := s.bookmarks[id]
-	if !exists {
-		return os.ErrNotExist
-	}
-
-	existing.URL = b.URL
-	existing.Title = b.Title
-	existing.Description = b.Description
-	existing.Tags = b.Tags
-	existing.UpdatedAt = time.Now()
+	s.clients[client.ID] = client
 	return nil
 }
 
-// DeleteBookmark removes a bookmark by its ID
-func (s *store) DeleteBookmark(id string) error {
+// UpdateClient updates an existing client
+func (s *store) UpdateClient(id string, client *Client) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
-
-	if _, exists := s.bookmarks[id]; !exists {
-		return os.ErrNotExist
+	if _, exists := s.clients[id]; !exists {
+		return nil
 	}
-	delete(s.bookmarks, id)
+	client.ID = id
+	client.UpdatedAt = time.Now()
+	s.clients[id] = client
 	return nil
 }
 
-// ListBookmarks returns all bookmarks
-func (s *store) ListBookmarks() ([]*Bookmark, error) {
-	s.mu.RLock()
-	defer s.mu.RUnlock()
-
-	bookmarks := make([]*Bookmark, 0, len(s.bookmarks))
-	for _, b := range s.bookmarks {
-		bookmarks = append(bookmarks, b)
-	}
-	return bookmarks, nil
+// DeleteClient deletes a client
+func (s *store) DeleteClient(id string) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	delete(s.clients, id)
+	return nil
 }
 
-// SearchBookmarks filters bookmarks based on query and tags
-func (s *store) SearchBookmarks(filter SearchFilter) ([]*Bookmark, error) {
+// SearchClients searches clients by name or email
+func (s *store) SearchClients(query string) ([]*Client, error) {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
-
-	var results []*Bookmark
-
-	for _, b := range s.bookmarks {
-		if filter.Query != "" {
-			if !contains(b.Title, filter.Query) && !contains(b.Description, filter.Query) && !contains(b.URL, filter.Query) {
-				continue
-			}
+	var results []*Client
+	for _, client := range s.clients {
+		if client.Name == query || client.Email == query {
+			results = append(results, client)
 		}
-
-		if len(filter.Tags) > 0 {
-			if !hasAnyTag(b.Tags, filter.Tags) {
-				continue
-			}
-		}
-
-		results = append(results, b)
 	}
-
 	return results, nil
 }
 
-// FilterByTags returns bookmarks that match any of the given tags
-func (s *store) FilterByTags(tags []string) ([]*Bookmark, error) {
+// GetInvoice retrieves an invoice by ID
+func (s *store) GetInvoice(id string) (*Invoice, error) {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
-
-	var results []*Bookmark
-
-	for _, b := range s.bookmarks {
-		if hasAnyTag(b.Tags, tags) {
-			results = append(results, b)
-		}
+	invoice, exists := s.invoices[id]
+	if !exists {
+		return nil, nil
 	}
-
-	return results, nil
+	return invoice, nil
 }
 
-// Export returns all bookmarks in export format
-func (s *store) Export() (*ExportData, error) {
+// GetInvoices retrieves all invoices
+func (s *store) GetInvoices() ([]*Invoice, error) {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
-
-	bookmarks := make([]Bookmark, 0, len(s.bookmarks))
-	for _, b := range s.bookmarks {
-		bookmarks = append(bookmarks, *b)
+	var invoices []*Invoice
+	for _, invoice := range s.invoices {
+		invoices = append(invoices, invoice)
 	}
-
-	return &ExportData{Bookmarks: bookmarks}, nil
+	return invoices, nil
 }
 
-// Import loads bookmarks from export data
-func (s *store) Import(data *ExportData) error {
+// CreateInvoice creates a new invoice
+func (s *store) CreateInvoice(invoice *Invoice) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
-
-	s.bookmarks = make(map[string]*Bookmark)
-	for _, b := range data.Bookmarks {
-		bookmark := b
-		bookmark.CreatedAt = time.Now()
-		bookmark.UpdatedAt = time.Now()
-		s.bookmarks[bookmark.ID] = &bookmark
-	}
+	s.invoices[invoice.ID] = invoice
 	return nil
 }
 
-// SaveToFile saves all bookmarks to a JSON file
-func (s *store) SaveToFile(filename string) error {
-	s.mu.RLock()
-	defer s.mu.RUnlock()
-
-	data, err := json.MarshalIndent(s.bookmarks, "", "  ")
-	if err != nil {
-		return err
-	}
-
-	return ioutil.WriteFile(filename, data, 0644)
-}
-
-// LoadFromFile loads bookmarks from a JSON file
-func (s *store) LoadFromFile(filename string) error {
+// UpdateInvoice updates an existing invoice
+func (s *store) UpdateInvoice(id string, invoice *Invoice) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
-
-	data, err := ioutil.ReadFile(filename)
-	if err != nil {
-		return err
+	if _, exists := s.invoices[id]; !exists {
+		return nil
 	}
-
-	var bookmarks map[string]*Bookmark
-	if err := json.Unmarshal(data, &bookmarks); err != nil {
-		return err
-	}
-
-	s.bookmarks = bookmarks
+	invoice.ID = id
+	invoice.UpdatedAt = time.Now()
+	s.invoices[id] = invoice
 	return nil
 }
 
-// Helper function to check if a string contains another string (case insensitive)
-func contains(s, substr string) bool {
-	s = strings.ToLower(s)
-	substr = strings.ToLower(substr)
-	return strings.Contains(s, substr)
+// DeleteInvoice deletes an invoice
+func (s *store) DeleteInvoice(id string) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	delete(s.invoices, id)
+	return nil
 }
 
-// Helper function to check if a bookmark has any of the specified tags
-func hasAnyTag(bookmarkTags []Tag, filterTags []string) bool {
-	for _, tag := range bookmarkTags {
-		for _, filterTag := range filterTags {
-			if strings.ToLower(tag.Name) == strings.ToLower(filterTag) {
-				return true
-			}
+// GetComments retrieves all comments for a client
+func (s *store) GetComments(clientID string) ([]*Comment, error) {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	var comments []*Comment
+	for _, comment := range s.comments {
+		if comment.ClientID == clientID {
+			comments = append(comments, comment)
 		}
 	}
-	return false
+	return comments, nil
 }
 
-// Helper function to generate a unique ID
-func generateID() string {
-	return time.Now().Format("20060102150405")
+// CreateComment creates a new comment
+func (s *store) CreateComment(comment *Comment) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.comments[comment.ID] = comment
+	return nil
+}
+
+// DeleteComment deletes a comment
+func (s *store) DeleteComment(id string) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	delete(s.comments, id)
+	return nil
+}
+
+// GetHistory retrieves all history entries for a client
+func (s *store) GetHistory(clientID string) ([]*HistoryEntry, error) {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	var history []*HistoryEntry
+	for _, entry := range s.history {
+		if entry.ClientID == clientID {
+			history = append(history, entry)
+		}
+	}
+	return history, nil
+}
+
+// CreateHistory creates a new history entry
+func (s *store) CreateHistory(entry *HistoryEntry) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.history[entry.ID] = entry
+	return nil
+}
+
+// Save persists the data (stub for future implementation)
+func (s *store) Save() error {
+	// In-memory store doesn't need to save
+	return nil
+}
+
+// Load loads the data (stub for future implementation)
+func (s *store) Load() error {
+	// In-memory store doesn't need to load
+	return nil
 }
