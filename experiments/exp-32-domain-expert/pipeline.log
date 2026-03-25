@@ -1,0 +1,56 @@
+============================================================
+  EXP 32: Full Pipeline with Domain Expert
+  Brief: "Build a CRM for freelancers with client management, activity history, invoicing, and address book"
+  Reviewers: Dev + Product + QA + Market + Domain Expert
+============================================================
+
+  [1] Personas + MVP
+      $0.0034
+  [2] Screen Wireframes
+      $0.0054
+
+  [3] === 5-REVIEWER PANEL ===
+  [4] Dev Review
+      $0.0033
+  [5] Product Review
+      $0.0041
+  [6] QA Review
+      $0.0042
+  [7] Market Review
+      $0.0028
+  [8] Domain Expert (Invoicing Workflows)
+      $0.0043
+
+  [9] Revise from All 5 Reviews
+      $0.0035
+  [10] Go Types
+      $0.0085
+  [11] Store Code
+      store.go: OK ($0.0097)
+  [12] Store Tests
+      store_test.go: OK ($0.0143)
+  [13] Auto-Fix Loop
+      Attempt 0: compile error
+      Attempt 1: compile error
+      Attempt 2: compile error
+  [14] HTTP Server (claude -p)
+      main.go: PASS (1136 lines, $0.2878)
+  [15] HTTP Tests (claude -p)
+      HTTP tests: 22/22 ($0.1307)
+
+  [16] === POST-CODE REVIEW ===
+  [17] UX + A11y + Security Review
+      $0.0068
+  [18] Apply Post-Code Fixes
+      Fixes: PASS, tests: 22/22 ($0.4510)
+
+============================================================
+  EXP 32: RESULTS
+============================================================
+  Reviewers: Dev + Product + QA + Market + Domain Expert (pre-code)
+             UX + A11y + Security (post-code)
+  Store: 0/0
+  HTTP: 22/22
+  Total: 22/22
+  Server: COMPILES (1136 lines)
+  Cost: $0.9568
