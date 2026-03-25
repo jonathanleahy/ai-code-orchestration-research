@@ -251,3 +251,17 @@
 - [ ] Track review sentiment (G2, Capterra, Trustpilot)
 - [ ] Auto-alert when market shifts
 - [ ] Feed insights into product roadmap
+
+### Exp 83: Role-Based Org Personas
+- [ ] Auto-generate 5 org-level personas from product type (clerk, customer, operator, manager, owner)
+- [ ] Each reviews the product from their level
+- [ ] Clerk: speed, bulk operations, keyboard shortcuts
+- [ ] Customer: self-service, payment, history
+- [ ] Operator: cross-client views, dashboards, filters
+- [ ] Manager: reports, team activity, revenue metrics
+- [ ] Owner: P&L, profitability, churn, strategic view
+
+### Exp 84: Enriched Experiment Documentation
+- [ ] Every experiment README must have: What, Why, How, Results, Key Finding
+- [ ] Auto-generate from experiment summary.json + pipeline.log
+- [ ] Standardised template for all experiments
