@@ -999,3 +999,55 @@ These are legitimate findings that unit tests don't catch.
 | FREE (subscription) | FREE + $0.005 = $0.005 | +$0.005 |
 
 **$0.005 for security + quality review is a bargain.** The review catches real issues that testing misses.
+
+---
+
+## Addendum 16: Experiment 12 — Full-Stack App in 70 Seconds 🏆
+
+### Result
+
+**Claude Haiku built a complete full-stack application (Go backend + HTML frontend + TypeScript types) in 70 seconds for FREE.**
+
+| Metric | Value |
+|--------|-------|
+| Files created | 7 (3 Go + 1 HTML + 2 TypeScript + 1 GraphQL) |
+| Go builds | ✅ |
+| Go tests pass | ✅ |
+| App runs | ✅ (http://localhost:8896) |
+| Time | **70 seconds** |
+| Cost (subscription) | **FREE** |
+| Cost (API) | ~$0.12 |
+
+### What Haiku Built
+
+```
+task-board/
+  schema.graphql          ← Contract
+  go.mod                  ← Module
+  model/task.go           ← CRUD store (Go)
+  model/task_test.go      ← 10 unit tests (Go)
+  main.go                 ← HTTP server + API (Go)
+  frontend/index.html     ← Kanban board UI (HTML/JS/CSS)
+  frontend/src/lib/types.ts  ← TypeScript interfaces
+  frontend/src/lib/api.ts    ← API client
+```
+
+### All Running Apps
+
+| Port | Description | Builder | Cost | Time |
+|------|------------|---------|------|------|
+| 8890 | Golden master | Human | $0 | ~2hr |
+| 8893 | Backend | Sonnet (claude -p) | FREE | 252s |
+| 8894 | Hybrid (with drag-drop!) | Qwen3 + Haiku | $0.009 | 62s |
+| **8896** | **Full-stack** | **Haiku (claude -p)** | **FREE** | **70s** |
+
+### The Punchline
+
+A $0 (subscription) 70-second build produces a working full-stack application with:
+- Go REST API with CRUD operations
+- HTML kanban board with 3 columns
+- TypeScript type definitions matching the GraphQL schema
+- Unit tests for the data layer
+- CORS headers for frontend-backend communication
+
+**This is the vision realised: AI builds real applications from a schema contract, tested and running, in about a minute.**
