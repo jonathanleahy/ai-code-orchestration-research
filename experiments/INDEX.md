@@ -55,6 +55,8 @@ graph LR
 | [20](exp-20/README.md) | URL Shortener (new app) | Store works | $0.019 | Approach generalises; claude -p needs foreground |
 | [21](exp-21-statuspulse/README.md) | **StatusPulse (4 services)** | **4/4 build** | $0.021 | 1,540 lines, 4 microservices, $0.02 total |
 | [22](exp-22-journeys/README.md) | **Brief → Journeys → Screens** | 8+ screens | $0.038 | $0.04 design turns code into a product |
+| [23](exp-23-personas/README.md) | **Persona Interview Loop** | 2 accept, 2 reject → APPROVED | $0.051 | Personas found features NOT in brief |
+| [24](exp-24-wireframes-to-code/README.md) | Wireframes → Code | 6 routes, BUILD PASS | $0.20 | 106 lines vs 493 — wireframes give focus |
 
 ## Spike Progression
 

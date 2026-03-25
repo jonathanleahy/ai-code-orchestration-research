@@ -1,0 +1,9 @@
+{
+  "brief": "Build an invoice generator for freelancers",
+  "model": "qwen/qwen3-coder-30b-a3b-instruct",
+  "total_cost": 0.050646,
+  "mvp_accepts": 2,
+  "mvp_rejects": 2,
+  "screen_iterations": 1,
+  "final_verdict": "APPROVED"
+}
