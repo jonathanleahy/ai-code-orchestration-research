@@ -60,6 +60,10 @@ const FILES = {
             '_folder': true,
             'README.md': 'experiments/exp-13/README.md'
         },
+        'exp-14': {
+            '_folder': true,
+            'README.md': 'experiments/exp-14/README.md'
+        },
         'exp-16': {
             '_folder': true,
             'README.md': 'experiments/exp-16/README.md'

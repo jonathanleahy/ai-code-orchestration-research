@@ -37,13 +37,19 @@ The parser is the weakest link — 40% of API-model failures are extraction issu
 | `### heading` + code block | Format 2 | PASS |
 | Mixed explanation text | Format 1 | PASS |
 
-### Live Experiment Results
+### Live Experiment Results (5 runs)
 
-When using the canonical prompt (explicit `--- FILE:` instructions), **both parsers extract all 4 files successfully**. The build failures are due to code quality (backtick/template literal issue in main.go), not parser extraction.
+When using canonical prompts, **both parsers extract all 4 files in all 5 runs**. Failures are entirely code quality.
 
-| Run | v1 Files | v2 Files | v1 Build | v2 Build | Failure Reason |
-|-----|----------|----------|----------|----------|----------------|
+| Run | v1 Files | v2 Files | Build | Tests | Failure Reason |
+|-----|----------|----------|-------|-------|----------------|
 | 0 | 4/4 | 4/4 | FAIL | FAIL | Template literals in Go backtick string |
+| 1 | 4/4 | 4/4 | OK | FAIL | &constant (cannot take address) |
+| 2 | 4/4 | 4/4 | OK | FAIL | &constant |
+| 3 | 4/4 | 4/4 | OK | FAIL | &constant |
+| 4 | 4/4 | 4/4 | FAIL | FAIL | Template literals |
+
+**Summary: 100% extraction, 60% build, 0% tests, 0% delta between parsers.**
 
 ## Key Finding
 
