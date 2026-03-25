@@ -59,8 +59,25 @@ Run AFTER code is built. Review actual HTML/Go code.
 
 ---
 
-## Build Method: Progressive Enhancement
+## Build Method: TDD + Progressive Enhancement
 
+### TDD (Tests First) — Exp 48
+Write tests BEFORE code. Code is built to pass the tests.
+
+| Metric | TDD (Exp 48) | Code-First (Exp 38) |
+|--------|-------------|---------------------|
+| Coverage | **90.3%** | 57.4% |
+| Tests | 34/34 | 32/32 |
+| Server lines | 491 | 894 |
+| Cost | **$0.24** | $0.82 |
+
+**TDD produces 33% higher coverage at 71% less cost.**
+
+### Mutation Testing (Exp 49)
+Intentionally change code, verify tests catch it. Score: **89%** (8/9 caught).
+Only gap: no test checks timestamps (CreatedAt set to zero → tests still pass).
+
+### Progressive Enhancement
 Don't build everything at once. Add one feature at a time.
 
 ```
