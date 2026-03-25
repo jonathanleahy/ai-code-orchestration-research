@@ -1,80 +1,113 @@
 # Research TODO
 
-## Completed (29 experiments)
+## Completed (49 experiments)
 - [x] Exp 1-18: Code generation (prompts, models, auto-fix, V-Model, parser)
-- [x] Exp 19-21: Multi-service + different apps (StatusPulse, URL shortener)
+- [x] Exp 19-21: Multi-service + different apps
 - [x] Exp 22-23: Product design (journeys, personas, wireframes)
 - [x] Exp 24-26: Wireframes→code, full pipeline, test layers
-- [x] Exp 27-28: Fully automated pipeline (bookmark manager, CRM)
-- [x] Exp 29: gqlgen GraphQL (iterative pipeline for code generation)
-- [x] Exp 30: 4-reviewer panel (dev, product, QA, market) — RUNNING
+- [x] Exp 27-28: Fully automated pipeline
+- [x] Exp 29: gqlgen GraphQL
+- [x] Exp 30-32: Reviewer panels (4, 8, domain expert)
+- [x] Exp 33: Add feature (CSV export, zero regression)
+- [x] Exp 34-36: Simplicity agent, Playwright, domain+simplicity
+- [x] Exp 37: 10-reviewer panel with SaaS UX
+- [x] Exp 38: Progressive enhancement (ZERO regressions)
+- [x] Exp 39: 20 reviewers (NO diminishing returns)
+- [x] Exp 40-40b: Playwright (AI-driven failed, scripted works)
+- [x] Exp 41-41d: AI testing agent, adversarial, pen test
+- [x] Exp 42: AI pen test agent (4 High)
+- [x] Exp 43: Static security (gosec, govulncheck)
+- [x] Exp 44: Frontend + API security (27/37)
+- [x] Exp 45: Chaos agent (25/25 survived)
+- [x] Exp 46: Screenshot → product (Instatus clone)
+- [x] Exp 47: Code metrics (57.4% coverage, complexity max 9)
+- [x] Exp 48: TDD (90.3% coverage, 33% higher than code-first)
+- [x] Exp 49: Mutation testing (89% score)
 
 ## Next Experiments
 
-### Exp 31: Personas USE the Running App (Playwright)
-- [ ] Build app from brief
-- [ ] Start the server
-- [ ] Use Playwright to simulate each persona doing their journey
-- [ ] Persona 1: "I tried to add a client and the button didn't work"
-- [ ] Persona 2: "I searched for 'Acme' and got no results even though I just added it"
-- [ ] Report what works and what doesn't — test the PRODUCT, not the code
-- [ ] Measures: journey completion rate per persona
+### Exp 50: GDPR/Privacy Reviewer
+- [ ] Pre-code reviewer checks: right to deletion, export, consent, minimisation, retention
+- [ ] Post-code reviewer checks: PII in logs, encrypted storage, PII in URLs, error message leaks
+- [ ] Privacy pen tester: enumerate IDs, access other users' data, PII in HTML source
 
-### Exp 32: Regression Testing (Change a Feature)
-- [ ] Take a working app with passing tests
-- [ ] Change one thing: rename a field, change a default, alter a validation
-- [ ] Run the test suite — do the tests catch the change?
-- [ ] Measures: what % of intentional changes are caught by tests
-- [ ] Tests test quality, not just test count
+### Exp 51: Multi-User Concurrent Testing (Two Browsers)
+- [ ] Two Playwright browsers running simultaneously
+- [ ] User A adds client while User B deletes a client
+- [ ] User A views invoice while User B marks it paid
+- [ ] User A searches while User B creates 10 clients rapidly
+- [ ] Verify: no crashes, data consistency, no stale reads
 
-### Exp 33: Add Feature to Existing App
-- [ ] Take the CRM from Exp 28/30
-- [ ] Brief: "Add CSV export for client list"
-- [ ] Tests whether the pipeline handles ENHANCEMENT, not just greenfield
-- [ ] Must not break existing tests
-- [ ] Measures: feature added + all old tests still pass
+### Exp 52: SaaS Multi-Tenant Reviewer
+- [ ] Data isolation: org_id on every query, user A can't see user B's data
+- [ ] Auth on every route: no unauthenticated endpoints
+- [ ] Billing hooks: where does Stripe go?
+- [ ] Team features: invite, roles (admin/member/viewer)
+- [ ] Rate limiting per tenant
+- [ ] Subdomain/custom domain support
 
-### Exp 34: Docker Build + Deploy
-- [ ] Take a passing app
-- [ ] Generate Dockerfile
+### Exp 53: Design System Pipeline (new spike)
+- [ ] Screenshot/URL → multimodal AI reads the visual
+- [ ] Extracts: colors, fonts, spacing, border-radius, shadows, layout grid
+- [ ] Generates: design-tokens.json (CSS variables)
+- [ ] Generates: component library (button, card, form, nav, table)
+- [ ] Feeds into: every product uses these tokens
+- [ ] Storybook or HTML catalog for visual reference
+
+### Exp 54: Website Clone Pipeline (new spike)
+- [ ] Multimodal reads live site (screenshots of pages)
+- [ ] Extracts: content, structure, navigation, forms
+- [ ] Produces: matching clone with same layout and content
+- [ ] Feeds design tokens from Exp 53
+
+### Exp 55: Docker + Deploy
+- [ ] Take a passing app → generate Dockerfile
 - [ ] Build Docker image
-- [ ] Deploy to VPS (or local Docker)
-- [ ] Verify it runs at the deployed URL
-- [ ] Measures: time from passing tests to live URL
+- [ ] Deploy to VPS
+- [ ] Verify running at deployed URL
 
-### Exp 35: Screenshot → Product
-- [ ] Input: screenshot of a competitor (HubSpot, Instatus, etc.)
-- [ ] Claude reads the screenshot
-- [ ] Extracts: layout, features, navigation, style
-- [ ] Generates wireframes + spec + code matching the screenshot
-- [ ] Measures: how close is the result to the original?
+### Exp 56: User Feedback Loop
+- [ ] Personas USE the app (via Playwright)
+- [ ] Each reports what works, what's broken, what's missing
+- [ ] Pipeline updates the app based on feedback
+- [ ] Re-test → repeat 3 times
+- [ ] Measure: does the app improve with each iteration?
 
-### Exp 36: Minimum Viable Pipeline (How Cheap?)
-- [ ] Strip everything: 1 persona, no wireframes, just types → code → tests
-- [ ] What's the absolute floor cost for a working app?
-- [ ] Compare: full pipeline ($0.50) vs minimal pipeline ($?)
-- [ ] At what point does removing steps reduce quality?
+### Exp 57: Multi-Language (TypeScript/Node.js)
+- [ ] Same pipeline but Express/Fastify, Vitest, TypeScript
+- [ ] Measure: does the approach generalise beyond Go?
 
-### Exp 37: Multi-Language (TypeScript/Node.js)
-- [ ] Same pipeline but target TypeScript instead of Go
-- [ ] Uses: npm, Express/Fastify, Vitest
-- [ ] Measures: does the approach generalize beyond Go?
+### Exp 58: Real Database (PostgreSQL)
+- [ ] Replace in-memory with PostgreSQL
+- [ ] Generate migrations, connection pooling
+- [ ] Measure: how much more complex?
 
-### Exp 38: Real Database (PostgreSQL)
-- [ ] Replace in-memory store with PostgreSQL
-- [ ] Generate migrations, connection pooling, queries
-- [ ] Measures: how much more complex is the pipeline for persistent storage?
-
-### Exp 39: AI Code Review (Model Reviews Model)
-- [ ] One model writes the code
-- [ ] Different model reviews it (security, quality, patterns)
+### Exp 59: AI Reviews AI Code (Model Reviews Model)
+- [ ] One model writes code
+- [ ] Different model reviews (security, quality, patterns)
 - [ ] Reviewer can REQUEST CHANGES → code model fixes
 - [ ] Like pr-review.sh but for AI-generated code
-- [ ] Measures: what issues does the reviewer catch?
 
-### Exp 40: Progressive Enhancement (MVP → V2 → V3)
-- [ ] Build MVP from brief
-- [ ] Personas use it → feedback
-- [ ] Add features based on feedback (not a new brief)
-- [ ] Repeat 3 times
-- [ ] Measures: does the app improve with each iteration? Do tests keep passing?
+### Exp 60: Creative Agent (Zara)
+- [ ] After MVP is built, creative agent suggests "delight" features
+- [ ] "What if invoices had a thank-you note?"
+- [ ] "What if the dashboard showed revenue this month?"
+- [ ] Measure: does the creative agent improve market reviewer's verdict?
+
+### Exp 61: SaaS Auth (Registration, Login, SSO, MFA)
+- [ ] Secure registration: email verification, Argon2id password hashing
+- [ ] Login: JWT in httpOnly cookie, session management
+- [ ] Forgot password: secure token, email reset flow
+- [ ] SSO: OAuth2/OIDC with Google/GitHub
+- [ ] MFA/2FA: TOTP (Google Authenticator), backup codes
+- [ ] Account lockout after 5 failed attempts
+- [ ] Password complexity rules
+- [ ] Reviewer: auth security specialist
+- [ ] Playwright: test entire auth flow (register → verify → login → 2FA)
+
+### Exp 62: Scripted Regression Suite
+- [ ] Collect ALL Playwright tests from every experiment
+- [ ] Run full suite after every build (journeys + mobile + console + auth)
+- [ ] Each new feature adds its own Playwright tests
+- [ ] Gate: build fails if any regression test fails
+- [ ] AI agent runs AFTER scripted tests to find NEW bugs
