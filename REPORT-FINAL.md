@@ -809,3 +809,57 @@ OpenRouter models get one shot. Even with our retry loop, the retry sends the er
 | Go model layer (API) | Qwen3-30B | $0.001 | 25s |
 | Node.js CLI (API) | Gemini + MiniMax | $0.024 | 4min |
 | Full Go app (API) | Gemini plan + Qwen3-30B model + MiniMax main | ~$0.015 | 3min |
+
+---
+
+## Addendum 13: Experiments 7-8 — Hybrid Pipeline + MiniMax Breakthrough
+
+### Experiment 7: Hybrid Pipeline (cheapest API + free subscription)
+
+**Architecture:** Qwen3-30B for model layer (API) + Haiku for main.go (subscription)
+
+| Step | Model | Cost | Result |
+|------|-------|------|--------|
+| Schema | Qwen3-30B | $0.001 | PASS |
+| Model + tests | Qwen3-30B | $0.007 | PASS (10/10) |
+| main.go + main_test.go | **Haiku (subscription)** | **FREE** (~$0.10 API) | PASS (builds, 62s) |
+| **Total** | | **$0.009 API + FREE** | **App works!** |
+
+The hybrid app runs at http://localhost:8894 and Haiku even added drag-and-drop to the kanban board (not in the spec!).
+
+### Experiment 8: MiniMax on main.go with Explicit Backtick Hint
+
+**Result: 2/3 — MiniMax CAN build main.go when the backtick issue is explained explicitly.**
+
+The prompt includes:
+```
+CRITICAL: In the embedded HTML's JavaScript, you MUST use string concatenation:
+  WRONG: `Hello ${name}`
+  RIGHT: 'Hello ' + name
+```
+
+This is the first time an OpenRouter model has successfully compiled main.go with embedded HTML. The fix is in the **prompt**, not the model.
+
+| Model | Without hint | With hint |
+|-------|-------------|-----------|
+| Qwen3-30B | 0/5 | 0/5 (too small) |
+| **MiniMax M2.7** | 0/5 | **2/3** |
+| Gemini Flash (escalation) | 0/5 | Not tested |
+
+### Updated Cost Table (with API equivalents)
+
+| Config | API Cost | Subscription Cost | Time |
+|--------|----------|------------------|------|
+| Hybrid (Qwen3 + Haiku) | $0.009 + $0.10 = $0.11 | **$0.009** | 62s |
+| Full Haiku | $0.10 | FREE | 80s |
+| Full Sonnet | $0.50 | FREE | 252s |
+| Gemini + MiniMax (no main.go) | $0.024 | N/A | 3min |
+| Gemini + MiniMax (with hint, main.go) | ~$0.035 | N/A | 4min |
+
+### Key Finding: The Backtick Issue Is Solved
+
+Two paths to working main.go:
+1. **claude -p (any model)**: tool system iterates and fixes → FREE on subscription
+2. **MiniMax with explicit prompt hint**: explains the constraint → $0.004/call, 2/3 pass rate
+
+Combined with the model layer (100% on Qwen3-30B), the full Go app is buildable for under $0.04 via API or FREE on subscription.
