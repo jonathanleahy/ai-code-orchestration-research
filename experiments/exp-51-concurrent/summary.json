@@ -1,0 +1,36 @@
+{
+  "tests": 6,
+  "passed": 5,
+  "failed": 1,
+  "results": [
+    {
+      "test": "Concurrent creates",
+      "pass": true,
+      "detail": "A: 10/10, B: 10/10, errors: 0"
+    },
+    {
+      "test": "Read while write",
+      "pass": true,
+      "detail": "Reads: 20, writes: 10, errors: 0"
+    },
+    {
+      "test": "Write-read consistency",
+      "pass": false,
+      "detail": "0/5 consistent"
+    },
+    {
+      "test": "Dashboard while creating",
+      "pass": true,
+      "detail": "Dashboard: 10 loads, Creates: 10, errors: 0"
+    },
+    {
+      "test": "50 concurrent burst",
+      "pass": true,
+      "detail": "50/50 in 0.2s, errors: 0"
+    },
+    {
+      "test": "Server healthy after",
+      "pass": true
+    }
+  ]
+}

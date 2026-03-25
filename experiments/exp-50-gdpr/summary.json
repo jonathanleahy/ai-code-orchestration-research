@@ -1,0 +1,10 @@
+{
+  "total_cost": 0.015279000000000001,
+  "findings": [
+    "GDPR: 10 non-compliant items",
+    "PII: 20 potential leaks"
+  ],
+  "gdpr_non_compliant": 10,
+  "pii_leaks": 20,
+  "privacy_pen_test_findings": 0
+}
