@@ -72,6 +72,10 @@ const FILES = {
             '_folder': true,
             'README.md': 'experiments/exp-16/README.md'
         },
+        'exp-18': {
+            '_folder': true,
+            'README.md': 'experiments/exp-18/README.md'
+        },
         'spike-v1': {
             '_folder': true,
             'REPORT.md': 'experiments/spike-v1/REPORT.md',
