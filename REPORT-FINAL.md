@@ -605,3 +605,32 @@ Both Qwen3-30B and Gemini Flash make the same mistake: using JavaScript template
 - Language-specific gotchas shared across all training data
 - Backtick-in-backtick (Go/JS interaction)
 - `&constant` (Go pointer to constant — all models get this wrong)
+
+---
+
+## Addendum 8: Actual Costs from OpenRouter Logs
+
+The report's cost estimates used a flat `tokens × $0.000003` formula. Actual OpenRouter costs (from the user's billing logs) are significantly lower because OpenRouter routes to the cheapest provider.
+
+### Actual Per-Call Costs (from OpenRouter logs)
+
+| Model | Estimated | Actual | Difference |
+|-------|----------|--------|------------|
+| Qwen3-30B | $0.002 | **$0.0004-0.0009** | 2-5x cheaper |
+| Gemini Flash | $0.013 | **$0.007-0.010** | 1.3-1.8x cheaper |
+| MiniMax M2.7 | $0.013 | **$0.004** | 3x cheaper |
+| Qwen3 Coder 480B | $0.008 | **$0.005** | 1.6x cheaper |
+
+### Corrected Application Costs
+
+| Config | Estimated | Actual (from logs) |
+|--------|----------|-------------------|
+| Gemini + Qwen3-30B (Go app) | $0.028 | **~$0.010** |
+| Gemini + MiniMax (Node.js) | $0.069 | **~$0.024** |
+| Gemini + Qwen3-30B (Node.js) | $0.10 | **~$0.035** |
+
+### Total Research Spend
+
+User's OpenRouter dashboard shows: **~$1.50 total** for the entire research (576 API calls over 7 days).
+
+This means the entire research — 3 spikes, 9+ experiment configs, 4 approaches, autoresearch prompt optimization, model comparisons, escalation tests — cost less than a cup of coffee.
