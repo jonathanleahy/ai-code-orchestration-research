@@ -692,14 +692,14 @@ func generateInvoiceHTML(inv *store.Invoice) string {
 		</div>
 
 		` + (func() string {
-	if inv.Notes != "" {
-		return `<div class="notes">
+		if inv.Notes != "" {
+			return `<div class="notes">
 			<h4>Notes</h4>
 			<p>` + inv.Notes + `</p>
 		</div>`
-	}
-	return ""
-}()) + `
+		}
+		return ""
+	}()) + `
 
 		<div class="actions">
 			<a href="/" class="btn btn-secondary">Back to Dashboard</a>

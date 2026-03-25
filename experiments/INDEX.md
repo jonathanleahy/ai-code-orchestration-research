@@ -62,6 +62,7 @@ graph TD
 | [23](exp-23-personas/README.md) | **Persona Interview Loop** | 2 accept, 2 reject → APPROVED | $0.051 | Personas found features NOT in brief |
 | [24](exp-24-wireframes-to-code/README.md) | Wireframes → Code | 6 routes, BUILD PASS | $0.20 | 106 lines vs 493 — wireframes give focus |
 | [25](exp-25-full-pipeline/README.md) | **Full Pipeline: Brief → Product** | Store+Server PASS | $0.21 | 8 words → compiled app, dev review caught issues |
+| [26](exp-26-tests/README.md) | **Add Test Layers** | 33/36 (92%) | $0.12 | Store + acceptance + HTTP tests, $0.33 total with code |
 
 ## Spike Progression
 

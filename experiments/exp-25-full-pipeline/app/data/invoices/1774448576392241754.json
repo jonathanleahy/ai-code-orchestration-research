@@ -1,0 +1,38 @@
+{
+  "id": "1774448576392241754",
+  "client_id": "234",
+  "number": "INV-1774448576",
+  "issue_date": "2026-03-25T00:00:00Z",
+  "due_date": "2026-04-24T00:00:00Z",
+  "status": "draft",
+  "line_items": [
+    {
+      "id": "",
+      "description": "werwewerw",
+      "quantity": 1,
+      "unit_price": 333,
+      "total": 333
+    },
+    {
+      "id": "",
+      "description": "weqqweqwe",
+      "quantity": 1,
+      "unit_price": 33,
+      "total": 33
+    },
+    {
+      "id": "",
+      "description": "",
+      "quantity": 1,
+      "unit_price": 0,
+      "total": 0
+    }
+  ],
+  "tax_rate": 44,
+  "subtotal": 366,
+  "tax_amount": 161.04,
+  "total": 527.04,
+  "notes": "wrerwerewr",
+  "created_at": "2026-03-25T14:22:56.392241075Z",
+  "updated_at": "2026-03-25T14:22:56.392241075Z"
+}
