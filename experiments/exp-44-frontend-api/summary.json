@@ -1,0 +1,35 @@
+{
+  "total_checks": 37,
+  "passed": 27,
+  "failed": 10,
+  "findings": [
+    "HTML: Missing lang attribute \u2014 accessibility",
+    "Header: Missing \u2014 clickjacking risk",
+    "Header: Missing \u2014 MIME sniffing risk",
+    "Header: Missing \u2014 no HSTS (OK for localhost)",
+    "Header: Missing \u2014 no CSP",
+    "Header: Missing \u2014 may leak URLs",
+    "Header: Missing \u2014 browser features not restricted",
+    "API: No Cache-Control on API responses",
+    "API: No rate limiting headers",
+    "API: No pagination \u2014 will be slow with 1000+ clients"
+  ],
+  "by_category": {
+    "XSS": {
+      "pass": 1,
+      "fail": 0
+    },
+    "HTML": {
+      "pass": 15,
+      "fail": 1
+    },
+    "Headers": {
+      "pass": 3,
+      "fail": 6
+    },
+    "API": {
+      "pass": 8,
+      "fail": 3
+    }
+  }
+}
