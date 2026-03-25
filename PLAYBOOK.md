@@ -2,9 +2,9 @@
 
 **How to go from a one-line idea to a running, tested, reviewed product.**
 
-Based on 41 experiments. Total research cost: ~$11.
+Based on 44 experiments. Total research cost: ~$12.
 
-**Key numbers:** $0.34-0.96/app | 20 reviewers at $0.047 (no diminishing returns) | Progressive enhancement: ZERO regressions | Playwright: 20s, catches what 26 tests + 10 reviewers miss
+**Key numbers:** $0.34-0.96/app | 20 reviewers at $0.047 (no diminishing returns) | Progressive enhancement: ZERO regressions | Playwright: 20s, catches what 26 tests + 10 reviewers miss | gosec finds 12 issues FREE | AI pen test: 4 High for $0.02
 
 ---
 
@@ -110,21 +110,59 @@ Run after EVERY build. Simulates real users clicking through the app.
 
 ---
 
+## Security Testing Stack (Exp 41-44)
+
+### Static Analysis (after code gen, FREE, instant)
+```bash
+cd app/
+gosec ./...                    # XSS taint, unbounded parsing, hardcoded creds
+staticcheck ./...              # Code correctness, performance
+govulncheck ./...              # Known CVEs in dependencies
+go vet ./...                   # Suspicious constructs
+```
+
+| Tool | Findings (Exp 43) | Catches |
+|------|-------------------|---------|
+| gosec | 12 issues | XSS via taint (3), unbounded form parsing (3), unhandled errors (4), no timeout (1) |
+| staticcheck | 0 | Code correctness |
+| govulncheck | 13 CVEs | Go stdlib vulnerabilities (need upgrade) |
+| go vet | 0 | Printf format errors, unreachable code |
+
+### Dynamic Analysis (against live server)
+| Tool | Findings | Cost | Catches |
+|------|----------|------|---------|
+| Frontend HTML checker (44) | 1 fail | FREE | Missing lang, inline handlers, eval() |
+| Security headers (44) | 6 missing | FREE | X-Frame-Options, CSP, HSTS, Referrer-Policy |
+| REST API checker (44) | 3 fails | FREE | No pagination, rate limiting, Cache-Control |
+| Stored XSS (44) | SAFE | FREE | Unescaped user input in HTML |
+| Deep adversarial (41d) | 11 issues | FREE | XSS, SQLi, path traversal, unicode, methods |
+| AI pen test agent (42) | 4 High | $0.02 | AI-planned attacks, chained findings |
+| AI testing agent (41c) | 0 bugs | $0.035 | Exploratory — agent decides what to test |
+
+### Browser Testing (Playwright)
+| Test Suite | Findings | Time |
+|------------|----------|------|
+| User journeys (40b) | 3 fails | 20s |
+| Mobile viewport (40b) | 2 fails (table overflow, button off-screen) | 5s |
+| Console errors (40b) | 1 fail | 5s |
+
+---
+
 ## Cost Breakdown
 
 | Component | Cost | % of Total |
 |-----------|------|-----------|
-| Pre-code reviews (7) | $0.035 | 4% |
+| Pre-code reviews (7-20) | $0.035-0.10 | 5% |
 | Post-code reviews (3) | $0.015 | 2% |
 | Store code (Qwen3-30B) | $0.01-0.02 | 2% |
-| HTTP server (claude -p) | $0.15-0.25 | 40% |
-| HTTP tests (claude -p) | $0.10-0.20 | 30% |
-| Store tests (Qwen3-30B) | $0.01-0.02 | 2% |
-| Auto-fix loop | $0.00-0.01 | 1% |
-| Playwright | ~$0.10 | 15% |
-| **Total** | **$0.40-0.82** | |
+| HTTP server (claude -p) | $0.15-0.25 | 35% |
+| HTTP tests (claude -p) | $0.10-0.20 | 25% |
+| Security testing | $0.00-0.05 | 5% |
+| Playwright | FREE | 0% |
+| Static analysis | FREE | 0% |
+| **Total** | **$0.40-0.96** | |
 
-**$0.05 of reviews saves $0.50 of rework.**
+**$0.05 of reviews + FREE security testing saves $5.00 of post-launch fixes.**
 
 ---
 
