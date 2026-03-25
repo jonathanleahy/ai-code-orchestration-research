@@ -1,0 +1,26 @@
+{
+  "total_cost": 0,
+  "avg_rating": 3.2,
+  "reviews": [
+    {
+      "role": "Clerk (Data Entry)",
+      "rating": 3
+    },
+    {
+      "role": "Customer (Client-Facing)",
+      "rating": 3
+    },
+    {
+      "role": "Operator (Day-to-Day)",
+      "rating": 3
+    },
+    {
+      "role": "Manager (Team Lead)",
+      "rating": 3
+    },
+    {
+      "role": "Owner (Business)",
+      "rating": 4
+    }
+  ]
+}

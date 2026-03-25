@@ -1,0 +1,47 @@
+{
+  "total_cost": 0,
+  "protected": 0,
+  "unprotected": 8,
+  "auth_tests": [
+    {
+      "name": "No auth on API",
+      "status": 200,
+      "protected": false
+    },
+    {
+      "name": "No auth on dashboard",
+      "status": 200,
+      "protected": false
+    },
+    {
+      "name": "No auth on client detail",
+      "status": 404,
+      "protected": false
+    },
+    {
+      "name": "No auth on create",
+      "status": 200,
+      "protected": false
+    },
+    {
+      "name": "No login page",
+      "status": 200,
+      "protected": false
+    },
+    {
+      "name": "No register page",
+      "status": 200,
+      "protected": false
+    },
+    {
+      "name": "No logout endpoint",
+      "status": 200,
+      "protected": false
+    },
+    {
+      "name": "No session cookie",
+      "status": 200,
+      "protected": false
+    }
+  ]
+}
