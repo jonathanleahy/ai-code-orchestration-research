@@ -91,7 +91,7 @@ func handleDashboard(w http.ResponseWriter, r *http.Request) {
 		html += "</tbody></table>"
 	}
 
-	html += "<div id=\"addForm\" style=\"display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:999;display:flex;align-items:center;justify-content:center\">" +
+	html += "<div id=\"addForm\" style=\"display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:999;align-items:center;justify-content:center\">" +
 		"<form method=\"POST\" style=\"background:#fff;padding:30px;border-radius:4px;width:100%;max-width:400px\">" +
 		"<h2 style=\"margin-top:0\">Add Client</h2>" +
 		"<div style=\"margin-bottom:16px\"><label style=\"display:block;margin-bottom:4px;font-weight:500\">Name <span style=\"color:#dc2626\">*</span></label><input type=\"text\" name=\"name\" required style=\"width:100%;padding:8px;border:1px solid #ddd;border-radius:4px;box-sizing:border-box\"></div>" +
