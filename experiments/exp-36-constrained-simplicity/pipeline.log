@@ -1,0 +1,33 @@
+============================================================
+  EXP 36: Domain Expert + Constrained Simplicity
+  Brief: "Build a CRM for freelancers with client management, activity history, invoicing, and address book"
+============================================================
+
+  [1] Domain Expert: What's Needed
+      $0.0028
+  [2] Constrained Simplicity: Simplest Implementation
+      $0.0055
+  [3] Go Types (from simplified spec)
+      $0.0049
+  [4] Store
+      store.go: OK (249 lines, $0.0066)
+  [5] Store Tests
+      Tests: 0/0 ($0.0130)
+  [6] Server (claude -p)
+      main.go: PASS (942 lines, $0.2360)
+  [7] HTTP Tests (claude -p)
+      Tests: 29/29 ($0.1214)
+
+============================================================
+  EXP 36: RESULTS
+============================================================
+  Store: 249 lines, 0/0 tests
+  Server: 942 lines, 29/29 tests
+  Total: 29/29
+  Build: PASS
+  Cost: $0.3901
+
+  Comparison:
+    Exp 32 (domain only):      380 + 1136 = 1516 lines, $0.96
+    Exp 34 (simplicity only):  173 + 345  = 518 lines,  $0.20 (features missing)
+    Exp 36 (both combined):    249 + 942  = 1191 lines,  $0.3901

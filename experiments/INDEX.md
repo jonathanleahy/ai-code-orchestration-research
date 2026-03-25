@@ -78,6 +78,7 @@ graph TD
 | [33](exp-33-add-feature/README.md) | **Add Feature (CSV Export)** | 55/55, no regression | $0.23 | Added feature without breaking 52 existing tests |
 | [34](exp-34-simplicity/README.md) | **Simplicity Agent** | 13/13, 173+345 lines | $0.20 | 70% less code, 79% cheaper than Exp 32 |
 | [35](exp-35-playwright/README.md) | **Playwright Journeys** | 3 pass, 5 fail | — | Simplicity agent cut features from the brief |
+| [36](exp-36-constrained-simplicity/README.md) | **Domain + Constrained Simplicity** | 29/29, 249+942 lines | $0.39 | Sweet spot: all features, simply built, 60% cheaper |
 
 ## Spike Progression
 
