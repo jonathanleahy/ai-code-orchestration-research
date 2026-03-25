@@ -1,0 +1,51 @@
+```css
+:root {
+  /* Colors */
+  --color-bg: #ffffff;
+  --color-text: #1a1a1a;
+  --color-accent: #d4727a;
+  --color-grey: #666666;
+
+  /* Typography */
+  --font-heading: 'Georgia', serif;
+  --font-body: 'Helvetica Neue', sans-serif;
+  --font-logo: 'Georgia', serif;
+  --font-nav: 'Helvetica Neue', sans-serif;
+  --font-size-logo: 32px;
+  --font-size-nav: 13px;
+  --font-size-section-label: 12px;
+  --font-size-h1: 60px;
+  --font-size-h2: 36px;
+  --font-size-h3: 24px;
+  --font-size-body: 16px;
+  --font-line-height-body: 1.6;
+  --font-letter-spacing-nav: 0.1em;
+  --font-weight-bold: bold;
+  --font-weight-regular: normal;
+
+  /* Spacing */
+  --space-unit: 8px;
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 48px;
+  --space-xl: 80px;
+  --space-2xl: 120px;
+  --space-section-padding: 80px;
+  --space-component-gap: 24px;
+
+  /* Borders */
+  --border-width: 1px;
+  --border-style: solid;
+  --border-color: #e0e0e0;
+
+  /* Shadows */
+  --shadow-none: none;
+
+  /* Breakpoints */
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+}
+```
