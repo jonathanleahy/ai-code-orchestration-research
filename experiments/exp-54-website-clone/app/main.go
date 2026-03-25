@@ -94,6 +94,7 @@ const html = `<!DOCTYPE html>
 			font-size: 18px;
 			font-weight: 600;
 			letter-spacing: -0.5px;
+			font-family: Georgia, 'Times New Roman', serif;
 		}
 
 		.nav-links {
@@ -136,7 +137,7 @@ const html = `<!DOCTYPE html>
 
 		.hero-title {
 			font-size: 72px;
-			font-family: Georgia, serif;
+			font-family: Georgia, 'Times New Roman', serif;
 			line-height: 1.1;
 			margin-bottom: 48px;
 			max-width: 700px;
@@ -145,7 +146,7 @@ const html = `<!DOCTYPE html>
 		.hero-body {
 			font-size: 18px;
 			line-height: 1.8;
-			max-width: 600px;
+			max-width: 550px;
 			color: #333;
 		}
 
@@ -160,8 +161,9 @@ const html = `<!DOCTYPE html>
 			text-transform: uppercase;
 			font-size: 12px;
 			letter-spacing: 2px;
-			color: #999;
+			color: #d4727a;
 			margin-bottom: 48px;
+			font-weight: 600;
 		}
 
 		.logos {
@@ -173,9 +175,9 @@ const html = `<!DOCTYPE html>
 		}
 
 		.logo-item {
-			font-size: 16px;
-			font-weight: 400;
-			color: #666;
+			font-size: 18px;
+			font-weight: 700;
+			color: #000;
 		}
 
 		/* Services */
@@ -190,8 +192,8 @@ const html = `<!DOCTYPE html>
 		}
 
 		.service-item {
-			padding: 32px 0;
-			border-bottom: 1px solid #f0f0f0;
+			padding: 24px 0;
+			border-bottom: 1px solid #eee;
 		}
 
 		.service-item:last-child {
@@ -299,19 +301,52 @@ const html = `<!DOCTYPE html>
 		}
 
 		.case-study {
-			padding: 0;
+			padding: 32px;
+			background-color: #f9fafb;
+			border-radius: 8px;
+		}
+
+		.case-study-label {
+			text-transform: uppercase;
+			font-size: 11px;
+			letter-spacing: 2px;
+			color: #d4727a;
+			font-weight: 600;
+			margin-bottom: 16px;
+			display: block;
 		}
 
 		.case-study-title {
 			font-size: 24px;
 			font-family: Georgia, serif;
-			margin-bottom: 12px;
+			margin-bottom: 16px;
+			font-weight: bold;
 		}
 
 		.case-study-text {
 			font-size: 15px;
 			line-height: 1.8;
 			color: #555;
+			margin-bottom: 20px;
+		}
+
+		.case-study-link {
+			text-decoration: none;
+			color: #d4727a;
+			font-size: 14px;
+			font-weight: 600;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			transition: color 0.2s;
+		}
+
+		.case-study-link:hover {
+			color: #c95661;
+		}
+
+		.case-study-link::after {
+			content: "→";
 		}
 
 		/* Blog */
@@ -359,6 +394,43 @@ const html = `<!DOCTYPE html>
 			color: #e8a0a4;
 		}
 
+		.learn-more-cta {
+			margin-top: 48px;
+			display: flex;
+			align-items: center;
+			gap: 24px;
+		}
+
+		.learn-more-button {
+			display: inline-flex;
+			align-items: center;
+			gap: 12px;
+			text-decoration: none;
+			color: #fff;
+			font-size: 16px;
+			font-weight: 600;
+			border: 2px solid #fff;
+			padding: 12px 32px;
+			border-radius: 4px;
+			transition: all 0.2s;
+		}
+
+		.learn-more-button:hover {
+			background-color: #fff;
+			color: #1a1a1a;
+		}
+
+		.learn-more-email {
+			color: #d4727a;
+			text-decoration: none;
+			font-size: 16px;
+			transition: color 0.2s;
+		}
+
+		.learn-more-email:hover {
+			color: #e8a0a4;
+		}
+
 		.blog-grid {
 			display: grid;
 			grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -368,24 +440,133 @@ const html = `<!DOCTYPE html>
 		.blog-card {
 			background: #fff;
 			padding: 24px;
+			border-top: 1px solid #eee;
 		}
 
 		.blog-date {
-			font-size: 13px;
-			color: #999;
+			font-size: 12px;
+			color: #d4727a;
 			margin-bottom: 12px;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+			font-weight: 600;
 		}
 
 		.blog-title {
-			font-size: 20px;
+			font-size: 24px;
 			font-family: Georgia, serif;
 			margin-bottom: 12px;
+			font-weight: bold;
 		}
 
 		.blog-excerpt {
 			font-size: 14px;
 			line-height: 1.7;
 			color: #666;
+			margin-bottom: 16px;
+		}
+
+		.blog-read-more {
+			text-decoration: none;
+			color: #d4727a;
+			font-size: 14px;
+			font-weight: 600;
+			display: inline-block;
+			transition: color 0.2s;
+		}
+
+		.blog-read-more:hover {
+			color: #c95661;
+		}
+
+		/* Benefits Section */
+		.benefits-section {
+			padding: 120px 40px;
+			background-color: #fff;
+		}
+
+		.benefits-grid {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			gap: 40px;
+			max-width: 1200px;
+			margin: 0 auto;
+		}
+
+		.benefit-item {
+			text-align: left;
+		}
+
+		.benefit-item h3 {
+			font-size: 20px;
+			font-family: Georgia, serif;
+			margin-bottom: 16px;
+		}
+
+		.benefit-item p {
+			font-size: 15px;
+			line-height: 1.8;
+			color: #666;
+		}
+
+		/* Approach Section */
+		.approach-section {
+			padding: 120px 40px;
+			background-color: #fafafa;
+		}
+
+		.approach-content {
+			max-width: 900px;
+			margin: 0 auto;
+		}
+
+		.approach-section h2 {
+			font-size: 48px;
+			margin-bottom: 32px;
+		}
+
+		.approach-text {
+			font-size: 16px;
+			line-height: 1.8;
+			color: #333;
+		}
+
+		/* Learn More Cards Section */
+		.learn-more-cards-section {
+			padding: 120px 40px;
+			background-color: #fff;
+		}
+
+		.learn-more-cards-container {
+			max-width: 1200px;
+			margin: 0 auto;
+		}
+
+		.learn-more-cards-grid {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 40px;
+			margin-top: 60px;
+		}
+
+		.learn-more-card {
+			background-color: #f9fafb;
+			padding: 40px;
+			border-radius: 8px;
+			display: flex;
+			flex-direction: column;
+		}
+
+		.learn-more-card h3 {
+			font-size: 22px;
+			font-family: Georgia, serif;
+			margin-bottom: 24px;
+		}
+
+		.learn-more-card-arrow {
+			color: #d4727a;
+			font-size: 24px;
+			margin-top: auto;
 		}
 
 		/* Footer */
@@ -461,6 +642,43 @@ const html = `<!DOCTYPE html>
 			color: #666;
 		}
 
+		.social-icons {
+			display: flex;
+			gap: 16px;
+			margin-top: 24px;
+		}
+
+		.social-icon {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 40px;
+			height: 40px;
+			border: 1px solid #555;
+			border-radius: 4px;
+			text-decoration: none;
+			color: #ccc;
+			font-size: 18px;
+			transition: all 0.2s;
+		}
+
+		.social-icon:hover {
+			border-color: #d4727a;
+			color: #d4727a;
+		}
+
+		.office-address {
+			margin-top: 24px;
+			font-size: 14px;
+			line-height: 1.8;
+			color: #999;
+		}
+
+		.office-address p {
+			color: #999;
+			margin: 0;
+		}
+
 		@media (max-width: 768px) {
 			h1 {
 				font-size: 42px;
@@ -494,6 +712,14 @@ const html = `<!DOCTYPE html>
 			.nav-links a {
 				font-size: 12px;
 			}
+
+			.benefits-grid {
+				grid-template-columns: 1fr;
+			}
+
+			.learn-more-cards-grid {
+				grid-template-columns: 1fr;
+			}
 		}
 	</style>
 </head>
@@ -508,6 +734,7 @@ const html = `<!DOCTYPE html>
 			<li><a href="#case-studies">About Us</a></li>
 			<li><a href="#blog">Views</a></li>
 			<li><span class="phone-icon">☎</span></li>
+			<li style="margin-left: 16px; font-size: 14px;">EN / DE</li>
 		</ul>
 	</nav>
 
@@ -515,7 +742,7 @@ const html = `<!DOCTYPE html>
 	<section class="hero">
 		<div class="hero-label">A GLOBAL PRODUCT & UX DESIGN COMPANY</div>
 		<h1 class="hero-title">Competitive Advantage by <span class="pink">Design</span>.</h1>
-		<p class="hero-body">We partner with world-class businesses to transform customer experience through strategic product design and user research. Our team delivers measurable impact that drives competitive advantage.</p>
+		<p class="hero-body">We partner with world-class businesses to transform <span class="pink">customer experience</span> through strategic product design. We're obsessed with understanding <span class="pink">user needs</span> and creating solutions that are <span class="pink">brilliantly easy to use</span>. Our team delivers measurable impact that drives competitive advantage.</p>
 	</section>
 
 	<!-- Logo Bar -->
@@ -572,6 +799,38 @@ const html = `<!DOCTYPE html>
 		</div>
 	</section>
 
+	<!-- Benefits Section -->
+	<section class="benefits-section">
+		<div class="container">
+			<div class="benefits-grid">
+				<div class="benefit-item">
+					<h3>Ship quality products</h3>
+					<p>Design with rigor and precision. We ensure every element serves a purpose and delivers measurable business value.</p>
+				</div>
+				<div class="benefit-item">
+					<h3>Create happier users</h3>
+					<p>User satisfaction drives loyalty. Our research-backed approach ensures your customers feel heard and valued.</p>
+				</div>
+				<div class="benefit-item">
+					<h3>Reduce project risk</h3>
+					<p>Validate early, iterate often. We identify potential issues before they become costly problems in production.</p>
+				</div>
+				<div class="benefit-item">
+					<h3>Deliver results that matter</h3>
+					<p>Every design decision is grounded in data and strategy. We track impact and optimize for outcomes that matter.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Our Approach Section -->
+	<section class="approach-section">
+		<div class="approach-content">
+			<h2>We follow a UX process because it works.</h2>
+			<p class="approach-text">Our battle-tested process combines strategic thinking with creative excellence. We start with deep customer research to understand the landscape, define clear objectives, and identify opportunities. Through iterative design and continuous validation, we ensure every decision moves closer to measurable business outcomes. This methodical approach has helped world-class companies transform their products and scale their impact.</p>
+		</div>
+	</section>
+
 	<!-- CTA -->
 	<section class="cta-section" id="cta">
 		<h2 class="cta-title">Let's create something great together.</h2>
@@ -587,16 +846,22 @@ const html = `<!DOCTYPE html>
 			<div class="section-label">Trusted by world-class businesses –</div>
 			<div class="case-studies-grid">
 				<div class="case-study">
+					<span class="case-study-label">Product Transformation</span>
 					<h3 class="case-study-title">Google</h3>
 					<p class="case-study-text">Redesigned core product flows to improve user engagement and retention. Strategic research informed multi-quarter product roadmap.</p>
+					<a href="#case-studies" class="case-study-link">Learn more</a>
 				</div>
 				<div class="case-study">
+					<span class="case-study-label">Design System</span>
 					<h3 class="case-study-title">Logitech</h3>
 					<p class="case-study-text">Led cross-functional design transformation across connected hardware ecosystem. Built design system supporting global go-to-market.</p>
+					<a href="#case-studies" class="case-study-link">Learn more</a>
 				</div>
 				<div class="case-study">
+					<span class="case-study-label">Digital Banking</span>
 					<h3 class="case-study-title">BNP Paribas</h3>
 					<p class="case-study-text">Modernized digital banking experience serving millions of users. Implemented customer-centric design operating model for enterprise organization.</p>
+					<a href="#case-studies" class="case-study-link">Learn more</a>
 				</div>
 			</div>
 		</div>
@@ -611,16 +876,40 @@ const html = `<!DOCTYPE html>
 					<div class="blog-date">March 2025</div>
 					<h3 class="blog-title">The Future of Design Leadership</h3>
 					<p class="blog-excerpt">How modern design leaders are reshaping organizations and driving competitive advantage through customer-centric practices and cross-functional collaboration.</p>
+					<a href="#blog" class="blog-read-more">Read more →</a>
 				</div>
 				<div class="blog-card">
 					<div class="blog-date">February 2025</div>
 					<h3 class="blog-title">Research-Driven Product Strategy</h3>
 					<p class="blog-excerpt">Why deep customer research should inform every strategic decision. We explore proven methodologies that uncover hidden opportunities and reduce execution risk.</p>
+					<a href="#blog" class="blog-read-more">Read more →</a>
 				</div>
 				<div class="blog-card">
 					<div class="blog-date">January 2025</div>
 					<h3 class="blog-title">Building Design Systems at Scale</h3>
 					<p class="blog-excerpt">A practical guide to establishing design systems that scale with your organization. Learn how to implement, govern, and evolve design systems successfully.</p>
+					<a href="#blog" class="blog-read-more">Read more →</a>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Learn More Cards Section -->
+	<section class="learn-more-cards-section">
+		<div class="learn-more-cards-container">
+			<div class="section-label">Learn more about –</div>
+			<div class="learn-more-cards-grid">
+				<div class="learn-more-card">
+					<h3>UX, UI & Product Design</h3>
+					<div class="learn-more-card-arrow">→</div>
+				</div>
+				<div class="learn-more-card">
+					<h3>Product Discovery & Research</h3>
+					<div class="learn-more-card-arrow">→</div>
+				</div>
+				<div class="learn-more-card">
+					<h3>Fractional Design Leadership</h3>
+					<div class="learn-more-card-arrow">→</div>
 				</div>
 			</div>
 		</div>
@@ -629,12 +918,17 @@ const html = `<!DOCTYPE html>
 	<!-- Learn More -->
 	<section class="learn-more-section">
 		<div class="container">
-			<div class="section-label">Learn more –</div>
+			<h2 style="font-size: 48px; color: #fff; margin-bottom: 48px;">Learn more on what we do</h2>
 			<div class="learn-more-links">
-				<a href="#blog" class="learn-more-link">Insights & Articles</a>
+				<a href="#services" class="learn-more-link">Our Approach</a>
+				<a href="#services" class="learn-more-link">UX/UI & Product Design</a>
+				<a href="#services" class="learn-more-link">UX Research</a>
+				<a href="#services" class="learn-more-link">Design Systems</a>
 				<a href="#case-studies" class="learn-more-link">Case Studies</a>
-				<a href="#services" class="learn-more-link">Our Services</a>
-				<a href="#about" class="learn-more-link">Team & Approach</a>
+			</div>
+			<div class="learn-more-cta">
+				<a href="mailto:hello@eachandother.com" class="learn-more-button">Contact us</a>
+				<a href="mailto:hello@eachandother.com" class="learn-more-email">hello@eachandother.com</a>
 			</div>
 		</div>
 	</section>
@@ -646,7 +940,14 @@ const html = `<!DOCTYPE html>
 				<h4>Each&Other</h4>
 				<p>Global product & UX design consultancy serving world-class businesses.</p>
 				<p style="margin-top: 24px;"><a href="mailto:hello@eachandother.com">hello@eachandother.com</a></p>
-				<p style="margin-top: 24px;">San Francisco, CA<br>London, UK<br>Berlin, Germany</p>
+				<div class="office-address">
+					<p><strong>Dublin, Ireland</strong><br>Unit 1, The Dock<br>Dublin, Ireland</p>
+					<p style="margin-top: 16px;"><strong>London, UK</strong><br>42 Greek Street<br>London, UK</p>
+				</div>
+				<div class="social-icons">
+					<a href="https://linkedin.com/company/eachandother" class="social-icon" title="LinkedIn">in</a>
+					<a href="https://instagram.com/eachandother" class="social-icon" title="Instagram">📷</a>
+				</div>
 			</div>
 			<div class="footer-column">
 				<h4>Services</h4>
