@@ -62,6 +62,31 @@
 - [ ] Document: cheap model → auto-fix → retry → escalate to stronger model
 - [ ] Measure cost per successful build with escalation vs without
 
+## New Experiment Ideas
+
+### Spec → Test Data → Use Cases (V-Model Pattern)
+- [ ] Blueprint produces: spec + real test data + use cases (acceptance criteria)
+- [ ] Executor builds code to pass unit tests (doesn't see use cases)
+- [ ] Unit tests run during development
+- [ ] Use cases run AFTER complete build (acceptance gate)
+- [ ] Prevents "teaching to the test" — executor optimises for spec, not test
+- [ ] System loops: fail use cases → back to executor with feedback
+- [ ] This is a proper V-model with AI at each layer
+
+### PR Review Gate (Quality + Security)
+- [ ] After code passes structural gates, submit as a "PR"
+- [ ] AI reviewer checks: code quality, security patterns, error handling
+- [ ] Like pr-review.sh but for AI-generated code
+- [ ] Could use a different (stronger) model as reviewer
+- [ ] Approval required before code enters assembled output
+- [ ] Catches issues tests don't: hardcoded secrets, SQL injection, missing auth
+
+### Model Writes Its Own Tests (fix model_test 0%)
+- [ ] Instead of testing against golden master types, let the model write task.go + task_test.go together
+- [ ] The tests verify the spec, not specific types
+- [ ] Then run golden master integration tests as the acceptance gate
+- [ ] This matches how real developers work — they write code and tests together
+
 ## Future Directions
 
 ### Bigger Applications

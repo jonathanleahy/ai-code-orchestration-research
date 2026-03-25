@@ -1,0 +1,22 @@
+{
+  "schema": {
+    "best_variation": "v1_basic",
+    "best_rate": 1.0,
+    "task_title": "Create schema.graphql"
+  },
+  "model": {
+    "best_variation": "v1_basic",
+    "best_rate": 1.0,
+    "task_title": "Create model/task.go"
+  },
+  "model_test": {
+    "best_variation": "none",
+    "best_rate": 0,
+    "task_title": "Create model/task_test.go"
+  },
+  "main": {
+    "best_variation": "v2_example",
+    "best_rate": 1.0,
+    "task_title": "Create main.go (HTTP server + HTML UI)"
+  }
+}
