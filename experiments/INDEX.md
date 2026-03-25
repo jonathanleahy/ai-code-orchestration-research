@@ -2,32 +2,36 @@
 
 ## Research Question
 
-**Can AI models build working applications from scratch? What's the cheapest way?**
+**Can AI go from a one-line idea to a running product? What's the cheapest way?**
 
-We ran 12 experiments across 3 spikes (increasing complexity), testing 11+ models, 4 architectural approaches, and multiple pipeline strategies. Total research cost: ~$3.00.
+25 experiments across code generation, product design, and end-to-end pipelines. Tested 11+ models, 4 architectures, persona interviews, dev review gates, and V-Model verification. Total research cost: ~$5.00.
 
-## Results at a Glance
+## The Answer: $0.21 from Idea to Product
 
 ```mermaid
-graph LR
-    subgraph "Winners"
-        W1["🏆 Exp 12<br/>Full app in 70s<br/>FREE (Haiku)"]
-        W2["🏆 Exp 6<br/>Haiku 3x faster<br/>than Sonnet"]
-        W3["🏆 Exp 3<br/>V4 prompt: 0→100%<br/>on cheapest model"]
-    end
+graph TD
+    Brief["Brief: 8 words"] --> Personas["Persona Discovery<br/>$0.004"]
+    Personas --> MVP["MVP Synthesis<br/>$0.005"]
+    MVP --> Screens["Screen Wireframes<br/>$0.008"]
+    Screens --> DevReview["Dev Review Gate<br/>$0.007"]
+    DevReview -->|"NEEDS CHANGES"| Revise["Revised Spec<br/>$0.006"]
+    Revise --> Types["Go Types<br/>$0.007"]
+    Types --> Store["Store Layer<br/>Qwen3-30B $0.013"]
+    Store --> Server["HTTP Server<br/>claude -p $0.16"]
+    Server --> Product["Compiled Product<br/>713 lines"]
 
-    subgraph "Key Insights"
-        I1["💡 Exp 4<br/>Auto-fix catches<br/>40-60% of errors FREE"]
-        I2["💡 Exp 1<br/>Escalation fails on<br/>shared blind spots"]
-        I3["💡 Exp 5<br/>Pipeline > Model<br/>(retry loop essential)"]
-    end
-
-    subgraph "Architecture"
-        A1["🔧 Exp 7<br/>Hybrid: cheap API<br/>+ free subscription"]
-        A2["🔧 Exp 10<br/>V-Model: hidden<br/>acceptance tests"]
-        A3["🔧 Exp 11<br/>PR review gate<br/>for quality/security"]
-    end
+    style Brief fill:#4488ff,color:#fff
+    style DevReview fill:#f59e0b,color:#000
+    style Product fill:#22c55e,color:#000
 ```
+
+## Top 5 Findings
+
+1. **Persona interviews find features the brief missed** (Exp 23) — "recurring invoices" wasn't in the brief but 3/4 personas demanded it
+2. **Dev review catches complexity before code** (Exp 25) — PDF generation, SMTP, PII concerns caught at $0.007, not at development
+3. **Prompt wording > model choice** (Exp 3, 15) — same model goes 0% → 100% with better prompt
+4. **Auto-fix is free money** (Exp 4, 16) — goimports + &constant fix catches 40-60% of errors
+5. **Wireframes produce better code** (Exp 24) — 6 routes/106 lines vs 3 routes/493 lines
 
 ## All Experiments
 
@@ -111,21 +115,15 @@ graph TD
 
 | Category | Cost |
 |----------|------|
-| Spike V1 (11 models) | $0.35 |
-| Spike V2 (9 configs, 4 approaches) | $1.50 |
-| Spike V2 autoresearch | $0.05 |
-| Spike V3 (3 configs) | $0.30 |
-| Spike V3 compile fix runs | $0.25 |
-| Spike V3 autoresearch | $0.05 |
-| Experiments 1-12 | ~$0.50 |
-| **Total** | **~$3.00** |
+| Spikes V1-V3 (original research) | ~$3.00 |
+| Experiments 13-18 (code generation) | ~$0.80 |
+| Experiments 19-21 (multi-service) | ~$0.25 |
+| Experiments 22-25 (product design + pipeline) | ~$0.55 |
+| **Total research cost** | **~$4.60** |
+| **Cost per app (proven)** | **$0.02-0.21** |
 
-## Remaining Experiments (TODO)
+## Next Steps
 
-See [TODO.md](../TODO.md) for the full list. Key remaining:
-
-- **Parser hardening** — Production parser to fix the 40% extraction failure rate
-- **Full pipeline retry** — Re-run model routing (exp-05) with retry loop instead of single-shot
-- **Bigger apps** — SvelteKit + Go GraphQL (2000+ lines) to test scaling
-- **Pipeline integration** — A/B test winning strategy in Dark Factory daemon
-- **V-Model full loop** — Complete the acceptance test feedback loop (exp-10)
+- **Add test layers**: Store tests (2-file), acceptance tests (V-Model), HTTP integration tests
+- **Pipeline integration**: Wire winning strategy into Dark Factory daemon
+- **Blueprint update**: Persona discovery + dev review + exact types as standard stages
