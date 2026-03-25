@@ -265,3 +265,37 @@
 - [ ] Every experiment README must have: What, Why, How, Results, Key Finding
 - [ ] Auto-generate from experiment summary.json + pipeline.log
 - [ ] Standardised template for all experiments
+
+## NEW SPIKE: Visual Accuracy & Iterative Refinement
+
+### Exp 85: Full-Page Screenshot Comparison
+- [ ] Full-page screenshot of original (scroll capture all sections)
+- [ ] Full-page screenshot of clone at same viewport
+- [ ] Pixel-diff with ImageMagick compare or Python PIL
+- [ ] Output: % similarity per section, difference heatmap
+
+### Exp 86: Structural DOM Comparison
+- [ ] Extract DOM hierarchy from both sites
+- [ ] Compare: section count, heading levels, element types
+- [ ] Score: structural similarity %
+
+### Exp 87: CSS Property Comparison
+- [ ] Extract computed styles from both (font sizes, colors, spacing)
+- [ ] Diff each property: "original h1=72px, clone=60px — 17% off"
+- [ ] Feed diffs as fix instructions
+
+### Exp 88: Iterative Visual Refinement Loop
+- [ ] Screenshot clone → AI compares to original → generates CSS fixes
+- [ ] Apply fixes → re-screenshot → re-compare
+- [ ] Repeat until similarity >90%
+- [ ] Measure: iterations needed, improvement per iteration
+
+### Exp 89: Component-by-Component Comparison
+- [ ] Crop each section from both screenshots
+- [ ] Score per component (nav, hero, logo bar, services, footer)
+- [ ] Focus fixes on lowest-scoring sections
+
+### Exp 90: Layout Grid Overlay
+- [ ] Extract grid/column positions from both
+- [ ] Overlay comparison: alignment differences
+- [ ] Catches centering, margin, padding mismatches
