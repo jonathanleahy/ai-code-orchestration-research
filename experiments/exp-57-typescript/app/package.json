@@ -1,0 +1,11 @@
+{
+  "name": "crm-app",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Simple CRM in Node.js/TypeScript",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "test": "node dist/server.test.js"
+  }
+}
