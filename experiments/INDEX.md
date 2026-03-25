@@ -76,6 +76,7 @@ graph TD
 | [31](exp-31-post-code-review/README.md) | **Post-Code: UX+A11y+OWASP** | Fixes applied, 54/54 | $0.025 | ARIA labels, XSS fixes, CSP headers added |
 | [32](exp-32-domain-expert/README.md) | **8 Reviewers + Domain Expert** | 22/22 HTTP | $0.96 | Domain expert found 10 missing invoice features; store too complex for cheap model |
 | [33](exp-33-add-feature/README.md) | **Add Feature (CSV Export)** | 55/55, no regression | $0.23 | Added feature without breaking 52 existing tests |
+| [34](exp-34-simplicity/README.md) | **Simplicity Agent** | 13/13, 173+345 lines | $0.20 | 70% less code, 79% cheaper than Exp 32 |
 
 ## Spike Progression
 

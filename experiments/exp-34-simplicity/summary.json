@@ -1,0 +1,15 @@
+{
+  "brief": "Build a CRM for freelancers with client management, activity history, and invoicing",
+  "total_cost": 0.20329915,
+  "store_lines": 173,
+  "server_lines": 345,
+  "tests_pass": 13,
+  "tests_fail": 0,
+  "builds": true,
+  "simplicity_reviews": 4,
+  "comparison": {
+    "exp32_store": 380,
+    "exp32_server": 1136,
+    "exp32_cost": 0.96
+  }
+}
