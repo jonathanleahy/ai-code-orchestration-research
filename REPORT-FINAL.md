@@ -769,3 +769,43 @@ Golden Master Tests (acceptance)
 ```
 
 **Projected cost: $0.01-0.03 per application with the full pipeline.**
+
+---
+
+## Addendum 12: Experiment 6 — Claude Subscription Models (Sonnet vs Haiku)
+
+### Result
+
+Both Sonnet and Haiku via `claude -p` successfully build the complete task-board:
+
+| Model | Files | Builds | Own Tests | Time | Cost (sub) |
+|-------|-------|--------|-----------|------|------------|
+| **Haiku** | 4 | ✅ | ✅ | **80s** | **$0.17** |
+| Sonnet | 4 | ✅ | ✅ | 252s | $0.50 |
+
+### Key Finding: Haiku > Sonnet for claude -p
+
+Haiku is **3x faster** and produces equally correct code. For subscription users, Haiku is the optimal choice for claude -p builds:
+- 80 seconds vs 252 seconds
+- Both solve the JS-in-Go-backtick issue (tool system iterates)
+- Both produce 4 complete files with working tests
+- All free on subscription
+
+### Why claude -p Solves Backtick But OpenRouter Doesn't
+
+`claude -p` has a built-in compile → fix loop:
+1. Writes code with template literals
+2. Runs `go build`, sees "invalid character" error
+3. Rewrites using string concatenation
+4. Builds successfully
+
+OpenRouter models get one shot. Even with our retry loop, the retry sends the error message but the model makes the same mistake again — it doesn't have the "try a different approach" instinct that claude -p's tool system provides.
+
+### Updated Recommendation
+
+| Use Case | Best Option | Cost | Time |
+|----------|-----------|------|------|
+| Go projects (subscription) | **claude -p Haiku** | FREE | 80s |
+| Go model layer (API) | Qwen3-30B | $0.001 | 25s |
+| Node.js CLI (API) | Gemini + MiniMax | $0.024 | 4min |
+| Full Go app (API) | Gemini plan + Qwen3-30B model + MiniMax main | ~$0.015 | 3min |
