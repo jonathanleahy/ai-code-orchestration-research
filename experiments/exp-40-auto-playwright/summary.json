@@ -1,0 +1,56 @@
+{
+  "total_cost": 0.49485264999999995,
+  "passes": 0,
+  "fails": 0,
+  "unknowns": 8,
+  "results": [
+    {
+      "journey": "View Dashboard",
+      "result": "UNKNOWN",
+      "notes": "could not determine",
+      "cost": 0.06944225
+    },
+    {
+      "journey": "Add Client",
+      "result": "UNKNOWN",
+      "notes": "could not determine",
+      "cost": 0.073622
+    },
+    {
+      "journey": "View Client Profile",
+      "result": "UNKNOWN",
+      "notes": "could not determine",
+      "cost": 0.0339349
+    },
+    {
+      "journey": "Edit Client",
+      "result": "UNKNOWN",
+      "notes": "could not determine",
+      "cost": 0.0567695
+    },
+    {
+      "journey": "Delete Client",
+      "result": "UNKNOWN",
+      "notes": "could not determine",
+      "cost": 0.06891635
+    },
+    {
+      "journey": "Add Activity",
+      "result": "UNKNOWN",
+      "notes": "could not determine",
+      "cost": 0.07697785
+    },
+    {
+      "journey": "Create Invoice",
+      "result": "UNKNOWN",
+      "notes": "could not determine",
+      "cost": 0.0672596
+    },
+    {
+      "journey": "Search Clients",
+      "result": "UNKNOWN",
+      "notes": "could not determine",
+      "cost": 0.04793019999999999
+    }
+  ]
+}
