@@ -1,98 +1,58 @@
 # Research TODO
 
-## Active
-- [ ] **Autoresearch executor prompts** — running now, finding optimal prompt per sub-task type for Qwen3-30B
+## Completed
+- [x] **Autoresearch executor prompts** — 3/4 sub-tasks at 100% on Qwen3-30B
+- [x] **Index page with experiment map** — experiments/INDEX.md with Mermaid diagrams, results table
+- [x] **Per-experiment directories** — 12 experiment READMEs in exp-01/ through exp-12/
+- [x] **Spike V3 Report** — experiments/spike-v3/REPORT.md (architecture, contract-first, backtick case study)
+- [x] **Autoresearch Report** — experiments/spike-v3/autoresearch-report.md (methodology, results, winning prompts)
+- [x] **Compile-Fix Pipeline** — experiments/spike-v3/compile-fix-pipeline.md (gate pipeline, per-language configs)
+- [x] **Escalation Strategy** — experiments/spike-v3/escalation-strategy.md (cost analysis, when it works/doesn't)
+- [x] **Escalation on Failure** — exp-01: 0/5, shared blind spots can't be escalated
+- [x] **Claude Subscription Models** — exp-06: Haiku 3x faster, both pass
+- [x] **Full-Stack App (70s)** — exp-12: 7 files, builds, tests, runs, FREE
+- [x] **Auto-Fix Pipeline measurement** — exp-04: 40-60% of errors fixed free
+- [x] **MiniMax Backtick Hint** — exp-08: 2/3 with explicit hint
+- [x] **V-Model Pattern (conceptual)** — exp-10: pattern works, blocked by parser
+- [x] **Model Routing (single-shot)** — exp-05: 0/5, proves retry loop essential
 
 ## Experiments to Run
 
-### Escalation on Failure (Spike 3b)
-- [ ] When cheap model fails and auto-fix doesn't work:
-  - Variation 1: Call the SAME cheap model with the error message (retry)
-  - Variation 2: Call a STRONGER model (e.g., Gemini Flash) with the error + original code
-  - Measure: which is cheaper per successful fix? Does escalation beat retry?
-  - The backtick issue is the perfect test case — cheap model fails, does Gemini fix it?
+### Parser Hardening (Exp 13)
+- [ ] Production-grade file block parser
+- [ ] Handle: truncated END markers, code fences, package declarations, filename hints
+- [ ] Measure: re-run exp-09 (API-only full app) with improved parser
+- [ ] Target: reduce 40% parser failure rate to <5%
 
-### Re-run Spikes 1+2 with Improved Executor (Spike 1b/2b)
-- [ ] Take the winning prompts from autoresearch
-- [ ] Re-run the V1 model comparison (11 models) with improved prompts
-- [ ] Re-run V2 Node.js CLI with improved prompts + compile gate
-- [ ] Compare: how much did prompt engineering + auto-fix improve results?
-- [ ] Record improvement delta and cost delta
+### Full Pipeline Retry for Model Routing (Exp 14)
+- [ ] Re-run exp-05 (model routing) WITH retry loop instead of single-shot
+- [ ] Route: schema/model → Qwen3-30B, main.go → MiniMax or Gemini
+- [ ] Measure: does routing save cost vs. one model for everything?
 
-### More Sub-Task Granularity Testing
-- [ ] Can 2-3 files per sub-task work? (halves API calls)
-- [ ] What's the maximum files-per-task before quality drops?
+### Re-run V1+V2 with All Improvements (Exp 15)
+- [ ] Take winning prompts from autoresearch
+- [ ] Add compile gate + auto-fix
+- [ ] Re-run V1 (11 models) and V2 (dep-doctor CLI)
+- [ ] Compare: improvement delta and cost delta
 
-### Model Routing by Task Type
-- [ ] Route logic tasks → cheapest model, mixed-content tasks → mid-tier
-- [ ] Measure if routing saves cost vs using one model for everything
+### Sub-Task Granularity (Exp 16)
+- [ ] Test 2-3 files per sub-task (halves API calls)
+- [ ] Measure: quality drop threshold
+- [ ] Test: task.go + task_test.go as one sub-task (fixes model_test 0%)
 
-## Documentation
-
-### Index Page with Experiment Map
-- [ ] Create an interactive index page (HTML/JS)
-- [ ] Node diagram (Mermaid or D3.js) showing:
-  - Core idea at centre
-  - Connections to each spike (V1, V2, V3)
-  - Sub-experiments branching off each spike
-  - Results annotated on each node
-- [ ] Clickable — each node links to its report
-
-### Spike V3 Report
-- [ ] Write dedicated spike-v3/REPORT.md (not just addenda)
-- [ ] Include: architecture diagrams, contract-first pattern, mock-driven building
-- [ ] claude -p findings with code examples
-- [ ] Compile gate + auto-fix pipeline diagram
-- [ ] Backtick lesson as a case study
-
-### Autoresearch Report
-- [ ] Document the autoresearch methodology
-- [ ] Results table: pass rate per prompt variation per sub-task type
-- [ ] Winning prompts with explanations of why they work
-- [ ] Cost analysis: autoresearch cost vs improvement value
-
-## Architecture Improvements
-
-### Compile-Fix Pipeline
-- [ ] Document the full gate pipeline: goimports → gofmt → go build → go vet → go test
-- [ ] Add per-language gate configs (Go, Node.js, Python)
-- [ ] Measure: what % of errors does each gate level catch?
-
-### Escalation Strategy
-- [ ] Document: cheap model → auto-fix → retry → escalate to stronger model
-- [ ] Measure cost per successful build with escalation vs without
-
-## New Experiment Ideas
-
-### Spec → Test Data → Use Cases (V-Model Pattern)
-- [ ] Blueprint produces: spec + real test data + use cases (acceptance criteria)
-- [ ] Executor builds code to pass unit tests (doesn't see use cases)
-- [ ] Unit tests run during development
-- [ ] Use cases run AFTER complete build (acceptance gate)
-- [ ] Prevents "teaching to the test" — executor optimises for spec, not test
-- [ ] System loops: fail use cases → back to executor with feedback
-- [ ] This is a proper V-model with AI at each layer
-
-### PR Review Gate (Quality + Security)
-- [ ] After code passes structural gates, submit as a "PR"
-- [ ] AI reviewer checks: code quality, security patterns, error handling
-- [ ] Like pr-review.sh but for AI-generated code
-- [ ] Could use a different (stronger) model as reviewer
-- [ ] Approval required before code enters assembled output
-- [ ] Catches issues tests don't: hardcoded secrets, SQL injection, missing auth
-
-### Model Writes Its Own Tests (fix model_test 0%)
-- [ ] Instead of testing against golden master types, let the model write task.go + task_test.go together
-- [ ] The tests verify the spec, not specific types
-- [ ] Then run golden master integration tests as the acceptance gate
-- [ ] This matches how real developers work — they write code and tests together
+### V-Model Full Loop (Exp 17)
+- [ ] Fix parser to enable exp-10 completion
+- [ ] Blueprint → spec + hidden acceptance tests
+- [ ] Executor builds from spec only
+- [ ] Run acceptance gate after build
+- [ ] Measure: feedback loop iterations to pass
 
 ## Future Directions
 
 ### Bigger Applications
-- [ ] SvelteKit + Go GraphQL full stack (the original V3 plan)
-- [ ] Test contract-first + mock-driven with parallel frontend/backend building
-- [ ] Measure: does the approach scale to 2000+ line apps?
+- [ ] SvelteKit + Go GraphQL full stack (2000+ lines)
+- [ ] Test contract-first + mock-driven with parallel frontend/backend
+- [ ] Measure: does the approach scale?
 
 ### Pipeline Integration
 - [ ] Integrate winning strategy into Dark Factory daemon

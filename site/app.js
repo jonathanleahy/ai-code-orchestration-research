@@ -104,6 +104,9 @@ const FILES = {
             '_folder': true,
             'REPORT.md': 'experiments/spike-v3/REPORT.md',
             'architecture.md': 'experiments/spike-v3/architecture.md',
+            'autoresearch-report.md': 'experiments/spike-v3/autoresearch-report.md',
+            'compile-fix-pipeline.md': 'experiments/spike-v3/compile-fix-pipeline.md',
+            'escalation-strategy.md': 'experiments/spike-v3/escalation-strategy.md',
             'executor-go.md': 'experiments/spike-v3/executor-go.md',
             'call-claude-p.sh': 'experiments/spike-v3/call-claude-p.sh',
             'golden-master': {
