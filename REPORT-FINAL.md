@@ -572,3 +572,36 @@ Plus a parser fix: lenient END FILE matching (the model sometimes truncates the 
 2. **Let models write code + tests together** — they know their own types
 3. **Parser leniency matters** — models truncate markers, the parser must handle it
 4. **Simple prompts win** — the winning prompts are shorter than the losing ones
+
+---
+
+## Addendum 7: Experiment Results — Escalation, Granularity, Auto-Fix
+
+### Experiment 1: Escalation (cheap model → stronger model on failure)
+
+**Hypothesis:** When Qwen3-30B fails to compile, sending the error + code to Gemini Flash should fix it.
+
+**Result: 0/5 — escalation does NOT fix the JS-in-Go-backtick issue.**
+
+Both Qwen3-30B and Gemini Flash make the same mistake: using JavaScript template literals (`${var}`) inside Go backtick strings. This is a fundamental language limitation, not a model quality issue. Escalation only helps when the stronger model knows something the weaker model doesn't — but both models have the same blind spot here.
+
+| Run | Cheap Model | Escalation | Combined Cost |
+|-----|------------|------------|---------------|
+| 0 | FAIL (backtick) | FAIL (same error) | $0.027 |
+| 1 | FAIL | FAIL | $0.026 |
+| 2 | FAIL | FAIL | $0.031 |
+| 3 | FAIL | FAIL | $0.026 |
+| 4 | FAIL | FAIL | $0.024 |
+
+**Lesson:** Escalation works for "the model didn't understand the task" (logic errors). It does NOT work for "the model doesn't know a language constraint" (all models share the same training data blind spots). The fix must be in the architecture spec.
+
+**When escalation WOULD work:**
+- Unused variable errors (cheap model forgets to use a var)
+- Missing import (cheap model doesn't know which package to import)
+- Type mismatch (cheap model uses wrong type)
+- These are "knowledge gaps" that a stronger model can fill
+
+**When escalation WON'T work:**
+- Language-specific gotchas shared across all training data
+- Backtick-in-backtick (Go/JS interaction)
+- `&constant` (Go pointer to constant — all models get this wrong)
