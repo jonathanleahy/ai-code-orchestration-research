@@ -1,0 +1,211 @@
+{
+  "total_cost": 0.046556999999999994,
+  "total_issues": 162,
+  "total_unique": 0,
+  "first_10": 80,
+  "last_10": 82,
+  "curve": [
+    {
+      "reviewers": 1,
+      "cumulative_issues": 8,
+      "cumulative_unique": 0
+    },
+    {
+      "reviewers": 2,
+      "cumulative_issues": 20,
+      "cumulative_unique": 0
+    },
+    {
+      "reviewers": 3,
+      "cumulative_issues": 28,
+      "cumulative_unique": 0
+    },
+    {
+      "reviewers": 4,
+      "cumulative_issues": 38,
+      "cumulative_unique": 0
+    },
+    {
+      "reviewers": 5,
+      "cumulative_issues": 44,
+      "cumulative_unique": 0
+    },
+    {
+      "reviewers": 6,
+      "cumulative_issues": 52,
+      "cumulative_unique": 0
+    },
+    {
+      "reviewers": 7,
+      "cumulative_issues": 62,
+      "cumulative_unique": 0
+    },
+    {
+      "reviewers": 8,
+      "cumulative_issues": 62,
+      "cumulative_unique": 0
+    },
+    {
+      "reviewers": 9,
+      "cumulative_issues": 72,
+      "cumulative_unique": 0
+    },
+    {
+      "reviewers": 10,
+      "cumulative_issues": 80,
+      "cumulative_unique": 0
+    },
+    {
+      "reviewers": 11,
+      "cumulative_issues": 90,
+      "cumulative_unique": 0
+    },
+    {
+      "reviewers": 12,
+      "cumulative_issues": 97,
+      "cumulative_unique": 0
+    },
+    {
+      "reviewers": 13,
+      "cumulative_issues": 107,
+      "cumulative_unique": 0
+    },
+    {
+      "reviewers": 14,
+      "cumulative_issues": 117,
+      "cumulative_unique": 0
+    },
+    {
+      "reviewers": 15,
+      "cumulative_issues": 127,
+      "cumulative_unique": 0
+    },
+    {
+      "reviewers": 16,
+      "cumulative_issues": 137,
+      "cumulative_unique": 0
+    },
+    {
+      "reviewers": 17,
+      "cumulative_issues": 144,
+      "cumulative_unique": 0
+    },
+    {
+      "reviewers": 18,
+      "cumulative_issues": 152,
+      "cumulative_unique": 0
+    },
+    {
+      "reviewers": 19,
+      "cumulative_issues": 162,
+      "cumulative_unique": 0
+    },
+    {
+      "reviewers": 20,
+      "cumulative_issues": 162,
+      "cumulative_unique": 0
+    }
+  ],
+  "reviewers": {
+    "R01 Dev Architect": {
+      "issues": 8,
+      "unique": 0,
+      "cost": 0.002121
+    },
+    "R02 Product Owner": {
+      "issues": 12,
+      "unique": 0,
+      "cost": 0.002232
+    },
+    "R03 QA Engineer": {
+      "issues": 8,
+      "unique": 0,
+      "cost": 0.002088
+    },
+    "R04 Market Analyst": {
+      "issues": 10,
+      "unique": 0,
+      "cost": 0.002172
+    },
+    "R05 Domain Expert (Accounting)": {
+      "issues": 6,
+      "unique": 0,
+      "cost": 0.002625
+    },
+    "R06 SaaS UX Designer": {
+      "issues": 8,
+      "unique": 0,
+      "cost": 0.0021420000000000002
+    },
+    "R07 Constrained Simplicity": {
+      "issues": 10,
+      "unique": 0,
+      "cost": 0.002292
+    },
+    "R08 Code Architect": {
+      "issues": 0,
+      "unique": 0,
+      "cost": 0.002634
+    },
+    "R09 Accessibility Expert": {
+      "issues": 10,
+      "unique": 0,
+      "cost": 0.002046
+    },
+    "R10 OWASP Security": {
+      "issues": 8,
+      "unique": 0,
+      "cost": 0.001869
+    },
+    "R11 Freelance Designer": {
+      "issues": 10,
+      "unique": 0,
+      "cost": 0.002379
+    },
+    "R12 Agency Owner": {
+      "issues": 7,
+      "unique": 0,
+      "cost": 0.002742
+    },
+    "R13 First-Time User": {
+      "issues": 10,
+      "unique": 0,
+      "cost": 0.001926
+    },
+    "R14 Power User": {
+      "issues": 10,
+      "unique": 0,
+      "cost": 0.002817
+    },
+    "R15 Mobile User": {
+      "issues": 10,
+      "unique": 0,
+      "cost": 0.001947
+    },
+    "R16 Competitor User": {
+      "issues": 10,
+      "unique": 0,
+      "cost": 0.002304
+    },
+    "R17 Data Privacy Officer": {
+      "issues": 7,
+      "unique": 0,
+      "cost": 0.002175
+    },
+    "R18 Billing Specialist": {
+      "issues": 8,
+      "unique": 0,
+      "cost": 0.002319
+    },
+    "R19 Onboarding Specialist": {
+      "issues": 10,
+      "unique": 0,
+      "cost": 0.002016
+    },
+    "R20 Growth Hacker": {
+      "issues": 0,
+      "unique": 0,
+      "cost": 0.002832
+    }
+  }
+}
