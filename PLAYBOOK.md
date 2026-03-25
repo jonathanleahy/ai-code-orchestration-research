@@ -2,7 +2,9 @@
 
 **How to go from a one-line idea to a running, tested, reviewed product.**
 
-Based on 38 experiments. Total research cost: ~$10.
+Based on 41 experiments. Total research cost: ~$11.
+
+**Key numbers:** $0.34-0.96/app | 20 reviewers at $0.047 (no diminishing returns) | Progressive enhancement: ZERO regressions | Playwright: 20s, catches what 26 tests + 10 reviewers miss
 
 ---
 
@@ -139,12 +141,51 @@ Run after EVERY build. Simulates real users clicking through the app.
 
 ---
 
+## 20 Reviewers — No Diminishing Returns (Exp 39)
+
+At $0.005/reviewer, 20 reviewers cost $0.047. First 10 found 80 issues, last 10 found 82.
+**Every reviewer contributes. There are no diminishing returns at 20.**
+
+Extra reviewers beyond the core 10:
+- Freelance Designer ("does this solve MY problem?")
+- Agency Owner ("does this scale to 200 clients?")
+- First-Time User ("what do I do first?")
+- Power User ("500 clients, 50 invoices/month")
+- Mobile User ("can I add a quick note on my phone?")
+- Competitor User ("why switch from HubSpot?")
+- Data Privacy Officer ("GDPR? Data export?")
+- Billing Specialist ("partial payments? Multi-currency?")
+- Onboarding Specialist ("CSV import? Getting-started wizard?")
+- Growth Hacker ("viral loop? Free tier hook?")
+
+---
+
+## Adversarial Testing (Exp 41b)
+
+20 adversarial tests: XSS, SQL injection, empty inputs, 1000-char names, unicode, negative amounts.
+**Zero bugs found — the app handles all adversarial inputs correctly.** Cost: $0.003.
+
+---
+
+## Testing Strategy
+
+| Layer | When | Cost | Catches |
+|-------|------|------|---------|
+| Go unit tests | After store build | $0.01-0.02 | Logic bugs |
+| HTTP integration tests | After server build | $0.10-0.20 | API contract bugs |
+| Scripted Playwright | After every build | FREE (20s) | UI regressions |
+| Adversarial testing | Before release | $0.003 | Security holes |
+| Manual Playwright | On demand | — | Complex interaction bugs |
+
+---
+
 ## For Dark Factory Integration
 
 1. **Blueprint stage** → add exact Go types (already done: IR-EXP17)
 2. **New stage: Persona Discovery** → between brainstorm and blueprint
-3. **New stage: Pre-code Review** → 7 reviewers before development
+3. **New stage: Pre-code Review** → 7-20 reviewers before development ($0.035-0.10)
 4. **Development stage** → progressive enhancement (one feature at a time)
 5. **New stage: Post-code Review** → 3 reviewers after development
-6. **Testing stage** → add Playwright journey testing
+6. **Testing stage** → Playwright scripts + adversarial tests
 7. **Auto-fix loop** → goimports + gofmt + fix-address-of-const after every code generation
+8. **SaaS UX patterns** → breadcrumbs, toasts, confirmations in every server build prompt
