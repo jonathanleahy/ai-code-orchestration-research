@@ -1,0 +1,137 @@
+=== Symbol Results ===
+
+Vulnerability #1: GO-2026-4602
+    FileInfo can escape from a Root in os
+  More info: https://pkg.go.dev/vuln/GO-2026-4602
+  Standard library
+    Found in: os@go1.24.4
+    Fixed in: os@go1.25.8
+    Example traces found:
+      #1: main.go:8:2: app.init calls http.init, which eventually calls os.ReadDir
+
+Vulnerability #2: GO-2026-4601
+    Incorrect parsing of IPv6 host literals in net/url
+  More info: https://pkg.go.dev/vuln/GO-2026-4601
+  Standard library
+    Found in: net/url@go1.24.4
+    Fixed in: net/url@go1.25.8
+    Example traces found:
+      #1: main.go:30:31: app.main calls http.ListenAndServe, which eventually calls url.Parse
+      #2: main.go:30:31: app.main calls http.ListenAndServe, which eventually calls url.ParseRequestURI
+
+Vulnerability #3: GO-2026-4341
+    Memory exhaustion in query parameter parsing in net/url
+  More info: https://pkg.go.dev/vuln/GO-2026-4341
+  Standard library
+    Found in: net/url@go1.24.4
+    Fixed in: net/url@go1.24.12
+    Example traces found:
+      #1: main.go:40:23: app.handleDashboard calls http.Request.ParseMultipartForm, which eventually calls url.ParseQuery
+      #2: main.go:52:22: app.handleDashboard calls url.URL.Query
+
+Vulnerability #4: GO-2026-4340
+    Handshake messages may be processed at the incorrect encryption level in
+    crypto/tls
+  More info: https://pkg.go.dev/vuln/GO-2026-4340
+  Standard library
+    Found in: crypto/tls@go1.24.4
+    Fixed in: crypto/tls@go1.24.12
+    Example traces found:
+      #1: main.go:30:31: app.main calls http.ListenAndServe, which eventually calls tls.Conn.HandshakeContext
+      #2: main.go:8:2: app.init calls http.init, which eventually calls tls.Conn.Read
+
+Vulnerability #5: GO-2026-4337
+    Unexpected session resumption in crypto/tls
+  More info: https://pkg.go.dev/vuln/GO-2026-4337
+  Standard library
+    Found in: crypto/tls@go1.24.4
+    Fixed in: crypto/tls@go1.24.13
+    Example traces found:
+      #1: main.go:30:31: app.main calls http.ListenAndServe, which eventually calls tls.Conn.HandshakeContext
+      #2: main.go:8:2: app.init calls http.init, which eventually calls tls.Conn.Read
+
+Vulnerability #6: GO-2025-4175
+    Improper application of excluded DNS name constraints when verifying
+    wildcard names in crypto/x509
+  More info: https://pkg.go.dev/vuln/GO-2025-4175
+  Standard library
+    Found in: crypto/x509@go1.24.4
+    Fixed in: crypto/x509@go1.24.11
+    Example traces found:
+      #1: main.go:30:31: app.main calls http.ListenAndServe, which eventually calls x509.Certificate.Verify
+
+Vulnerability #7: GO-2025-4155
+    Excessive resource consumption when printing error string for host
+    certificate validation in crypto/x509
+  More info: https://pkg.go.dev/vuln/GO-2025-4155
+  Standard library
+    Found in: crypto/x509@go1.24.4
+    Fixed in: crypto/x509@go1.24.11
+    Example traces found:
+      #1: main.go:30:31: app.main calls http.ListenAndServe, which eventually calls x509.Certificate.Verify
+      #2: main.go:30:31: app.main calls http.ListenAndServe, which eventually calls x509.Certificate.VerifyHostname
+
+Vulnerability #8: GO-2025-4013
+    Panic when validating certificates with DSA public keys in crypto/x509
+  More info: https://pkg.go.dev/vuln/GO-2025-4013
+  Standard library
+    Found in: crypto/x509@go1.24.4
+    Fixed in: crypto/x509@go1.24.8
+    Example traces found:
+      #1: main.go:30:31: app.main calls http.ListenAndServe, which eventually calls x509.Certificate.Verify
+
+Vulnerability #9: GO-2025-4011
+    Parsing DER payload can cause memory exhaustion in encoding/asn1
+  More info: https://pkg.go.dev/vuln/GO-2025-4011
+  Standard library
+    Found in: encoding/asn1@go1.24.4
+    Fixed in: encoding/asn1@go1.24.8
+    Example traces found:
+      #1: main.go:8:2: app.init calls http.init, which eventually calls asn1.Unmarshal
+
+Vulnerability #10: GO-2025-4010
+    Insufficient validation of bracketed IPv6 hostnames in net/url
+  More info: https://pkg.go.dev/vuln/GO-2025-4010
+  Standard library
+    Found in: net/url@go1.24.4
+    Fixed in: net/url@go1.24.8
+    Example traces found:
+      #1: main.go:30:31: app.main calls http.ListenAndServe, which eventually calls url.Parse
+      #2: main.go:30:31: app.main calls http.ListenAndServe, which eventually calls url.ParseRequestURI
+
+Vulnerability #11: GO-2025-4009
+    Quadratic complexity when parsing some invalid inputs in encoding/pem
+  More info: https://pkg.go.dev/vuln/GO-2025-4009
+  Standard library
+    Found in: encoding/pem@go1.24.4
+    Fixed in: encoding/pem@go1.24.8
+    Example traces found:
+      #1: main.go:8:2: app.init calls http.init, which eventually calls pem.Decode
+
+Vulnerability #12: GO-2025-4008
+    ALPN negotiation error contains attacker controlled information in
+    crypto/tls
+  More info: https://pkg.go.dev/vuln/GO-2025-4008
+  Standard library
+    Found in: crypto/tls@go1.24.4
+    Fixed in: crypto/tls@go1.24.8
+    Example traces found:
+      #1: main.go:30:31: app.main calls http.ListenAndServe, which eventually calls tls.Conn.HandshakeContext
+      #2: main.go:8:2: app.init calls http.init, which eventually calls tls.Conn.Read
+
+Vulnerability #13: GO-2025-4007
+    Quadratic complexity when checking name constraints in crypto/x509
+  More info: https://pkg.go.dev/vuln/GO-2025-4007
+  Standard library
+    Found in: crypto/x509@go1.24.4
+    Fixed in: crypto/x509@go1.24.9
+    Example traces found:
+      #1: main.go:8:2: app.init calls http.init, which eventually calls x509.CertPool.AppendCertsFromPEM
+      #2: main.go:30:31: app.main calls http.ListenAndServe, which eventually calls x509.Certificate.Verify
+      #3: main.go:8:2: app.init calls http.init, which eventually calls x509.ParseCertificate
+
+Your code is affected by 13 vulnerabilities from the Go standard library.
+This scan also found 2 vulnerabilities in packages you import and 6
+vulnerabilities in modules you require, but your code doesn't appear to call
+these vulnerabilities.
+Use '-show verbose' for more details.

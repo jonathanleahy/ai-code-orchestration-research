@@ -1,0 +1,204 @@
+{
+	"Golang errors": {},
+	"Issues": [
+		{
+			"severity": "HIGH",
+			"confidence": "MEDIUM",
+			"cwe": {
+				"id": "190",
+				"url": "https://cwe.mitre.org/data/definitions/190.html"
+			},
+			"rule_id": "G115",
+			"details": "integer overflow conversion int -\u003e rune",
+			"file": "/tmp/ai-code-orchestration-research/experiments/exp-37-full-panel/app/store/store.go",
+			"code": "45: \ts.nextID++\n46: \treturn string(rune(s.nextID))\n47: }\n",
+			"line": "46",
+			"column": "20",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "79",
+				"url": "https://cwe.mitre.org/data/definitions/79.html"
+			},
+			"rule_id": "G705",
+			"details": "XSS via taint analysis",
+			"file": "/tmp/ai-code-orchestration-research/experiments/exp-37-full-panel/app/main.go",
+			"code": "403: \n404: \tfmt.Fprint(w, html)\n405: }\n",
+			"line": "404",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "79",
+				"url": "https://cwe.mitre.org/data/definitions/79.html"
+			},
+			"rule_id": "G705",
+			"details": "XSS via taint analysis",
+			"file": "/tmp/ai-code-orchestration-research/experiments/exp-37-full-panel/app/main.go",
+			"code": "371: \n372: \tfmt.Fprint(w, html)\n373: }\n",
+			"line": "372",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "79",
+				"url": "https://cwe.mitre.org/data/definitions/79.html"
+			},
+			"rule_id": "G705",
+			"details": "XSS via taint analysis",
+			"file": "/tmp/ai-code-orchestration-research/experiments/exp-37-full-panel/app/main.go",
+			"code": "275: \n276: \tfmt.Fprint(w, html)\n277: }\n",
+			"line": "276",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "676",
+				"url": "https://cwe.mitre.org/data/definitions/676.html"
+			},
+			"rule_id": "G114",
+			"details": "Use of net/http serve function that has no support for setting timeouts",
+			"file": "/tmp/ai-code-orchestration-research/experiments/exp-37-full-panel/app/main.go",
+			"code": "29: \tlog.Println(\"Server listening on :8080\")\n30: \tlog.Fatal(http.ListenAndServe(\":8080\", nil))\n31: }\n",
+			"line": "30",
+			"column": "12",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "400",
+				"url": "https://cwe.mitre.org/data/definitions/400.html"
+			},
+			"rule_id": "G120",
+			"details": "Unbounded form parsing in HTTP handlers can cause memory exhaustion",
+			"file": "/tmp/ai-code-orchestration-research/experiments/exp-37-full-panel/app/main.go",
+			"code": "216: \tif r.Method == \"POST\" {\n217: \t\tr.ParseMultipartForm(1024 * 1024)\n218: \t\tvar lineItems []store.LineItem\n",
+			"line": "217",
+			"column": "23",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "400",
+				"url": "https://cwe.mitre.org/data/definitions/400.html"
+			},
+			"rule_id": "G120",
+			"details": "Unbounded form parsing in HTTP handlers can cause memory exhaustion",
+			"file": "/tmp/ai-code-orchestration-research/experiments/exp-37-full-panel/app/main.go",
+			"code": "136: \tif r.Method == \"POST\" \u0026\u0026 r.FormValue(\"_method\") != \"DELETE\" {\n137: \t\tr.ParseMultipartForm(1024 * 1024)\n138: \t\tclient.Name = r.FormValue(\"name\")\n",
+			"line": "137",
+			"column": "23",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "400",
+				"url": "https://cwe.mitre.org/data/definitions/400.html"
+			},
+			"rule_id": "G120",
+			"details": "Unbounded form parsing in HTTP handlers can cause memory exhaustion",
+			"file": "/tmp/ai-code-orchestration-research/experiments/exp-37-full-panel/app/main.go",
+			"code": "39: \tif r.Method == \"POST\" {\n40: \t\tr.ParseMultipartForm(1024 * 1024)\n41: \t\tname := r.FormValue(\"name\")\n",
+			"line": "40",
+			"column": "23",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/tmp/ai-code-orchestration-research/experiments/exp-37-full-panel/app/main.go",
+			"code": "216: \tif r.Method == \"POST\" {\n217: \t\tr.ParseMultipartForm(1024 * 1024)\n218: \t\tvar lineItems []store.LineItem\n",
+			"line": "217",
+			"column": "3",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/tmp/ai-code-orchestration-research/experiments/exp-37-full-panel/app/main.go",
+			"code": "136: \tif r.Method == \"POST\" \u0026\u0026 r.FormValue(\"_method\") != \"DELETE\" {\n137: \t\tr.ParseMultipartForm(1024 * 1024)\n138: \t\tclient.Name = r.FormValue(\"name\")\n",
+			"line": "137",
+			"column": "3",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/tmp/ai-code-orchestration-research/experiments/exp-37-full-panel/app/main.go",
+			"code": "39: \tif r.Method == \"POST\" {\n40: \t\tr.ParseMultipartForm(1024 * 1024)\n41: \t\tname := r.FormValue(\"name\")\n",
+			"line": "40",
+			"column": "3",
+			"nosec": false,
+			"suppressions": null
+		},
+		{
+			"severity": "LOW",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "703",
+				"url": "https://cwe.mitre.org/data/definitions/703.html"
+			},
+			"rule_id": "G104",
+			"details": "Errors unhandled",
+			"file": "/tmp/ai-code-orchestration-research/experiments/exp-37-full-panel/app/main.go",
+			"code": "34: \tw.Header().Set(\"Content-Type\", \"application/json\")\n35: \tjson.NewEncoder(w).Encode(map[string]string{\"status\": \"ok\"})\n36: }\n",
+			"line": "35",
+			"column": "2",
+			"nosec": false,
+			"suppressions": null
+		}
+	],
+	"Stats": {
+		"files": 2,
+		"lines": 567,
+		"nosec": 0,
+		"found": 12
+	},
+	"GosecVersion": "dev"
+}

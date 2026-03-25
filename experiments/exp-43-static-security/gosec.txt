@@ -1,0 +1,104 @@
+[gosec] 2026/03/25 18:47:47 Including rules: default
+[gosec] 2026/03/25 18:47:47 Excluding rules: default
+[gosec] 2026/03/25 18:47:47 Including analyzers: default
+[gosec] 2026/03/25 18:47:47 Excluding analyzers: default
+[gosec] 2026/03/25 18:47:47 Import directory: /tmp/ai-code-orchestration-research/experiments/exp-37-full-panel/app
+[gosec] 2026/03/25 18:47:47 Import directory: /tmp/ai-code-orchestration-research/experiments/exp-37-full-panel/app/store
+[gosec] 2026/03/25 18:47:47 Checking package: store
+[gosec] 2026/03/25 18:47:47 Checking file: /tmp/ai-code-orchestration-research/experiments/exp-37-full-panel/app/store/store.go
+[gosec] 2026/03/25 18:47:47 Checking package: main
+[gosec] 2026/03/25 18:47:47 Checking file: /tmp/ai-code-orchestration-research/experiments/exp-37-full-panel/app/main.go
+Results:
+
+
+[[97;41m/tmp/ai-code-orchestration-research/experiments/exp-37-full-panel/app/store/store.go:46[0m] - G115 (CWE-190): integer overflow conversion int -> rune (Confidence: MEDIUM, Severity: HIGH)
+    45: 	s.nextID++
+  > 46: 	return string(rune(s.nextID))
+    47: }
+
+Autofix: 
+
+[[30;43m/tmp/ai-code-orchestration-research/experiments/exp-37-full-panel/app/main.go:404[0m] - G705 (CWE-79): XSS via taint analysis (Confidence: HIGH, Severity: MEDIUM)
+    403: 
+  > 404: 	fmt.Fprint(w, html)
+    405: }
+
+Autofix: 
+
+[[30;43m/tmp/ai-code-orchestration-research/experiments/exp-37-full-panel/app/main.go:372[0m] - G705 (CWE-79): XSS via taint analysis (Confidence: HIGH, Severity: MEDIUM)
+    371: 
+  > 372: 	fmt.Fprint(w, html)
+    373: }
+
+Autofix: 
+
+[[30;43m/tmp/ai-code-orchestration-research/experiments/exp-37-full-panel/app/main.go:276[0m] - G705 (CWE-79): XSS via taint analysis (Confidence: HIGH, Severity: MEDIUM)
+    275: 
+  > 276: 	fmt.Fprint(w, html)
+    277: }
+
+Autofix: 
+
+[[30;43m/tmp/ai-code-orchestration-research/experiments/exp-37-full-panel/app/main.go:30[0m] - G114 (CWE-676): Use of net/http serve function that has no support for setting timeouts (Confidence: HIGH, Severity: MEDIUM)
+    29: 	log.Println("Server listening on :8080")
+  > 30: 	log.Fatal(http.ListenAndServe(":8080", nil))
+    31: }
+
+Autofix: 
+
+[[30;43m/tmp/ai-code-orchestration-research/experiments/exp-37-full-panel/app/main.go:217[0m] - G120 (CWE-400): Unbounded form parsing in HTTP handlers can cause memory exhaustion (Confidence: HIGH, Severity: MEDIUM)
+    216: 	if r.Method == "POST" {
+  > 217: 		r.ParseMultipartForm(1024 * 1024)
+    218: 		var lineItems []store.LineItem
+
+Autofix: 
+
+[[30;43m/tmp/ai-code-orchestration-research/experiments/exp-37-full-panel/app/main.go:137[0m] - G120 (CWE-400): Unbounded form parsing in HTTP handlers can cause memory exhaustion (Confidence: HIGH, Severity: MEDIUM)
+    136: 	if r.Method == "POST" && r.FormValue("_method") != "DELETE" {
+  > 137: 		r.ParseMultipartForm(1024 * 1024)
+    138: 		client.Name = r.FormValue("name")
+
+Autofix: 
+
+[[30;43m/tmp/ai-code-orchestration-research/experiments/exp-37-full-panel/app/main.go:40[0m] - G120 (CWE-400): Unbounded form parsing in HTTP handlers can cause memory exhaustion (Confidence: HIGH, Severity: MEDIUM)
+    39: 	if r.Method == "POST" {
+  > 40: 		r.ParseMultipartForm(1024 * 1024)
+    41: 		name := r.FormValue("name")
+
+Autofix: 
+
+[[37;40m/tmp/ai-code-orchestration-research/experiments/exp-37-full-panel/app/main.go:217[0m] - G104 (CWE-703): Errors unhandled (Confidence: HIGH, Severity: LOW)
+    216: 	if r.Method == "POST" {
+  > 217: 		r.ParseMultipartForm(1024 * 1024)
+    218: 		var lineItems []store.LineItem
+
+Autofix: 
+
+[[37;40m/tmp/ai-code-orchestration-research/experiments/exp-37-full-panel/app/main.go:137[0m] - G104 (CWE-703): Errors unhandled (Confidence: HIGH, Severity: LOW)
+    136: 	if r.Method == "POST" && r.FormValue("_method") != "DELETE" {
+  > 137: 		r.ParseMultipartForm(1024 * 1024)
+    138: 		client.Name = r.FormValue("name")
+
+Autofix: 
+
+[[37;40m/tmp/ai-code-orchestration-research/experiments/exp-37-full-panel/app/main.go:40[0m] - G104 (CWE-703): Errors unhandled (Confidence: HIGH, Severity: LOW)
+    39: 	if r.Method == "POST" {
+  > 40: 		r.ParseMultipartForm(1024 * 1024)
+    41: 		name := r.FormValue("name")
+
+Autofix: 
+
+[[37;40m/tmp/ai-code-orchestration-research/experiments/exp-37-full-panel/app/main.go:35[0m] - G104 (CWE-703): Errors unhandled (Confidence: HIGH, Severity: LOW)
+    34: 	w.Header().Set("Content-Type", "application/json")
+  > 35: 	json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
+    36: }
+
+Autofix: 
+
+[1;36mSummary:[0m
+  Gosec  : dev
+  Files  : 2
+  Lines  : 567
+  Nosec  : 0
+  Issues : [1;31m12[0m
+
