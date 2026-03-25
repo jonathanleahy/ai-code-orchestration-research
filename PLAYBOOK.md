@@ -2,9 +2,17 @@
 
 **How to go from a one-line idea to a running, tested, reviewed product.**
 
-Based on 44 experiments. Total research cost: ~$12.
+Based on 60 experiments. Total research cost: ~$17.
 
-**Key numbers:** $0.34-0.96/app | 20 reviewers at $0.047 (no diminishing returns) | Progressive enhancement: ZERO regressions | Playwright: 20s, catches what 26 tests + 10 reviewers miss | gosec finds 12 issues FREE | AI pen test: 4 High for $0.02
+**Key numbers:**
+- $0.34-0.96/app (idea to running product)
+- TDD: 90.3% coverage | Mutation: 89% score
+- 20 reviewers at $0.047 (no diminishing returns)
+- Org personas: 3.2/10 (need role-specific features)
+- Progressive: ZERO regressions | Playwright: catches 4 bugs nothing else finds
+- Auth: 0/8 protected | GDPR: 10 non-compliant | Multi-tenant: 19/20 missing
+- TypeScript: pipeline generalises (260 lines, BUILDS)
+- Auto-docs: README + API + user guide + ADRs from code ($0.02)
 
 ---
 
