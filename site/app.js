@@ -8,6 +8,54 @@ const FILES = {
     'experiments': {
         '_folder': true,
         'INDEX.md': 'experiments/INDEX.md',
+        'exp-01': {
+            '_folder': true,
+            'README.md': 'experiments/exp-01/README.md'
+        },
+        'exp-02': {
+            '_folder': true,
+            'README.md': 'experiments/exp-02/README.md'
+        },
+        'exp-03': {
+            '_folder': true,
+            'README.md': 'experiments/exp-03/README.md'
+        },
+        'exp-04': {
+            '_folder': true,
+            'README.md': 'experiments/exp-04/README.md'
+        },
+        'exp-05': {
+            '_folder': true,
+            'README.md': 'experiments/exp-05/README.md'
+        },
+        'exp-06': {
+            '_folder': true,
+            'README.md': 'experiments/exp-06/README.md'
+        },
+        'exp-07': {
+            '_folder': true,
+            'README.md': 'experiments/exp-07/README.md'
+        },
+        'exp-08': {
+            '_folder': true,
+            'README.md': 'experiments/exp-08/README.md'
+        },
+        'exp-09': {
+            '_folder': true,
+            'README.md': 'experiments/exp-09/README.md'
+        },
+        'exp-10': {
+            '_folder': true,
+            'README.md': 'experiments/exp-10/README.md'
+        },
+        'exp-11': {
+            '_folder': true,
+            'README.md': 'experiments/exp-11/README.md'
+        },
+        'exp-12': {
+            '_folder': true,
+            'README.md': 'experiments/exp-12/README.md'
+        },
         'spike-v1': {
             '_folder': true,
             'REPORT.md': 'experiments/spike-v1/REPORT.md',

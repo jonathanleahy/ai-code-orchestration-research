@@ -1,87 +1,118 @@
-# Experiment Map
+# Experiment Overview
 
-## Research Overview
+## Research Question
+
+**Can AI models build working applications from scratch? What's the cheapest way?**
+
+We ran 12 experiments across 3 spikes (increasing complexity), testing 11+ models, 4 architectural approaches, and multiple pipeline strategies. Total research cost: ~$3.00.
+
+## Results at a Glance
+
+```mermaid
+graph LR
+    subgraph "Winners"
+        W1["🏆 Exp 12<br/>Full app in 70s<br/>FREE (Haiku)"]
+        W2["🏆 Exp 6<br/>Haiku 3x faster<br/>than Sonnet"]
+        W3["🏆 Exp 3<br/>V4 prompt: 0→100%<br/>on cheapest model"]
+    end
+
+    subgraph "Key Insights"
+        I1["💡 Exp 4<br/>Auto-fix catches<br/>40-60% of errors FREE"]
+        I2["💡 Exp 1<br/>Escalation fails on<br/>shared blind spots"]
+        I3["💡 Exp 5<br/>Pipeline > Model<br/>(retry loop essential)"]
+    end
+
+    subgraph "Architecture"
+        A1["🔧 Exp 7<br/>Hybrid: cheap API<br/>+ free subscription"]
+        A2["🔧 Exp 10<br/>V-Model: hidden<br/>acceptance tests"]
+        A3["🔧 Exp 11<br/>PR review gate<br/>for quality/security"]
+    end
+```
+
+## All Experiments
+
+| # | Name | Result | Cost | Key Finding |
+|---|------|--------|------|-------------|
+| [01](exp-01/README.md) | Escalation (Cheap → Strong) | 0/5 FAIL | $0.13 | Escalation doesn't fix shared blind spots |
+| [02](exp-02/README.md) | Sub-Task Granularity | Partial | $0.04 | 1 file per task is optimal for quality |
+| [03](exp-03/README.md) | V1 Re-Run (Improved Prompts) | 100% pass | $0.05 | V4 prompt: "just output the file" wins |
+| [04](exp-04/README.md) | Auto-Fix Pipeline | 40-60% fixed | FREE | goimports → gofmt → sed → vet → build |
+| [05](exp-05/README.md) | Model Routing by Task Type | 0/5 FAIL | $0.05 | Single-shot fails; retry loop essential |
+| [06](exp-06/README.md) | Claude Sub Models (Sonnet vs Haiku) | Both pass | FREE | Haiku 3x faster, equal quality |
+| [07](exp-07/README.md) | Hybrid Pipeline | Design | — | Cheap API for planning, free sub for execution |
+| [08](exp-08/README.md) | MiniMax Backtick Hint | 2/3 pass | $0.03 | Explicit hint: "use concatenation, not literals" |
+| [09](exp-09/README.md) | Full App via API Only | Parser fail | $0.045 | Parser is the weakest link (~40% of failures) |
+| [10](exp-10/README.md) | V-Model Pattern | Conceptual ✅ | $0.032 | Hidden acceptance tests work as surprise gate |
+| [11](exp-11/README.md) | PR Review Gate | Design | — | AI reviewer catches issues tests don't |
+| [12](exp-12/README.md) | Full-Stack App (70s) | ✅ 7 files | FREE | Complete app from schema in ~1 minute |
+
+## Spike Progression
+
+| Spike | Application | Complexity | Tests | Best Result |
+|-------|------------|------------|-------|-------------|
+| [V1](spike-v1/REPORT.md) | Bash script (--model flag) | 2 files, 5 tests | 5/5 | All 11 models pass ($0.008-$0.015) |
+| [V2](spike-v2/REPORT.md) | Node.js CLI (dep-doctor) | 10 files, 18 tests | 18/18 | A3: $0.069, A5: $0.10 |
+| [V3](spike-v3/REPORT.md) | Go CRUD (task-board) | 6 files, 22 tests | 22/22 | Haiku: FREE in 70s |
+
+## Architecture Diagram
 
 ```mermaid
 graph TD
-    Core["🎯 Core Question<br/>Can AI build apps from scratch?<br/>What's the cheapest way?"]
+    Schema["📋 Schema / Contract<br/>(schema.graphql)"]
 
-    Core --> V1["📊 Spike V1<br/>Model Comparison<br/>11 models on bash task"]
-    Core --> V2["🔧 Spike V2<br/>Node.js CLI (dep-doctor)<br/>4 approaches × 9 configs"]
-    Core --> V3["🚀 Spike V3<br/>Go CRUD (task-board)<br/>HTTP server + HTML UI"]
+    Schema --> Planner["🧠 Planner<br/>Decompose into sub-tasks"]
+    Planner --> |"Sub-task list"| Executor
 
-    V1 --> V1R["Results:<br/>All models work at $0.008-$0.015<br/>claude -p tool mode was the bug"]
-    V1 --> V1AR["🔬 Autoresearch V1<br/>Prompt optimization<br/>V4: 0% → 100% on cheapest model"]
+    subgraph "Per Sub-Task"
+        Executor["⚡ Executor<br/>(cheapest model)"]
+        Executor --> Parser["📄 Parser<br/>Extract file blocks"]
+        Parser --> AutoFix["🔧 Auto-Fix<br/>goimports, gofmt, sed"]
+        AutoFix --> Gate["🚦 Gate<br/>go build, go vet, go test"]
+        Gate --> |FAIL| Retry["♻️ Retry / Escalate"]
+        Retry --> Executor
+        Gate --> |PASS| Assemble
+    end
 
-    V2 --> V2A["Approach A: Quality-First<br/>🏆 A3: 18/18, $0.069<br/>A5: 18/18, $0.10"]
-    V2 --> V2B["Approach B: Gen+Filter<br/>B1: 7/8, $0.237"]
-    V2 --> V2C["Approach C: LLM Council<br/>C1: 6/8, $0.192"]
-    V2 --> V2D["Approach D: Evolutionary<br/>D1: 7/8, $0.202"]
+    Assemble["📦 Assemble"] --> Accept["✅ Acceptance Tests<br/>(golden master)"]
 
-    V3 --> V3S4["🏆 S4: claude -p<br/>22/22 tests, FREE"]
-    V3 --> V3S1["S1: Gemini+MiniMax<br/>10/10 model, $0.13"]
-    V3 --> V3S2["S2: Gemini+Qwen3-30B<br/>10/10 model, $0.09"]
-    V3 --> V3Gate["🔧 Compile Gate<br/>goimports + go build<br/>40% errors fixed free"]
-    V3 --> V3AR["🔬 Autoresearch V2<br/>Executor prompt optimization<br/>Running..."]
-
-    V3Gate --> V3Esc["📋 TODO: Escalation<br/>Cheap model fails → stronger model fixes"]
-    V3AR --> V3Rerun["📋 TODO: Re-run V1+V2<br/>with improved prompts"]
-
-    style Core fill:#4488ff,color:#fff
-    style V2A fill:#22c55e,color:#000
-    style V3S4 fill:#22c55e,color:#000
-    style V1AR fill:#f59e0b,color:#000
-    style V3AR fill:#f59e0b,color:#000
-    style V3Gate fill:#8b5cf6,color:#fff
-    style V3Esc fill:#fde68a,color:#000
-    style V3Rerun fill:#fde68a,color:#000
+    style Schema fill:#4488ff,color:#fff
+    style Executor fill:#22c55e,color:#000
+    style AutoFix fill:#8b5cf6,color:#fff
+    style Gate fill:#f59e0b,color:#000
+    style Accept fill:#22c55e,color:#000
 ```
 
-## Experiment Index
+## Top 5 Findings
 
-| Spike | Application | Files | Tests | Report |
-|-------|------------|-------|-------|--------|
-| V1 | Bash task (--model flag) | 2 | 5 | [REPORT](spike-v1/REPORT.md) |
-| V2 | Node.js CLI (dep-doctor) | 10 | 18 | [REPORT](spike-v2/REPORT.md) |
-| V3 | Go CRUD (task-board) | 6 | 22 | [REPORT](spike-v3/REPORT.md) |
+1. **Prompt wording > model choice** — V4 prompt took Qwen3-30B from 0% to 100% pass rate. The prompt says "just output the file content" instead of procedural instructions.
 
-## Key Results Timeline
+2. **The pipeline IS the product** — Single-shot calls fail ~50%. The same models hit 100% with retry loop + auto-fix + structural gates. Invest in infrastructure, not expensive models.
 
-```mermaid
-gantt
-    title Research Timeline
-    dateFormat HH:mm
-    axisFormat %H:%M
+3. **Auto-fix is free money** — goimports + gofmt + unused-var sed fixes 40-60% of model errors without any API call. Always run structural fixes before retrying.
 
-    section Spike V1
-    11 model comparison       :v1, 15:00, 60min
-    Autoresearch prompts      :v1ar, 21:00, 15min
+4. **Subscription beats API** — Haiku builds a full-stack app in 70 seconds for FREE. API equivalent costs ~$0.12. For subscription users, this is the optimal path.
 
-    section Spike V2
-    Approach A (4 configs)    :v2a, 19:00, 30min
-    Approach B (gen+filter)   :v2b, 19:30, 20min
-    Approach C (council)      :v2c, 19:30, 20min
-    Approach D (evolutionary) :v2d, 19:30, 20min
-    A5 Qwen3-30B 18/18       :v2a5, 21:20, 5min
-
-    section Spike V3
-    Golden master             :v3gm, 21:30, 15min
-    S4 claude -p 22/22       :v3s4, 22:00, 5min
-    S1/S2 OpenRouter          :v3or, 22:00, 30min
-    Compile gate + auto-fix   :v3fix, 22:30, 30min
-    Autoresearch executor     :v3ar, 23:50, 30min
-```
+5. **Parser is the bottleneck** — 40% of API-model failures are parser extraction issues, not model quality. A production-grade parser would make all-API builds reliable.
 
 ## Cost Summary
 
-| Experiment | API Calls | OpenRouter Cost | Subscription Cost |
-|-----------|-----------|----------------|-------------------|
-| Spike V1 (11 models) | ~30 | $0.35 | — |
-| Spike V2 (9 configs) | ~200 | $1.50 | — |
-| Spike V2 autoresearch | ~24 | $0.05 | — |
-| Spike V3 (3 configs) | ~30 | $0.30 | $0.50 (claude -p) |
-| Spike V3 compile fix runs | ~20 | $0.25 | — |
-| Spike V3 autoresearch | ~100 | $0.05 | — |
-| **Total** | **~400** | **~$2.50** | **~$0.50** |
+| Category | Cost |
+|----------|------|
+| Spike V1 (11 models) | $0.35 |
+| Spike V2 (9 configs, 4 approaches) | $1.50 |
+| Spike V2 autoresearch | $0.05 |
+| Spike V3 (3 configs) | $0.30 |
+| Spike V3 compile fix runs | $0.25 |
+| Spike V3 autoresearch | $0.05 |
+| Experiments 1-12 | ~$0.50 |
+| **Total** | **~$3.00** |
 
-**Total research cost: ~$3.00**
+## Remaining Experiments (TODO)
+
+See [TODO.md](../TODO.md) for the full list. Key remaining:
+
+- **Parser hardening** — Production parser to fix the 40% extraction failure rate
+- **Full pipeline retry** — Re-run model routing (exp-05) with retry loop instead of single-shot
+- **Bigger apps** — SvelteKit + Go GraphQL (2000+ lines) to test scaling
+- **Pipeline integration** — A/B test winning strategy in Dark Factory daemon
+- **V-Model full loop** — Complete the acceptance test feedback loop (exp-10)
