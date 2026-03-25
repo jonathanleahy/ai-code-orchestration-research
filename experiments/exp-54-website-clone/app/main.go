@@ -121,8 +121,8 @@ const html = `<!DOCTYPE html>
 
 		/* Hero */
 		.hero {
-			padding: 120px 40px;
-			text-align: center;
+			padding: 150px 40px;
+			text-align: left;
 		}
 
 		.hero-label {
@@ -130,8 +130,8 @@ const html = `<!DOCTYPE html>
 			font-size: 13px;
 			letter-spacing: 2px;
 			color: #d4727a;
-			margin-bottom: 48px;
-			display: inline-block;
+			margin-bottom: 32px;
+			display: block;
 		}
 
 		.hero-title {
@@ -139,16 +139,13 @@ const html = `<!DOCTYPE html>
 			font-family: Georgia, serif;
 			line-height: 1.1;
 			margin-bottom: 48px;
-			max-width: 900px;
-			margin-left: auto;
-			margin-right: auto;
+			max-width: 700px;
 		}
 
 		.hero-body {
 			font-size: 18px;
 			line-height: 1.8;
 			max-width: 600px;
-			margin: 0 auto;
 			color: #333;
 		}
 
@@ -163,43 +160,48 @@ const html = `<!DOCTYPE html>
 			text-transform: uppercase;
 			font-size: 12px;
 			letter-spacing: 2px;
-			color: #d4727a;
+			color: #999;
 			margin-bottom: 48px;
 		}
 
 		.logos {
-			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-			gap: 40px;
+			display: flex;
+			justify-content: space-between;
 			align-items: center;
+			flex-wrap: wrap;
+			gap: 60px;
 		}
 
 		.logo-item {
-			font-size: 18px;
-			font-weight: 500;
+			font-size: 16px;
+			font-weight: 400;
 			color: #666;
-			text-align: center;
 		}
 
 		/* Services */
 		.services {
-			padding: 120px 40px;
+			padding: 150px 40px;
 		}
 
 		.service-grid {
-			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-			gap: 60px;
+			display: flex;
+			flex-direction: column;
+			gap: 0;
 		}
 
 		.service-item {
-			padding-bottom: 24px;
+			padding: 32px 0;
+			border-bottom: 1px solid #f0f0f0;
+		}
+
+		.service-item:last-child {
+			border-bottom: none;
 		}
 
 		.service-title {
-			font-size: 24px;
+			font-size: 20px;
 			font-family: Georgia, serif;
-			margin-bottom: 16px;
+			margin-bottom: 0;
 			display: flex;
 			align-items: center;
 			gap: 16px;
@@ -208,17 +210,16 @@ const html = `<!DOCTYPE html>
 		.service-title::after {
 			content: "→";
 			color: #d4727a;
+			margin-left: auto;
 		}
 
 		.service-description {
-			font-size: 15px;
-			line-height: 1.8;
-			color: #555;
+			display: none;
 		}
 
 		/* How Section */
 		.how-section {
-			padding: 120px 40px;
+			padding: 150px 40px;
 			background-color: #fafafa;
 		}
 
@@ -249,14 +250,17 @@ const html = `<!DOCTYPE html>
 
 		/* CTA */
 		.cta-section {
-			padding: 120px 40px;
+			padding: 150px 40px;
 			text-align: center;
+			background-color: #d4727a;
+			color: #fff;
 		}
 
 		.cta-title {
 			font-size: 48px;
 			font-family: Georgia, serif;
-			margin-bottom: 32px;
+			margin-bottom: 48px;
+			color: #fff;
 		}
 
 		.cta-link {
@@ -264,14 +268,18 @@ const html = `<!DOCTYPE html>
 			align-items: center;
 			gap: 12px;
 			text-decoration: none;
-			color: #d4727a;
+			color: #fff;
 			font-size: 16px;
 			font-weight: 600;
-			transition: color 0.2s;
+			border: 2px solid #fff;
+			padding: 12px 32px;
+			border-radius: 4px;
+			transition: all 0.2s;
 		}
 
 		.cta-link:hover {
-			color: #c05a62;
+			background-color: #fff;
+			color: #d4727a;
 		}
 
 		.cta-arrow {
@@ -280,7 +288,7 @@ const html = `<!DOCTYPE html>
 
 		/* Case Studies */
 		.case-studies {
-			padding: 120px 40px;
+			padding: 150px 40px;
 			border-top: 1px solid #f0f0f0;
 		}
 
@@ -308,9 +316,47 @@ const html = `<!DOCTYPE html>
 
 		/* Blog */
 		.blog-section {
-			padding: 120px 40px;
+			padding: 150px 40px;
 			background-color: #fafafa;
 			border-top: 1px solid #f0f0f0;
+		}
+
+		/* Learn More Section */
+		.learn-more-section {
+			padding: 150px 40px;
+			background-color: #1a1a1a;
+			color: #fff;
+		}
+
+		.learn-more-section .section-label {
+			color: #999;
+		}
+
+		.learn-more-links {
+			display: flex;
+			flex-direction: column;
+			gap: 24px;
+			max-width: 600px;
+		}
+
+		.learn-more-link {
+			text-decoration: none;
+			color: #d4727a;
+			font-size: 18px;
+			font-family: Georgia, serif;
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			transition: color 0.2s;
+		}
+
+		.learn-more-link::after {
+			content: "→";
+			margin-left: auto;
+		}
+
+		.learn-more-link:hover {
+			color: #e8a0a4;
 		}
 
 		.blog-grid {
@@ -344,27 +390,38 @@ const html = `<!DOCTYPE html>
 
 		/* Footer */
 		footer {
-			background-color: #000;
+			background-color: #1a1a1a;
 			color: #fff;
-			padding: 80px 40px 40px;
+			padding: 100px 40px 60px;
+		}
+
+		footer::before {
+			content: "&";
+			display: block;
+			font-size: 80px;
+			line-height: 1;
+			margin-bottom: 60px;
+			font-family: Georgia, serif;
+			color: #d4727a;
 		}
 
 		.footer-content {
 			display: grid;
 			grid-template-columns: repeat(4, 1fr);
-			gap: 60px;
-			margin-bottom: 60px;
+			gap: 80px;
+			margin-bottom: 80px;
 			max-width: 1200px;
 			margin-left: auto;
 			margin-right: auto;
 		}
 
 		.footer-column h4 {
-			font-size: 14px;
+			font-size: 12px;
 			font-weight: 600;
 			margin-bottom: 24px;
 			text-transform: uppercase;
-			letter-spacing: 1px;
+			letter-spacing: 2px;
+			color: #999;
 		}
 
 		.footer-column ul {
@@ -372,7 +429,7 @@ const html = `<!DOCTYPE html>
 		}
 
 		.footer-column li {
-			margin-bottom: 12px;
+			margin-bottom: 16px;
 		}
 
 		.footer-column a {
@@ -382,6 +439,10 @@ const html = `<!DOCTYPE html>
 			transition: color 0.2s;
 		}
 
+		.footer-column a[href^="mailto"] {
+			color: #d4727a;
+		}
+
 		.footer-column a:hover {
 			color: #fff;
 		}
@@ -389,7 +450,7 @@ const html = `<!DOCTYPE html>
 		.footer-column p {
 			font-size: 14px;
 			line-height: 1.8;
-			color: #aaa;
+			color: #999;
 		}
 
 		.footer-copyright {
@@ -397,7 +458,7 @@ const html = `<!DOCTYPE html>
 			border-top: 1px solid #333;
 			padding-top: 40px;
 			font-size: 13px;
-			color: #999;
+			color: #666;
 		}
 
 		@media (max-width: 768px) {
@@ -565,13 +626,27 @@ const html = `<!DOCTYPE html>
 		</div>
 	</section>
 
+	<!-- Learn More -->
+	<section class="learn-more-section">
+		<div class="container">
+			<div class="section-label">Learn more –</div>
+			<div class="learn-more-links">
+				<a href="#blog" class="learn-more-link">Insights & Articles</a>
+				<a href="#case-studies" class="learn-more-link">Case Studies</a>
+				<a href="#services" class="learn-more-link">Our Services</a>
+				<a href="#about" class="learn-more-link">Team & Approach</a>
+			</div>
+		</div>
+	</section>
+
 	<!-- Footer -->
 	<footer>
 		<div class="footer-content">
 			<div class="footer-column">
 				<h4>Each&Other</h4>
 				<p>Global product & UX design consultancy serving world-class businesses.</p>
-				<p style="margin-top: 16px;">San Francisco, CA<br>London, UK<br>Berlin, Germany</p>
+				<p style="margin-top: 24px;"><a href="mailto:hello@eachandother.com">hello@eachandother.com</a></p>
+				<p style="margin-top: 24px;">San Francisco, CA<br>London, UK<br>Berlin, Germany</p>
 			</div>
 			<div class="footer-column">
 				<h4>Services</h4>
