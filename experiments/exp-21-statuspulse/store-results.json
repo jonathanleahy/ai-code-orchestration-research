@@ -1,0 +1,33 @@
+{
+  "results": [
+    {
+      "service": "monitor",
+      "success": true,
+      "cost": 0.00804,
+      "tests_pass": 0,
+      "tests_total": 0,
+      "store_file": true,
+      "test_file": false
+    },
+    {
+      "service": "incidents",
+      "success": true,
+      "cost": 0.00573,
+      "tests_pass": 0,
+      "tests_total": 0,
+      "store_file": true,
+      "test_file": false
+    },
+    {
+      "service": "notify",
+      "success": false,
+      "cost": 0.006684,
+      "tests_pass": 7,
+      "tests_total": 8,
+      "store_file": true,
+      "test_file": true
+    }
+  ],
+  "total_cost": 0.020454,
+  "passes": 2
+}
