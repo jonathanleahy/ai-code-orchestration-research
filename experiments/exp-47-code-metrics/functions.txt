@@ -1,0 +1,20 @@
+  main.go:16:func init() {
+  main.go:23:func main() {
+  main.go:44:func handleHealth(w http.ResponseWriter, r *http.Request) {
+  main.go:49:func handleDashboard(w http.ResponseWriter, r *http.Request) {
+  main.go:210:func handleClientDetail(w http.ResponseWriter, r *http.Request) {
+  main.go:560:func handleCreateClient(w http.ResponseWriter, r *http.Request) {
+  main.go:580:func handleListClients(w http.ResponseWriter, r *http.Request) {
+  main.go:597:func handleUpdateClient(w http.ResponseWriter, r *http.Request) {
+  main.go:624:func handleDeleteClient(w http.ResponseWriter, r *http.Request) {
+  main.go:638:func handleCreateActivity(w http.ResponseWriter, r *http.Request) {
+  main.go:664:func handleListActivities(w http.ResponseWriter, r *http.Request) {
+  main.go:681:func handleCreateInvoice(w http.ResponseWriter, r *http.Request) {
+  main.go:724:func handleListInvoices(w http.ResponseWriter, r *http.Request) {
+  main.go:741:func handleMarkInvoicePaid(w http.ResponseWriter, r *http.Request) {
+  main.go:757:func handlePrintInvoice(w http.ResponseWriter, r *http.Request) {
+  store/store.go:47:func NewStore() *Store {
+  store/store.go:58:func (s *Store) AddClient(name, email, phone string) *Client {
+  store/store.go:77:func (s *Store) GetClient(id string) *Client {
+  store/store.go:84:func (s *Store) ListClients() []*Client {
+  store/store.go:95:func (s *Store) SearchClients(query string) []*Client {

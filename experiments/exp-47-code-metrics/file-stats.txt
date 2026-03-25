@@ -1,0 +1,2 @@
+  ./main.go: 894 lines, 15 functions
+  ./store/store.go: 227 lines, 13 functions
