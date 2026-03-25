@@ -64,6 +64,7 @@ graph TD
 | [25](exp-25-full-pipeline/README.md) | **Full Pipeline: Brief → Product** | Store+Server PASS | $0.21 | 8 words → compiled app, dev review caught issues |
 | [26](exp-26-tests/README.md) | **Add Test Layers** | 33/36 (92%) | $0.12 | Store + acceptance + HTTP tests, $0.33 total with code |
 | [27](exp-27-automated/README.md) | **Fully Automated** | 41/41 (100%) | $0.49 | CRM with invoices, 720 lines, zero intervention |
+| [29](exp-29-crm-gqlgen/README.md) | **CRM + gqlgen GraphQL** | BUILD PASS | ~$0.50 | Pipeline needs iterative mode for code generation |
 
 ## Spike Progression
 

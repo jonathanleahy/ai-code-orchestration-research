@@ -1,0 +1,65 @@
+scalar DateTime
+
+enum ClientStatus {
+  ACTIVE
+  INACTIVE
+  PROSPECT
+}
+
+enum ActivityType {
+  EMAIL
+  CALL
+  MEETING
+  NOTE
+}
+
+type Client {
+  id: ID!
+  name: String!
+  company: String!
+  email: String!
+  phone: String!
+  status: ClientStatus!
+  createdAt: DateTime!
+}
+
+type Activity {
+  id: ID!
+  clientID: ID!
+  type: ActivityType!
+  title: String!
+  description: String!
+  timestamp: DateTime!
+}
+
+type Invoice {
+  id: ID!
+  clientID: ID!
+  number: String!
+  amount: Float!
+  description: String!
+  status: String!
+  createdAt: DateTime!
+  dueDate: DateTime!
+}
+
+type Query {
+  clients(search: String): [Client!]!
+  client(id: ID!): Client
+  activities(clientID: ID!): [Activity!]!
+  invoices(clientID: ID!): [Invoice!]!
+  invoice(id: ID!): Invoice
+}
+
+type Mutation {
+  createClient(name: String!, company: String!, email: String!, phone: String!, status: ClientStatus!): Client!
+  updateClient(id: ID!, name: String, company: String, email: String, phone: String, status: ClientStatus): Client
+  deleteClient(id: ID!): Boolean!
+
+  createActivity(clientID: ID!, type: ActivityType!, title: String!, description: String!): Activity!
+  deleteActivity(id: ID!): Boolean!
+
+  createInvoice(clientID: ID!, number: String!, amount: Float!, description: String!, dueDate: DateTime!): Invoice!
+  updateInvoiceStatus(id: ID!, status: String!): Invoice
+  deleteInvoice(id: ID!): Boolean!
+}
