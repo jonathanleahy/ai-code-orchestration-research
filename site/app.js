@@ -4,8 +4,10 @@
 const FILES = {
     'README.md': 'README.md',
     'REPORT-FINAL.md': 'REPORT-FINAL.md',
+    'TODO.md': 'TODO.md',
     'experiments': {
         '_folder': true,
+        'INDEX.md': 'experiments/INDEX.md',
         'spike-v1': {
             '_folder': true,
             'REPORT.md': 'experiments/spike-v1/REPORT.md',
@@ -52,6 +54,7 @@ const FILES = {
         },
         'spike-v3': {
             '_folder': true,
+            'REPORT.md': 'experiments/spike-v3/REPORT.md',
             'architecture.md': 'experiments/spike-v3/architecture.md',
             'executor-go.md': 'experiments/spike-v3/executor-go.md',
             'call-claude-p.sh': 'experiments/spike-v3/call-claude-p.sh',
