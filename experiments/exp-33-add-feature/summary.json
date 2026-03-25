@@ -1,0 +1,10 @@
+{
+  "feature": "Export clients to CSV",
+  "total_cost": 0.23315819999999995,
+  "before_tests": 52,
+  "after_tests": 55,
+  "new_tests": 3,
+  "regression": false,
+  "builds": true,
+  "has_export": true
+}

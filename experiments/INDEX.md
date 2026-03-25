@@ -66,6 +66,8 @@ graph TD
 | [27](exp-27-automated/README.md) | **Fully Automated** | 41/41 (100%) | $0.49 | CRM with invoices, 720 lines, zero intervention |
 | [29](exp-29-crm-gqlgen/README.md) | **CRM + gqlgen GraphQL** | BUILD PASS | ~$0.50 | Pipeline needs iterative mode for code generation |
 | [30](exp-30-reviewed/README.md) | **4-Reviewer Panel CRM** | 51/51 (100%) | $0.40 | Product reviewer caught missing Add/Delete; all fixed |
+| [31](exp-31-post-code-review/README.md) | **Post-Code: UX+A11y+OWASP** | Fixes applied, 54/54 | $0.025 | ARIA labels, XSS fixes, CSP headers added |
+| [33](exp-33-add-feature/README.md) | **Add Feature (CSV Export)** | 55/55, no regression | $0.23 | Added feature without breaking 52 existing tests |
 
 ## Spike Progression
 
