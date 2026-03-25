@@ -148,3 +148,106 @@
 - [ ] FAQ generated from persona pain points
 - [ ] API reference for integrations
 - [ ] Admin guide (deployment, backup, monitoring)
+
+## NEW SPIKE: Idea Discovery & Validation
+
+### Exp 68: Reddit/Twitter Pain Point Scraping
+- [ ] Scrape Reddit (r/SaaS, r/startups, r/freelance) for "I wish there was..."
+- [ ] Scrape Twitter/X for complaints about existing tools
+- [ ] HackerNews "Ask HN" threads for unmet needs
+- [ ] Auto-categorize: pain point, frequency, willingness to pay
+- [ ] Output: ranked list of product ideas with demand signals
+
+### Exp 69: Market Research Pipeline
+- [ ] For each idea: market size estimate, TAM/SAM/SOM
+- [ ] Competitor landscape: who exists, pricing, reviews, gaps
+- [ ] Positioning: what's the unique angle?
+- [ ] Auto-generate BUILD/PIVOT/KILL verdict
+- [ ] Feed winning ideas directly into product pipeline
+
+### Exp 70: Landing Page Before Building
+- [ ] Generate landing page from product brief (headline, benefits, CTA)
+- [ ] Deploy to temporary URL
+- [ ] Measure: signups, bounce rate, time on page
+- [ ] If <X signups in Y days → KILL (don't build)
+- [ ] If >X signups → BUILD (demand confirmed)
+
+### Exp 71: Pricing Strategy
+- [ ] AI simulates Van Westendorp price sensitivity (too cheap/cheap/expensive/too expensive)
+- [ ] Test: freemium vs $10 vs $29 vs usage-based
+- [ ] Persona panels review each price point ("would you pay this?")
+- [ ] Output: recommended pricing tier + feature breakdown per tier
+
+## NEW SPIKE: Advertising & Marketing
+
+### Exp 72: Ad Copy + Visual Generation
+- [ ] Generate ad copy variants (headline, body, CTA) for each persona
+- [ ] DALL-E/Midjourney prompts for poster visuals
+- [ ] A/B test: which headline performs best? (simulated with personas)
+- [ ] Output: 5 ad variants ready to deploy
+
+### Exp 73: Video Script + Voiceover
+- [ ] Generate 30-second video script from product brief
+- [ ] Scene-by-scene storyboard (text descriptions)
+- [ ] Text-to-speech voiceover
+- [ ] Output: script + storyboard + audio file
+
+### Exp 74: SEO & Content Strategy
+- [ ] Keyword research: what do target users search for?
+- [ ] Generate 10 blog post outlines targeting those keywords
+- [ ] Generate 1 full blog post as sample
+- [ ] Meta descriptions, title tags, schema markup for the product pages
+
+### Exp 75: Product Hunt Launch Strategy
+- [ ] Generate: tagline, description, first comment, maker story
+- [ ] Schedule: best day/time to launch
+- [ ] Hunter outreach: identify potential hunters
+- [ ] Community engagement plan for launch day
+
+## NEW SPIKE: Distribution & Growth
+
+### Exp 76: Distribution Channel Analysis
+- [ ] Where do target personas hang out? (Reddit, Twitter, LinkedIn, forums)
+- [ ] Partnership opportunities (integrations, affiliates)
+- [ ] Content distribution plan (where to post, when, what format)
+- [ ] Referral program design (what incentive, how it works)
+
+### Exp 77: Analytics & Tracking
+- [ ] Define: signup funnel, activation, retention, revenue metrics
+- [ ] Generate tracking code (events, properties)
+- [ ] Dashboard design: what to show, what alerts to set
+- [ ] Churn indicators: what predicts a user leaving?
+
+### Exp 78: Revenue Optimisation
+- [ ] After launch: which features drive upgrades?
+- [ ] Churn analysis: why do users leave? What's the #1 reason?
+- [ ] Upsell strategy: what converts free to paid?
+- [ ] Pricing experiment: does $15→$19 reduce signups?
+
+## NEW SPIKE: Operations & Legal
+
+### Exp 79: Customer Support Automation
+- [ ] Auto-generate help docs from user guide + API docs
+- [ ] Chatbot trained on product knowledge base
+- [ ] Ticket categorization: bug, feature request, billing, how-to
+- [ ] Escalation rules: AI handles L1, human handles L2+
+
+### Exp 80: Legal Document Generation
+- [ ] Terms of Service from product spec + jurisdiction
+- [ ] Privacy Policy from GDPR data map
+- [ ] Cookie Policy from tracking implementation
+- [ ] DPA (Data Processing Agreement) for enterprise customers
+- [ ] Acceptable Use Policy
+
+### Exp 81: Localisation Pipeline
+- [ ] Translate UI strings to 5 languages (ES, FR, DE, JA, PT)
+- [ ] Locale-specific personas review translations
+- [ ] Date/currency/number formatting per locale
+- [ ] RTL support check (Arabic, Hebrew)
+
+### Exp 82: Competitor Monitoring
+- [ ] Track competitor pricing changes (weekly scrape)
+- [ ] Track new feature announcements
+- [ ] Track review sentiment (G2, Capterra, Trustpilot)
+- [ ] Auto-alert when market shifts
+- [ ] Feed insights into product roadmap
