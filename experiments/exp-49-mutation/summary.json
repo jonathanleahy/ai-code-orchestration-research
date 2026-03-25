@@ -1,0 +1,66 @@
+{
+  "mutations": 14,
+  "caught": 8,
+  "survived": 1,
+  "skipped": 5,
+  "score": 88.88888888888889,
+  "results": [
+    {
+      "name": "Return nil instead of client",
+      "status": "caught"
+    },
+    {
+      "name": "Return empty slice",
+      "status": "caught"
+    },
+    {
+      "name": "Skip empty name check",
+      "status": "skipped"
+    },
+    {
+      "name": "Flip not-found check",
+      "status": "caught"
+    },
+    {
+      "name": "Wrong status default",
+      "status": "caught"
+    },
+    {
+      "name": "Zero amount",
+      "status": "skipped"
+    },
+    {
+      "name": "Don't increment ID",
+      "status": "skipped"
+    },
+    {
+      "name": "Don't set CreatedAt",
+      "status": "survived",
+      "detail": "CreatedAt is zero"
+    },
+    {
+      "name": "Don't actually delete",
+      "status": "caught"
+    },
+    {
+      "name": "Wrong status code on create",
+      "status": "caught"
+    },
+    {
+      "name": "Wrong method check",
+      "status": "skipped"
+    },
+    {
+      "name": "Remove health endpoint",
+      "status": "skipped"
+    },
+    {
+      "name": "Don't lock mutex",
+      "status": "caught"
+    },
+    {
+      "name": "Don't unlock mutex",
+      "status": "caught"
+    }
+  ]
+}
