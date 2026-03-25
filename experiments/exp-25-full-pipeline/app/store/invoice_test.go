@@ -401,15 +401,15 @@ func TestClientStore(t *testing.T) {
 		}
 	})
 
-	// Test ListClients
+	// Test ListClients (after one was deleted above, expect 3)
 	t.Run("ListClients", func(t *testing.T) {
 		clients, err := store.ListClients()
 		if err != nil {
 			t.Fatalf("ListClients failed: %v", err)
 		}
 
-		if len(clients) != 4 {
-			t.Errorf("Expected 4 clients, got %d", len(clients))
+		if len(clients) != 3 {
+			t.Errorf("Expected 3 clients, got %d", len(clients))
 		}
 	})
 }

@@ -63,6 +63,7 @@ graph TD
 | [24](exp-24-wireframes-to-code/README.md) | Wireframes → Code | 6 routes, BUILD PASS | $0.20 | 106 lines vs 493 — wireframes give focus |
 | [25](exp-25-full-pipeline/README.md) | **Full Pipeline: Brief → Product** | Store+Server PASS | $0.21 | 8 words → compiled app, dev review caught issues |
 | [26](exp-26-tests/README.md) | **Add Test Layers** | 33/36 (92%) | $0.12 | Store + acceptance + HTTP tests, $0.33 total with code |
+| [27](exp-27-automated/README.md) | **Fully Automated** | 24/26 (92%) | $0.32 | Zero intervention: brief → tested product with auto-fix |
 
 ## Spike Progression
 

@@ -1,0 +1,13 @@
+{
+		"bookmarks": [
+			{
+				"id": "test1",
+				"url": "https://example.com",
+				"title": "Example Site",
+				"description": "A sample website",
+				"tags": [{"name": "test", "color": "blue"}],
+				"created_at": "2023-01-01T00:00:00Z",
+				"updated_at": "2023-01-01T00:00:00Z"
+			}
+		]
+	}
