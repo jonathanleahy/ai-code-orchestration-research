@@ -1,0 +1,16 @@
+{
+  "total_cost": 0.23590534999999999,
+  "store_tests": {
+    "pass": 0,
+    "fail": 0
+  },
+  "http_tests": {
+    "pass": 34,
+    "fail": 0
+  },
+  "coverage": 90.3,
+  "builds": true,
+  "server_lines": 491,
+  "test_lines": 267,
+  "code_lines": 222
+}

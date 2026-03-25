@@ -1,0 +1,34 @@
+============================================================
+  EXP 48: TDD — Tests First
+============================================================
+
+  [1] Write tests FIRST (no code exists yet)
+      Tests: OK (267 lines, $0.0076)
+      Before code: FAIL (expected)
+
+  [2] Write code to pass the tests
+      Code: OK (222 lines, $0.0079)
+
+  [3] Auto-fix loop
+      Attempt 0: 0/0 (0 failing)
+      Attempt 1: 0/0 (0 failing)
+      Attempt 2: 0/0 (0 failing)
+
+  [4] HTTP Server (claude -p)
+      Server: PASS (491 lines, $0.1019)
+
+  [5] HTTP Tests (claude -p)
+      HTTP tests: 34/34 ($0.1010)
+
+============================================================
+  TDD RESULTS
+============================================================
+  Store tests (written FIRST): 0/0
+  HTTP tests: 34/34
+  Total: 34/34
+  Coverage: 90.3%
+  Server: PASS (491 lines)
+  Cost: $0.2359
+
+  vs Exp 38 (code-first): 57.4% coverage
+  vs Exp 48 (TDD): 90.3% coverage
